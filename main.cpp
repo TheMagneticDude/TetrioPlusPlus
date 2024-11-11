@@ -6,7 +6,7 @@ int main()
     while (1) {
         LCD.Update();
         // Never end
-        //test for github
+        //test for github push
     }
     return 0;
 }

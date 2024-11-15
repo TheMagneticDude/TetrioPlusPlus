@@ -41,3 +41,6 @@ simulator_libraries/
 
 # Project specific
 game
+
+# Nix
+.direnv

@@ -1,6 +1,6 @@
 #ifndef GRID_H
 #define GRID_H
-#include<Tetromino.h>
+#include "../TETRIODEP/Tetromino.h"
 #include<vector>
 
 class Grid {
@@ -13,9 +13,9 @@ class Grid {
 
     Grid(int width, int height);
 
-    void draw(int pos_x, int pos_y) {}
+    void draw(int pos_x, int pos_y);
 };
-extern Grid grid; 
+
 #endif
 
 

@@ -3,13 +3,15 @@
 #include <cstdint>
 #include <optional>
 #include <vector>
-#include <Tetromino.h>
-#include <Grid.h>
+#include "../TETRIODEP/Tetromino.h"
+#include "../TETRIODEP/Grid.h"
+
+
 
 #define SCALE 6
 
 
-Grid::Grid(int width, int height) : width(width), height(height), data(width * height) {}
+Grid::Grid(int width, int height) : width(width), height(height), data(width * height, Tetromino::E) {}
 
 
 void Grid::draw(int pos_x, int pos_y) {

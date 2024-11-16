@@ -1,7 +1,9 @@
-#include<TetrisBoard.h>
-#include<Tetromino.h>
-#include<Grid.h>
+#include"../TETRIODEP/TetrisBoard.h"
+#include"../TETRIODEP/Tetromino.h"
+#include "../TETRIODEP/Grid.h"
 #include "FEHRandom.h"
+
+
 
     TetrisBoard::TetrisBoard() : grid(10, 20) {
         for (int x = 0; x < 10; x++) {

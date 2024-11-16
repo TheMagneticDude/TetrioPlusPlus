@@ -4,9 +4,9 @@
 #include <optional>
 #include <vector>
 
-#include<Tetromino.h>
-#include<Grid.h>
-#include<TetrisBoard.h>
+#include "../TETRIODEP/Tetromino.h"
+#include "../TETRIODEP/Grid.h"
+#include "../TETRIODEP/TetrisBoard.h"
 
 
 int main() {

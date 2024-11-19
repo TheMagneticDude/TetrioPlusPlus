@@ -1,17 +1,40 @@
-#include"../TETRIODEP/TetrisBoard.h"
-#include"../TETRIODEP/Tetromino.h"
+#include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Grid.h"
+#include "../TETRIODEP/Tetromino.h"
 #include "FEHRandom.h"
 
+//initialize tetrisboard with a coordinate (top left corner)
+TetrisBoard::TetrisBoard(int Inx, int Iny) : grid(10, 20) {
+    //these are where the board is built around in world coords (top left corner)
+    TetrisBoard::boardX = Inx;
+    TetrisBoard::boardY = Iny;
+    
+    // for (int x = 0; x < 10; x++) {
+    //     for (int y = 0; y < 20; y++) {
+    //         // was for generating random minos
+    //         auto mino = static_cast<Tetromino>(Random.RandInt() % 7);
+    //         grid.data[y * 10 + x] = mino;
+    //     }
+    // }
 
+}
 
-    TetrisBoard::TetrisBoard() : grid(10, 20) {
-        for (int x = 0; x < 10; x++) {
-            for (int y = 0; y < 20; y++) {
-                auto mino = static_cast<Tetromino>(Random.RandInt() % 7);
-                grid.data[y * 10 + x] = mino;
-            }
-        }
+//draws the entire tetrisboard
+void TetrisBoard::draw() { 
+     grid.draw(boardX, boardY);
     }
-
-    void TetrisBoard::draw(int pos_x, int pos_y) { grid.draw(pos_x, pos_y); }
+// draws boarder around board
+void TetrisBoard::drawBoarder() { grid.drawBoarder(boardX, boardY); }
+//transforms the tetris board coordinate grid (bottom left being 0,0) to grid coordinate system (world coordinate system 0,0 top left)
+int TetrisBoard::convertToGridCoordsX(int x){
+    return x + boardX;
+}
+//transforms the tetris board coordinate grid (bottom left being 0,0) to grid coordinate system (world coordinate system 0,0 top left)
+int TetrisBoard::convertToGridCoordsY(int y){
+    return boardY + 20*6 - y*6;
+}
+// draws a tetromino with the bottom left corner at pos_x and pos_y on the tetris board coordinate grid
+void TetrisBoard::drawMino(int pos_x, int pos_y, Tetromino type) {
+    //create mino
+     auto mino = static_cast<Tetromino>(type);
+    }

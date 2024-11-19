@@ -8,12 +8,7 @@ class TetrisBoard {
     // tetrominos, all centered around bottom left
 
     // line horizontal
-    int Tetromno_I_H[4][4] = {
-        {1, 1, 1, 1},
-        {0, 0, 0, 0},
-        {0, 0, 0, 0},
-        {0, 0, 0, 0},
-    };
+    Grid Tetromno_I_H();
     // line verticle
     int Tetromno_I_V[4][4] = {
         {1, 0, 0, 0},
@@ -77,7 +72,8 @@ class TetrisBoard {
     void draw();
     void drawRandom();
     void drawBoarder();
-    void drawMino(int pos_x, int pos_y, Tetromino type);
+    int* getOrientation(int o);
+    void drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
     int convertToGridCoordsX(int x);
     int convertToGridCoordsY(int y);
 };

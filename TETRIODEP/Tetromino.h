@@ -13,4 +13,11 @@ enum class Tetromino : uint8_t {
     T,//T shape
     Z//Left Snake
 };
+
+enum class TetrominoOrientation {
+    H,//horizontal
+    L,//left
+    R,//right
+    U//upsidedown
+};
 #endif

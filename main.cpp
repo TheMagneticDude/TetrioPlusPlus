@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <optional>
 #include <vector>
+#include <Tetromino.h>
 
 #include "../TETRIODEP/Grid.h"
 #include "../TETRIODEP/TetrisBoard.h"
@@ -12,8 +13,8 @@
 #include <Windows.h>
 
 int main() {
-    int board1Loc[2] = {20, 100};
-    int board2Loc[2] = {240, 100};
+    int board1Loc[2] = {40, 60};
+    int board2Loc[2] = {200, 60};
     TetrisBoard board1(board1Loc[0], board1Loc[1]);
     TetrisBoard board2(board2Loc[0], board2Loc[1]);
 
@@ -22,8 +23,12 @@ int main() {
 
         board1.draw();
         board2.draw();
-        board1.drawRandom();
-        board2.drawRandom();
+
+        board1.drawTetromino(0,0,static_cast<Tetromino>(2), TetrominoOrientation::H);
+
+
+        // board1.drawRandom();
+        // board2.drawRandom();
         board1.drawBoarder();
         board2.drawBoarder();
 

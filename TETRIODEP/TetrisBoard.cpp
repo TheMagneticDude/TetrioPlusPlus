@@ -2,6 +2,8 @@
 #include "../TETRIODEP/Grid.h"
 #include "../TETRIODEP/Tetromino.h"
 #include "FEHRandom.h"
+#include <FEHLCD.h>
+#include <iostream>
 
 //initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int Inx, int Iny) : grid(10, 20) {
@@ -28,14 +30,22 @@ void TetrisBoard::draw() {
 void TetrisBoard::drawBoarder() { grid.drawBoarder(boardX, boardY); }
 //transforms the tetris board coordinate grid (bottom left being 0,0) to grid coordinate system (world coordinate system 0,0 top left)
 int TetrisBoard::convertToGridCoordsX(int x){
+    
     return x + boardX;
 }
 //transforms the tetris board coordinate grid (bottom left being 0,0) to grid coordinate system (world coordinate system 0,0 top left)
 int TetrisBoard::convertToGridCoordsY(int y){
-    return boardY + 20*6 - y*6;
+    
+    return boardY + 20*SCALE - y*SCALE;
 }
+
+//returns the correct tetromino array with orientation
+int* getOrientation(Tetromino type,TetrominoOrientation o){
+
+}
+
 // draws a tetromino with the bottom left corner at pos_x and pos_y on the tetris board coordinate grid
-void TetrisBoard::drawMino(int pos_x, int pos_y, Tetromino type) {
-    //create mino
-     auto mino = static_cast<Tetromino>(type);
+void TetrisBoard::drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {
+    
+
     }

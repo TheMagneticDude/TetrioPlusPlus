@@ -8,20 +8,21 @@ TetrisBoard::TetrisBoard(int Inx, int Iny) : grid(10, 20) {
     //these are where the board is built around in world coords (top left corner)
     TetrisBoard::boardX = Inx;
     TetrisBoard::boardY = Iny;
-    
-    // for (int x = 0; x < 10; x++) {
-    //     for (int y = 0; y < 20; y++) {
-    //         // was for generating random minos
-    //         auto mino = static_cast<Tetromino>(Random.RandInt() % 7);
-    //         grid.data[y * 10 + x] = mino;
-    //     }
-    // }
-
 }
 
 //draws the entire tetrisboard
 void TetrisBoard::draw() { 
      grid.draw(boardX, boardY);
+    }
+    //draws random minos across tetris board
+    void TetrisBoard::drawRandom(){
+        for (int x = 0; x < 10; x++) {
+        for (int y = 0; y < 20; y++) {
+            // was for generating random minos
+            auto mino = static_cast<Tetromino>(Random.RandInt() % 7);
+            grid.data[y * 10 + x] = mino;
+        }
+    }
     }
 // draws boarder around board
 void TetrisBoard::drawBoarder() { grid.drawBoarder(boardX, boardY); }

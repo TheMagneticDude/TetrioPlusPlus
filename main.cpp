@@ -22,6 +22,8 @@ int main() {
 
         board1.draw();
         board2.draw();
+        board1.drawRandom();
+        board2.drawRandom();
         board1.drawBoarder();
         board2.drawBoarder();
 

@@ -17,32 +17,16 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
             if (color != BLACK) {
-                drawMino(x, y, color);
+                drawMino(pos_x + x * SCALE, pos_y + y * SCALE, color);
             }
 
-            // LCD.SetFontColor(color);
-            // LCD.FillRectangle(pos_x + x * SCALE, pos_y + y * SCALE, SCALE, SCALE);
+            //LCD.SetFontColor(color);
+            //LCD.FillRectangle(pos_x + x * SCALE, pos_y + y * SCALE, SCALE, SCALE);
         }
     }
 }
 
 void addMino(Tetromino mino) {}
-
-// draws boarder around grid
-void Grid::drawBoarder(int pos_x, int pos_y) {
-    // top bottom boarders
-    LCD.SetFontColor(WHITE);
-    // top boarder
-    LCD.FillRectangle(pos_x - SCALE, pos_y - SCALE, SCALE * (width + 2), SCALE);
-    // bottom boarder
-    LCD.FillRectangle(pos_x - SCALE, pos_y + SCALE * height, SCALE * (width + 2), SCALE);
-
-    // left and right boarders
-    // Left boarder
-    LCD.FillRectangle(pos_x - SCALE, pos_y - SCALE, SCALE, SCALE * (height + 2));
-    // // bottom boarder
-    LCD.FillRectangle(pos_x + SCALE * width, pos_y - SCALE, SCALE, SCALE * (height + 2));
-}
 
 // draws a mino with the bottom left corner at pos_x and pos_y
 void Grid::drawMino(int pos_x, int pos_y, int color) {

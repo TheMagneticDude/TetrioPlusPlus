@@ -71,7 +71,7 @@ class TetrisBoard {
     TetrisBoard(int x, int y);
     void draw();
     void drawRandom();
-    void drawBoarder();
+    void drawBorder();
     int* getOrientation(int o);
     void drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
     int convertToGridCoordsX(int x);

@@ -3,11 +3,11 @@
 #include <cstdint>
 #include <optional>
 #include <vector>
-#include <Tetromino.h>
 
 #include "../TETRIODEP/Grid.h"
 #include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Tetromino.h"
+#include "../TETRIODEP/Menu.h"
 
 // for key and mouse input
 #include <Windows.h>
@@ -18,19 +18,31 @@ int main() {
     TetrisBoard board1(board1Loc[0], board1Loc[1]);
     TetrisBoard board2(board2Loc[0], board2Loc[1]);
 
+    Menu mainMenu = Menu();
+
     while (1) {
         LCD.Clear();
 
-        board1.draw();
+        
+
+        mainMenu.update();
+        Button s = Button(0,0,70,20,"BUTTON");
+        s.updateButtonState();
+
+        if(mainMenu.start.getButtonTriggered()){
+            board1.draw();
         board2.draw();
 
-        board1.drawTetromino(0,0,static_cast<Tetromino>(2), TetrominoOrientation::H);
+        board1.drawTetromino(0, 0, static_cast<Tetromino>(2), TetrominoOrientation::H);
+
+        board1.drawBorder();
+        board2.drawBorder();
+        board1.drawRandom();
+        board2.drawRandom();
+        }
+        
 
 
-        // board1.drawRandom();
-        // board2.drawRandom();
-        board1.drawBoarder();
-        board2.drawBoarder();
 
         // board1.drawMino(0,0);
 

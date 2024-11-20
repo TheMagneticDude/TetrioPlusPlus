@@ -5,19 +5,18 @@
 
 class Grid {
   private:
-    int width;
-    int height;
-
   public:
-// scale of minos
+    // scale of minos
 #define SCALE 8 // was 6
     std::vector<Tetromino> data;
+    int width;
+    int height;
 
     Grid(int width, int height);
 
     void addMino(Tetromino mino);
     void draw(int pos_x, int pos_y);
-    void drawBoarder(int pos_x, int pos_y);
+    // void drawBoarder(int pos_x, int pos_y);
 
     void minoShading(int pos_x, int pos_y, int color);
 

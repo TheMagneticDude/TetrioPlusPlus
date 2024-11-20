@@ -21,14 +21,16 @@ int main() {
     Menu mainMenu = Menu();
 
     while (1) {
-        LCD.Clear();
 
         // Button s = Button(0,0,70,20,"BUTTON");
         // s.updateButtonState();
 
         if (mainMenu.start.getButtonTriggered()) {
             // clear screen
-            LCD.Clear();
+            
+            if(mainMenu.start.onButtonClicked()){
+                LCD.Clear();
+            }
             board1.draw();
             board2.draw();
 
@@ -38,9 +40,14 @@ int main() {
             board2.drawBorder();
             board1.drawRandom();
             board2.drawRandom();
+            
+        }else if(mainMenu.start.onButtonReleased()){
+            LCD.Clear();
+        }else{
+        mainMenu.update();
         }
 
-        mainMenu.update();
+        
 
         // board1.drawMino(0,0);
 

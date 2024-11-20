@@ -15,6 +15,7 @@ using namespace std;
 Button::Button(){}
 //creates a rectangular button with x and y being the top left of the rectangle
 Button::Button(float x, float y, float w, float h,string text){
+
     buttonX = x;
     buttonY = y;
     buttonCenterX = x + w/2;
@@ -38,6 +39,7 @@ Button::Button(float x, float y, float w, float h,string text){
 
 //initializes button values and whether button starts enabled or disabled
 Button::Button(float x, float y, float w, float h,string text, bool e){
+
     buttonX = x;
     buttonY = y;
     buttonCenterX = x + w/2;
@@ -91,6 +93,14 @@ void Button::updateButtonState(){
         triggered = true;
         //trigger color change
         currColor = triggeredColor;
+
+        //toggle buttonState
+        if(currState == buttonState::inactive){
+            currState = buttonState::active;
+        }
+        if(currState == buttonState::active){
+            currState = buttonState::held;
+        }
         cout<<"PRESSED";
     }else{
         //else clear touched location to off the screen
@@ -99,12 +109,30 @@ void Button::updateButtonState(){
         currColor = defaultColor;
         touchedX = numeric_limits<float>::max();
         touchedY = numeric_limits<float>::max();
+
+        //reset buttonState
+        if(currState == buttonState::held){
+            currState = buttonState::released;
+        }
+        if(currState == buttonState::released){
+            currState = buttonState::inactive;
+        }
     }
     //redraws button
     drawButton();
+
+    
 }
 
 bool Button::getButtonTriggered(){
     return triggered;
+}
+
+bool Button::onButtonClicked(){
+    return currState == buttonState::active;
+}
+
+bool Button::onButtonReleased(){
+    return currState == buttonState::released;
 }
 

@@ -8,8 +8,18 @@ using namespace std;
 
 class Button {
   private:
+  enum class buttonState{
+    inactive,
+    active,
+    held,
+    released
+  };
+
+  buttonState currState = buttonState::inactive;
+
   bool triggered; //if button is being held it is true
   bool enabled; //if button can be pressed it is true
+  
 
   int defaultColor;//normal color of button
   int triggeredColor;//color of button when triggered
@@ -46,6 +56,12 @@ class Button {
   void updateButtonState();
 
   bool getButtonTriggered();
+
+//returns true once when button is pressed and doesent return true again until its been let go and then pressed again
+  bool onButtonClicked();
+
+//returns true once when button is released
+  bool onButtonReleased();
 
   
 };

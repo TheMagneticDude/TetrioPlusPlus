@@ -5,9 +5,9 @@
 #include <vector>
 
 #include "../TETRIODEP/Grid.h"
+#include "../TETRIODEP/Menu.h"
 #include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Tetromino.h"
-#include "../TETRIODEP/Menu.h"
 
 // for key and mouse input
 #include <Windows.h>
@@ -23,26 +23,24 @@ int main() {
     while (1) {
         LCD.Clear();
 
-        
+        // Button s = Button(0,0,70,20,"BUTTON");
+        // s.updateButtonState();
+
+        if (mainMenu.start.getButtonTriggered()) {
+            // clear screen
+            LCD.Clear();
+            board1.draw();
+            board2.draw();
+
+            board1.drawTetromino(0, 0, static_cast<Tetromino>(2), TetrominoOrientation::H);
+
+            board1.drawBorder();
+            board2.drawBorder();
+            board1.drawRandom();
+            board2.drawRandom();
+        }
 
         mainMenu.update();
-        Button s = Button(0,0,70,20,"BUTTON");
-        s.updateButtonState();
-
-        if(mainMenu.start.getButtonTriggered()){
-            board1.draw();
-        board2.draw();
-
-        board1.drawTetromino(0, 0, static_cast<Tetromino>(2), TetrominoOrientation::H);
-
-        board1.drawBorder();
-        board2.drawBorder();
-        board1.drawRandom();
-        board2.drawRandom();
-        }
-        
-
-
 
         // board1.drawMino(0,0);
 

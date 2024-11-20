@@ -15,6 +15,8 @@ class Button {
   int triggeredColor;//color of button when triggered
   int disabledColor;//color of button when disabled
 
+  int currColor = defaultColor;
+
   public:
   float buttonX;
   float buttonY;

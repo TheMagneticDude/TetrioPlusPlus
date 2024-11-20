@@ -31,6 +31,8 @@ Button::Button(float x, float y, float w, float h,string text){
     defaultColor = WHITE;
     triggeredColor = GRAY;
     disabledColor = DARKGRAY;
+    
+    currColor = defaultColor;
 }
 
 
@@ -48,9 +50,15 @@ Button::Button(float x, float y, float w, float h,string text, bool e){
 
     triggered = false;
     enabled = e;
+    
     defaultColor = WHITE;
     triggeredColor = GRAY;
     disabledColor = DARKGRAY;
+    if(e){
+    currColor=disabledColor;
+    }else{
+        currColor = defaultColor;
+    }
 }
 
 void Button::setDefaultColor(int color){defaultColor = color;}
@@ -58,14 +66,15 @@ void Button::setTriggeredColor(int color){triggeredColor = color;}
 void Button::setDisabledColor(int color){disabledColor = color;}
 
 void Button::drawButton(){
-    LCD.SetFontColor(defaultColor);
+    LCD.SetFontColor(currColor);
     LCD.DrawRectangle(buttonX,buttonY,buttonWidth,buttonHeight);
     LCD.WriteAt(buttonText,buttonX,buttonY+4);
 }
 
 //redraws button and also updates its state
 void Button::updateButtonState(){
-    drawButton();
+    bool withinX = false;
+    bool withinY = false;
     //update touched location
     if(!LCD.Touch(&touchedX,&touchedY)){
         //wait until touch happens
@@ -74,20 +83,25 @@ void Button::updateButtonState(){
         //wait until touch releases
         //no joke this is the actual code from FEH documentation -_-
         //if touch is within button boundery then set button state to true
-    bool withinX = touchedX >= buttonX && touchedX <= buttonX + buttonWidth;
-    bool withinY = touchedY >= buttonY && touchedY <= buttonY + buttonHeight;
+    withinX = touchedX >= buttonX && touchedX <= buttonX + buttonWidth;
+    withinY = touchedY >= buttonY && touchedY <= buttonY + buttonHeight;
+    }
     if(withinX && withinY){
         //button is touched
         triggered = true;
+        //trigger color change
+        currColor = triggeredColor;
         cout<<"PRESSED";
     }else{
         //else clear touched location to off the screen
         triggered = false;
+        //reset color
+        currColor = defaultColor;
         touchedX = numeric_limits<float>::max();
         touchedY = numeric_limits<float>::max();
     }
-    }
-    
+    //redraws button
+    drawButton();
 }
 
 bool Button::getButtonTriggered(){

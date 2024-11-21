@@ -29,7 +29,7 @@ int main() {
 
         mainMenu.disable(mainMenu.settings);
 
-        
+
         if (mainMenu.renderSubPage(mainMenu.start)) {
             LCD.SetFontColor(WHITE);
             LCD.WriteAt("\"Play\" Tetrio++ below!", 25, 20);
@@ -58,6 +58,16 @@ int main() {
             LCD.WriteAt("Tetrio++ Written by:", 0, 20);
             LCD.WriteAt("Nathan Cheng", 0, 50);
             LCD.WriteAt("Ojas Landge", 0, 90);
+        }
+
+        if (mainMenu.renderSubPage(mainMenu.instructions)) {
+
+            LCD.SetFontColor(WHITE);
+            LCD.WriteAt("How to play Tetrio++", 0, 20);
+            LCD.WriteAt("The goal is to clear lines", 0, 50);
+            LCD.WriteAt("faster than your opponent.",0,90);
+            LCD.WriteAt("First to stack to the", 0, 120);
+            LCD.WriteAt("top looses",0,150);
         }
 
         mainMenu.update();

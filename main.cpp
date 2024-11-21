@@ -25,14 +25,16 @@ int main() {
         // Button s = Button(0,0,70,20,"BUTTON");
         // s.updateButtonState();
 
-        if (mainMenu.start.getButtonTriggered()) {
-            // clear main menu screen
-            if (mainMenu.start.onButtonClicked()) {
-                LCD.Clear();
-            }
+        // settings has not been implemented yet so disabled
 
+        mainMenu.disable(mainMenu.settings);
+
+        
+        if (mainMenu.renderSubPage(mainMenu.start)) {
+            LCD.SetFontColor(WHITE);
+            LCD.WriteAt("\"Play\" Tetrio++ below!", 25, 20);
             mainMenu.remove();
-            
+
             board1.draw();
             board2.draw();
 
@@ -42,14 +44,23 @@ int main() {
             board2.drawBorder();
             board1.drawRandom();
             board2.drawRandom();
+        }
+        if (mainMenu.renderSubPage(mainMenu.stats)) {
 
-        } else if (mainMenu.start.onButtonReleased()) {
-            LCD.Clear();
-        }else{
-            mainMenu.update();
+            LCD.SetFontColor(WHITE);
+            LCD.WriteAt("\"High\" score: 253", 0, 40);
+            LCD.WriteAt("Best 40 line time: 3:42", 0, 70);
+            LCD.WriteAt("Total Lines cleared: 512", 0, 100);
+        }
+        if (mainMenu.renderSubPage(mainMenu.credits)) {
+
+            LCD.SetFontColor(WHITE);
+            LCD.WriteAt("Tetrio++ Written by:", 0, 20);
+            LCD.WriteAt("Nathan Cheng", 0, 50);
+            LCD.WriteAt("Ojas Landge", 0, 90);
         }
 
-        
+        mainMenu.update();
 
         // board1.drawMino(0,0);
 

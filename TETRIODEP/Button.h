@@ -54,13 +54,14 @@ class Button {
 
   Button();
   Button(float x, float y, float w, float h, string text);
+  Button(float x, float y, float w, float h, string text, unsigned int color, unsigned int trigColor);
   Button(float x, float y, float w, float h, string text, bool e);
 
   void drawButton();
 
-  void setDefaultColor(int color);
-  void setTriggeredColor(int color);
-  void setDisabledColor(int color);
+  void setDefaultColor(unsigned int color);
+  void setTriggeredColor(unsigned int color);
+  void setDisabledColor(unsigned int color);
   void updateButtonState();
 
   bool getButtonTriggered();
@@ -70,6 +71,9 @@ class Button {
 
 //returns true once when button is released
   bool onButtonReleased();
+
+  void disable();
+  void enable();
 
   void remove();
 

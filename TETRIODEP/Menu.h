@@ -1,31 +1,44 @@
 #ifndef MENU.H
 #define MENU .H
 
-#include "../TETRIODEP/Grid.h"
 #include "../TETRIODEP/Button.h"
+#include "../TETRIODEP/Grid.h"
 class Menu {
   private:
-  enum class Option{
-    None,
-    Start,
-    Settings,//can include page for player names, controls, themes, etcs
-    Stats,
-    Instructions,
-    Credits,
-  };
+    enum class Option {
+        None,//back to menu
+        Start,
+        Settings, // can include page for player names, controls, themes, etcs
+        Stats,
+        Instructions,
+        Credits,
+        Back,//limbo after back is pressed
+    };
 
-//current option selected
-  Option currOption = Option::None;
+    // current option selected
+    Option currOption = Option::None;
+
+    bool inPage;
+
   public:
     Button start;
     Button settings;
     Button stats;
     Button instructions;
     Button credits;
-  Menu();
-  void update();
+    Button back;
 
-  void remove();
+
+    Menu();
+    bool renderSubPage(Button &b);
+    void disable(Button &b);
+    void update();
+
+    void renderBackButton();
+    void removeBack();
+
+    void remove();
     
-    };
+
+};
 #endif

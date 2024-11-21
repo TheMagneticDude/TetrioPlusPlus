@@ -32,6 +32,8 @@ Button::Button(float x, float y, float w, float h,string text){
     defaultColor = WHITE;
     triggeredColor = GRAY;
     disabledColor = DARKGRAY;
+
+    removed = false;
     
     currColor = defaultColor;
 }
@@ -56,6 +58,7 @@ Button::Button(float x, float y, float w, float h,string text, bool e){
     defaultColor = WHITE;
     triggeredColor = GRAY;
     disabledColor = DARKGRAY;
+    removed = false;
     if(e){
     currColor=disabledColor;
     }else{
@@ -68,6 +71,7 @@ void Button::setTriggeredColor(int color){triggeredColor = color;}
 void Button::setDisabledColor(int color){disabledColor = color;}
 
 void Button::drawButton(){
+    removed = false;
     LCD.SetFontColor(currColor);
     LCD.DrawRectangle(buttonX,buttonY,buttonWidth,buttonHeight);
     LCD.WriteAt(buttonText,buttonX,buttonY+4);
@@ -134,5 +138,15 @@ bool Button::onButtonClicked(){
 
 bool Button::onButtonReleased(){
     return currState == buttonState::released;
+}
+
+void Button::remove(){
+    if(!removed){
+    int backColor = BLACK;
+    LCD.SetFontColor(backColor);
+    LCD.DrawRectangle(buttonX,buttonY,buttonWidth,buttonHeight);
+    LCD.WriteAt(buttonText,buttonX,buttonY+4);
+    }
+    removed = true;
 }
 

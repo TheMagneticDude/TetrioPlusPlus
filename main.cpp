@@ -26,11 +26,13 @@ int main() {
         // s.updateButtonState();
 
         if (mainMenu.start.getButtonTriggered()) {
-            // clear screen
-            
-            if(mainMenu.start.onButtonClicked()){
+            // clear main menu screen
+            if (mainMenu.start.onButtonClicked()) {
                 LCD.Clear();
             }
+
+            mainMenu.remove();
+            
             board1.draw();
             board2.draw();
 
@@ -40,11 +42,11 @@ int main() {
             board2.drawBorder();
             board1.drawRandom();
             board2.drawRandom();
-            
-        }else if(mainMenu.start.onButtonReleased()){
+
+        } else if (mainMenu.start.onButtonReleased()) {
             LCD.Clear();
         }else{
-        mainMenu.update();
+            mainMenu.update();
         }
 
         

@@ -24,9 +24,12 @@ void Menu::update(){
     stats.updateButtonState();
     instructions.updateButtonState();
     credits.updateButtonState();
+}
 
-    if(start.getButtonTriggered()){
-        
-    }
-
+void Menu::remove(){
+    start.remove();
+    settings.remove();
+    stats.remove();
+    instructions.remove();
+    credits.remove();
 }

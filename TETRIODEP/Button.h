@@ -4,6 +4,9 @@
 #include "../TETRIODEP/Grid.h"
 #include <FEHLCD.h>
 #include <string>
+
+#include <pthread.h>
+
 using namespace std;
 
 class Button {
@@ -14,6 +17,9 @@ class Button {
     held,
     released
   };
+
+//thread
+  //pthread_t thread_object (callable);
 
   buttonState currState = buttonState::inactive;
 
@@ -44,6 +50,8 @@ class Button {
 
   string buttonText;
 
+  bool removed;
+
   Button();
   Button(float x, float y, float w, float h, string text);
   Button(float x, float y, float w, float h, string text, bool e);
@@ -62,6 +70,8 @@ class Button {
 
 //returns true once when button is released
   bool onButtonReleased();
+
+  void remove();
 
   
 };

@@ -24,6 +24,8 @@ class Menu {
     Button credits;
   Menu();
   void update();
+
+  void remove();
     
     };
 #endif

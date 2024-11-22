@@ -103,9 +103,9 @@ void Button::updateButtonState() {
         bool withinX = false;
         bool withinY = false;
         // update touched location
-        if (!LCD.Touch(&touchedX, &touchedY)) {
+        if (!LCD.Touch(&touchedX, &touchedY, false)) {
             // wait until touch happens
-        } else if (LCD.Touch(&xTrash, &yTrash)) {
+        } else if (LCD.Touch(&xTrash, &yTrash, false)) {
             // wait until touch releases
             // no joke this is the actual code from FEH documentation -_-
             // if touch is within button boundery then set button state to true

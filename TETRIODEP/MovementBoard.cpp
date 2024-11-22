@@ -42,7 +42,7 @@ void MovementBoard::draw() { grid.draw(boardX, boardY); }
 void MovementBoard::update(bool L, bool R, bool U, bool D) {
     // mino gravity
     bool minoGravity = false;
-    ;
+ 
     time_t now = time(NULL);
 
     if (isTimeUp(now, nextGravityTick, minoGravityTick)) {

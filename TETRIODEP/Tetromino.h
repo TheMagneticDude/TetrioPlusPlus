@@ -10,7 +10,8 @@ enum class Tetromino : uint8_t {
     O, // Square
     S, // Right Snake
     T, // T shape
-    Z  // Left Snake
+    Z, // Left Snake
+    G, // Garbage
 };
 
 enum class TetrominoOrientation {

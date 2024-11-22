@@ -1,12 +1,16 @@
 #pragma once
 
 #include "Grid.h"
+#include "Input.h"
+#include "Tetromino.h"
 
 class TetrisBoard {
   private:
     Grid grid;
-    Grid movement;
+    Grid fallingGrid;
     // tetrominos, all centered around bottom left
+
+    PlayerInput input;
 
     // line horizontal
     Grid Tetromno_I_H();
@@ -67,9 +71,19 @@ class TetrisBoard {
     };
 
   public:
+    // These are global screen coordinates
     int boardX;
     int boardY;
-    TetrisBoard(int x, int y);
+    // These are grid coordinates
+    int fallingX;
+    int fallingY;
+
+    TetrisBoard(int x, int y, PlayerSettings &playerSettings);
+    void update();
+    // Returns true if a collision was detected
+    bool checkCollision(Grid with, int x, int y);
+    Grid createGrid(Tetromino type, TetrominoOrientation orientation);
+
     void draw();
     void drawRandom();
     void drawBorder();

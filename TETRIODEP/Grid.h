@@ -7,6 +7,9 @@
 
 class Grid {
   private:
+    void minoShading(int pos_x, int pos_y, int color);
+    void drawMino(int pos_x, int pos_y, int color);
+
   public:
     // scale of minos
 #define SCALE 8 // was 6
@@ -18,13 +21,11 @@ class Grid {
 
     Grid(int width, int height);
 
-    // adds mino with random color to the grid
+    Tetromino getAtPos(int x, int y);
     void addMino(Tetromino mino, int x, int y);
+    void removeMino(int pos_x, int pos_y);
+
     void draw(int pos_x, int pos_y);
     // void drawBoarder(int pos_x, int pos_y);
 
-    void minoShading(int pos_x, int pos_y, int color);
-
-    void drawMino(int pos_x, int pos_y, int color);
-    void removeMino(int pos_x, int pos_y);
 };

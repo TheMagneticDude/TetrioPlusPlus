@@ -1,24 +1,31 @@
+#include <iostream>
+
 #include "TetrisBoard.h"
 #include "FEHRandom.h"
 #include "Grid.h"
+#include "Input.h"
+#include "Settings.h"
 #include "Tetromino.h"
 #include <FEHLCD.h>
 
 // initialize tetrisboard with a coordinate (top left corner)
-TetrisBoard::TetrisBoard(int Inx, int Iny) : grid(10, 20), movement(10, 10) {
+TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &settings) : grid(10, 20), fallingGrid(3, 3), input(settings) {
     // these are where the board is built around in world coords (top left corner)
-    TetrisBoard::boardX = Inx;
-    TetrisBoard::boardY = Iny;
+    boardX = _boardX;
+    boardY = _boardY;
+    // TODO:
+    fallingX = 5;
+    fallingY = 10;
+    fallingGrid = createGrid(Tetromino::Z, TetrominoOrientation::H);
 }
 
 // draws the entire tetrisboard
 void TetrisBoard::draw() {
     grid.draw(boardX, boardY);
-    movement.draw(boardX, boardY);
+    fallingGrid.draw(boardX + fallingX * SCALE, boardY - fallingY * SCALE);
 }
 // draws random minos across tetris board
 void TetrisBoard::drawRandom() {
-
     for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 20; y++) {
             // was for generating random minos
@@ -60,13 +67,71 @@ int TetrisBoard::convertToGridCoordsX(int x) { return x + boardX; }
 // system 0,0 top left)
 int TetrisBoard::convertToGridCoordsY(int y) { return boardY + 20 * SCALE - y * SCALE; }
 
-// returns the correct tetromino array with orientation
-int *getOrientation(Tetromino type, TetrominoOrientation o) {}
+void TetrisBoard::update() {
+    input.update();
 
-// draws a tetromino with the bottom left corner at pos_x and pos_y on the tetris board coordinate grid
-void TetrisBoard::drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {}
+    bool pressedLeft = input.keyLeft.newPress();
+    bool pressedRight = input.keyRight.newPress();
+    if (pressedLeft && !pressedRight) {
+        if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
+            fallingX--;
+        }
+    } else if (pressedRight && !pressedLeft) {
+        if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
+            fallingX++;
+        }
+    }
+}
 
-// draws a moving tetromino starting with the bottom left corner at pos_x and pos_y on the tetris board coordinate grid
-void TetrisBoard::drawMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {
-    movement.drawMino(20, 100, BLUE);
+bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {
+    for (int x = 0; x < with.width; x++) {
+        for (int y = 0; y < with.height; y++) {
+            Tetromino withMino = with.getAtPos(x, y);
+            Tetromino gridMino;
+            if (withX + x < 0 || withX + x >= 10) {
+                gridMino = Tetromino::G;
+            } else {
+                gridMino = grid.getAtPos(withX + x, withY + y);
+            }
+            if (withMino != Tetromino::E && gridMino != Tetromino::E) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+Grid TetrisBoard::createGrid(Tetromino type, TetrominoOrientation orientation) {
+    int gridWidth = type == Tetromino::I ? 5 : 3;
+    Grid newGrid(gridWidth, gridWidth);
+    std::vector<int> newData;
+    switch (type) {
+    case Tetromino::I:
+        newData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        break;
+    case Tetromino::J:
+        newData = {2, 0, 0, 2, 2, 2, 0, 0, 0};
+        break;
+    case Tetromino::L:
+        newData = {0, 0, 3, 3, 3, 3, 0, 0, 0};
+        break;
+    case Tetromino::O:
+        newData = {0, 4, 4, 0, 4, 4, 0, 0, 0};
+        break;
+    case Tetromino::S:
+        newData = {0, 5, 5, 5, 5, 0, 0, 0, 0};
+        break;
+    case Tetromino::T:
+        newData = {0, 6, 0, 6, 6, 6, 0, 0, 0};
+        break;
+    case Tetromino::Z:
+        newData = {7, 7, 0, 0, 7, 7, 0, 0, 0};
+        break;
+    default:
+        std::cerr << "Tried to create grid with invalid tetromino type: " << static_cast<int>(type) << std::endl;
+    }
+    for (int i = 0; i < newData.size(); i++) {
+        newGrid.data[i] = static_cast<Tetromino>(newData[i]);
+    }
+    return newGrid;
 }

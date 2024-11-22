@@ -42,6 +42,7 @@ class PlayerInput {
     TriggerKey rotate180;
     TriggerKey softDrop;
     TriggerKey hardDrop;
+    TriggerKey swapHold;
 
     PlayerInput(PlayerSettings &playerSettings);
     void update();

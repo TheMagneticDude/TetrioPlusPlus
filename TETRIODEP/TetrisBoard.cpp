@@ -10,7 +10,7 @@
 
 // initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
-    : grid(10, 20), fallingGrid(3, 3), input(_settings) {
+    : grid(10, 20), fallingGrid(3, 3), holdGrid(3, 3), input(_settings) {
     settings = &_settings;
     // these are where the board is built around in world coords (top left corner)
     boardX = _boardX;
@@ -23,6 +23,7 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
 // draws the entire tetrisboard
 void TetrisBoard::draw() {
     grid.draw(boardX, boardY);
+    holdGrid.draw(boardX - (holdGrid.width + 1) * SCALE, boardY - 17 * SCALE);
     fallingGrid.draw(boardX + fallingX * SCALE, boardY - fallingY * SCALE);
 }
 // draws random minos across tetris board
@@ -71,6 +72,7 @@ int TetrisBoard::convertToGridCoordsY(int y) { return boardY + 20 * SCALE - y * 
 void TetrisBoard::update() {
     input.update();
 
+    // Handle Left/Right movement keys
     bool pressedLeft = input.keyLeft.newPress();
     bool pressedRight = input.keyRight.newPress();
     if (pressedLeft && !pressedRight) {
@@ -83,13 +85,17 @@ void TetrisBoard::update() {
         }
     }
 
+    // Get the time since gravity was last applied
     auto now = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> lastGravityDuration = now - lastGravity;
     float lastGravitySecs = lastGravityDuration.count();
+
+    // The soft drop key applies the Soft Drop Facter (SDF) to gravity
     float effectiveGravityRate = gravityRate;
     if (input.softDrop.pressed()) {
         effectiveGravityRate /= settings->handling.sdf;
     }
+
     if (lastGravitySecs >= effectiveGravityRate) {
         lastGravity = now;
         if (!checkCollision(fallingGrid, fallingX, fallingY - 1)) {
@@ -98,9 +104,11 @@ void TetrisBoard::update() {
             // This is temporary
             settleGrid(fallingGrid, fallingX, fallingY);
             startNewFalling();
+            return;
         }
     }
 
+    // Handle hard drops by moving the falling mino as far down as possible and settling it there
     if (input.hardDrop.newPress()) {
         int y = fallingY;
         while (!checkCollision(fallingGrid, fallingX, y - 1)) {
@@ -108,14 +116,29 @@ void TetrisBoard::update() {
         }
         settleGrid(fallingGrid, fallingX, y);
         startNewFalling();
+        return;
+    }
+
+    if (input.swapHold.newPress() && !didHold) {
+        std::cout << "started hold" << std::endl;
+        std::optional<Tetromino> oldHold = hold;
+        hold = fallingMino;
+        holdGrid = createGrid(fallingMino, TetrominoOrientation::H);
+        startNewFalling(oldHold);
+        didHold = true;
     }
 }
 
-void TetrisBoard::startNewFalling() {
-    Tetromino mino = static_cast<Tetromino>(Random.RandInt() % 7 + 1);
-    fallingGrid = createGrid(mino, TetrominoOrientation::H);
+void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
+    if (!mino.has_value()) {
+        mino = static_cast<Tetromino>(Random.RandInt() % 7 + 1);
+    }
+    fallingMino = *mino;
+    fallingGrid = createGrid(*mino, TetrominoOrientation::H);
     fallingX = 4;
     fallingY = 20;
+    lastGravity = std::chrono::high_resolution_clock::now();
+    didHold = false;
 }
 
 bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {

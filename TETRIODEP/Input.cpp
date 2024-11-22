@@ -14,7 +14,7 @@
 #include <X11/Xlib.h>
 #include <tigr.h>
 #endif
-#include <iostream>
+
 TriggerKey::TriggerKey(int keyCode, bool useDAS = false)
     : keyCode(keyCode), useDAS(useDAS), isPressed(false), isNewPress(false) {}
 
@@ -42,7 +42,7 @@ void TriggerKey::update() {
 #endif
 
     if (currentlyIsPressed && !isPressed) {
-        
+
         isPressed = true;
         resetHold();
     } else if (!currentlyIsPressed && isPressed) {
@@ -72,7 +72,8 @@ PlayerInput::PlayerInput(PlayerSettings &playerSettings)
     : handling(&playerSettings.handling), keyLeft(playerSettings.controls.moveLeft, true),
       keyRight(playerSettings.controls.moveRight, true), rotateCW(playerSettings.controls.rotateCW),
       rotateCCW(playerSettings.controls.rotateCCW), rotate180(playerSettings.controls.rotate180),
-      softDrop(playerSettings.controls.softDrop), hardDrop(playerSettings.controls.hardDrop) {}
+      softDrop(playerSettings.controls.softDrop), hardDrop(playerSettings.controls.hardDrop),
+      swapHold(playerSettings.controls.swapHold) {}
 
 void PlayerInput::update() {
     keyLeft.update();
@@ -82,6 +83,7 @@ void PlayerInput::update() {
     rotate180.update();
     softDrop.update();
     hardDrop.update();
+    swapHold.update();
 
     handleDAS(repeatingLeft, keyLeft);
     handleDAS(repeatingRight, keyRight);

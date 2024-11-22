@@ -25,5 +25,7 @@ class Grid {
     void setAtPos(Tetromino mino, int x, int y);
     void removeAtPos(int pos_x, int pos_y);
 
+    Grid rotate90();
+
     void draw(int pos_x, int pos_y);
 };

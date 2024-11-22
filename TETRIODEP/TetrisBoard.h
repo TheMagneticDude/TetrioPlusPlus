@@ -1,5 +1,7 @@
 #pragma once
 
+#include <optional>
+
 #include "Grid.h"
 #include "Input.h"
 #include "Settings.h"
@@ -9,7 +11,9 @@ class TetrisBoard {
   private:
     Grid grid;
     Grid fallingGrid;
-    // tetrominos, all centered around bottom left
+    Grid holdGrid;
+
+    Tetromino fallingMino;
 
     PlayerInput input;
     PlayerSettings *settings;
@@ -20,6 +24,9 @@ class TetrisBoard {
 
     float gravityRate = 0.7;
     std::chrono::high_resolution_clock::time_point lastGravity;
+
+    std::optional<Tetromino> hold;
+    bool didHold = false;
 
   public:
     // These are global screen coordinates
@@ -32,7 +39,7 @@ class TetrisBoard {
     bool checkCollision(Grid with, int x, int y);
     Grid createGrid(Tetromino type, TetrominoOrientation orientation);
     void settleGrid(Grid from, int fromX, int fromY);
-    void startNewFalling();
+    void startNewFalling(std::optional<Tetromino> mino = {});
 
     void draw();
     void drawRandom();

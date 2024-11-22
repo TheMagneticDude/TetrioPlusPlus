@@ -15,7 +15,8 @@
 #include <tigr.h>
 #endif
 
-TriggerKey::TriggerKey(int keyCode) : keyCode(keyCode), isPressed(false), isNewPress(false) {}
+TriggerKey::TriggerKey(int keyCode, bool useDAS = false)
+    : keyCode(keyCode), useDAS(useDAS), isPressed(false), isNewPress(false) {}
 
 void TriggerKey::update() {
     bool currentlyIsPressed;
@@ -41,20 +42,28 @@ void TriggerKey::update() {
 
     if (currentlyIsPressed && !isPressed) {
         isPressed = true;
-        isNewPress = true;
-        holdStart = std::chrono::high_resolution_clock::now();
+        resetHold();
     } else if (!currentlyIsPressed && isPressed) {
         isPressed = false;
     }
 }
 
-bool TriggerKey::newPress() { return isNewPress; }
+bool TriggerKey::newPress() {
+    bool wasNewPress = isNewPress;
+    isNewPress = false;
+    return wasNewPress;
+}
 
 bool TriggerKey::pressed() { return isPressed; }
 
 float TriggerKey::holdTime() {
     std::chrono::duration<float> duration = std::chrono::high_resolution_clock::now() - holdStart;
     return duration.count();
+}
+
+void TriggerKey::resetHold() {
+    isNewPress = true;
+    holdStart = std::chrono::high_resolution_clock::now();
 }
 
 PlayerInput::PlayerInput(PlayerSettings &playerSettings)
@@ -71,4 +80,18 @@ void PlayerInput::update() {
     rotate180.update();
     softDrop.update();
     hardDrop.update();
+
+    handleDAS(repeatingLeft, keyLeft);
+    handleDAS(repeatingRight, keyRight);
+}
+
+void PlayerInput::handleDAS(bool &isRepeating, TriggerKey &key) {
+    if (!key.pressed() && isRepeating) {
+        isRepeating = false;
+    } else if (isRepeating && key.holdTime() > handling->arr) {
+        key.resetHold();
+    } else if (!repeatingLeft && key.pressed() && key.holdTime() > handling->das) {
+        key.resetHold();
+        isRepeating = true;
+    }
 }

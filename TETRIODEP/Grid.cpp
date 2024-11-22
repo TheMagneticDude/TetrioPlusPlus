@@ -15,7 +15,7 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
-            std::cout << color;
+            std::cout << color << std::endl;
             if (color != BLACK) {
                 drawMino(pos_x + x * SCALE, pos_y + y * SCALE, color);
             }

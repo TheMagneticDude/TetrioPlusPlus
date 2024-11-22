@@ -10,19 +10,27 @@ class TriggerKey {
     std::chrono::high_resolution_clock::time_point holdStart;
     bool isPressed;
     bool isNewPress;
+    bool useDAS;
 
   public:
-    TriggerKey(int keyCode);
+    TriggerKey(int keyCode, bool useDAS);
     void update();
     bool newPress();
     bool pressed();
     // Returns the time in seconds
     float holdTime();
+    // Simulate a new press and reset the hold timer (used for e.g. DAS)
+    void resetHold();
 };
 
 class PlayerInput {
   private:
     PlayerHandling *handling;
+
+    bool repeatingLeft;
+    bool repeatingRight;
+
+    void handleDAS(bool &isRepeating, TriggerKey &key);
 
   public:
     // It's in FEH best practices to have all fields be private, but in this case it makes sense for a user of the

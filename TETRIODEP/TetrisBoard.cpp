@@ -25,17 +25,6 @@ void TetrisBoard::draw() {
     holdGrid.draw(boardX - (holdGrid.width + 1) * SCALE, boardY - 17 * SCALE);
     fallingGrid.draw(boardX + fallingX * SCALE, boardY - fallingY * SCALE);
 }
-// draws random minos across tetris board
-void TetrisBoard::drawRandom() {
-    for (int x = 0; x < 10; x++) {
-        for (int y = 0; y < 20; y++) {
-            // was for generating random minos
-            auto mino = static_cast<Tetromino>(Random.RandInt() % 7);
-
-            grid.data[y * 10 + x] = mino;
-        }
-    }
-}
 
 // draws border around board excluding top
 void TetrisBoard::drawBorder() {
@@ -60,13 +49,6 @@ void TetrisBoard::drawBorder() {
     LCD.FillRectangle(pos_x - borderScale + SCALE * grid.width + borderScale, pos_y - grid.height * SCALE, borderScale,
                       SCALE * (grid.height) + borderScale);
 }
-
-// transforms the tetris board coordinate grid (bottom left being 0,0) to grid coordinate system (world coordinate
-// system 0,0 top left)
-int TetrisBoard::convertToGridCoordsX(int x) { return x + boardX; }
-// transforms the tetris board coordinate grid (bottom left being 0,0) to grid coordinate system (world coordinate
-// system 0,0 top left)
-int TetrisBoard::convertToGridCoordsY(int y) { return boardY + 20 * SCALE - y * SCALE; }
 
 void TetrisBoard::update() {
     input.update();

@@ -44,13 +44,5 @@ class TetrisBoard {
     void startNewFalling(std::optional<Tetromino> mino = {});
 
     void draw();
-    void drawRandom();
     void drawBorder();
-    int *getOrientation(int o);
-    void drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
-    int convertToGridCoordsX(int x);
-    int convertToGridCoordsY(int y);
-
-    // movement methods
-    void drawMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
 };

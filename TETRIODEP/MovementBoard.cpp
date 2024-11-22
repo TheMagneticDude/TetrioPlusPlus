@@ -61,10 +61,12 @@ void MovementBoard::update() {
     }
 
     // down triggers if minogravity needs to tick
-    if (input.softDrop.pressed() && isBetween(movingY - 1, yMin, yMax)) {
+    if ((minoGravity || input.softDrop.pressed()) && isBetween(movingY + 1, yMin, yMax)) {
         grid.removeMino(movingX,movingY);
+        
         movingY++;
     }
+   
 
     // render mino
     if (isBetween(movingX, xMin, xMax) && isBetween(movingY, yMin, yMax)) {

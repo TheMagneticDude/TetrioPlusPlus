@@ -16,8 +16,8 @@ int main() {
     int board1Loc[2] = {40, 60};
     int board2Loc[2] = {200, 60};
     TetrisBoard board1(board1Loc[0], board1Loc[1]);
-    MovementBoard movement1(board1Loc[0], board1Loc[1], settings.p1Settings);
-    movement1.setMovingTetromino(0, 20 * SCALE, static_cast<Tetromino>(2), TetrominoOrientation::H);
+    MovementBoard movement1(board1Loc[0], board1Loc[1], settings.p2Settings);
+    movement1.setMovingTetromino(0, 0, Tetromino::J, TetrominoOrientation::H);
     TetrisBoard board2(board2Loc[0], board2Loc[1]);
     MovementBoard movement2(board1Loc[0], board1Loc[1], settings.p2Settings);
 
@@ -46,10 +46,10 @@ int main() {
             // update movement
             movement1.update();
 
-            // if (ctrl) {
-            //     board1.drawRandom();
+
+                // board1.drawRandom();
             //     board2.drawRandom();
-            // }
+
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 

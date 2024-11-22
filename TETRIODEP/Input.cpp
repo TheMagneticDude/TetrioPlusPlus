@@ -14,7 +14,7 @@
 #include <X11/Xlib.h>
 #include <tigr.h>
 #endif
-
+#include <iostream>
 TriggerKey::TriggerKey(int keyCode, bool useDAS = false)
     : keyCode(keyCode), useDAS(useDAS), isPressed(false), isNewPress(false) {}
 
@@ -25,6 +25,7 @@ void TriggerKey::update() {
     currentlyIsPressed = GetAsyncKeyState(keyCode);
 #endif
 
+// my guy you are a madman
 #if __linux__ && !__ANDROID__
     // I'm sorry but it had to be done :)
     // The TigrInternal structure is placed directly after Tigr (Tigr* is at offset 0 in LCD)
@@ -41,6 +42,7 @@ void TriggerKey::update() {
 #endif
 
     if (currentlyIsPressed && !isPressed) {
+        
         isPressed = true;
         resetHold();
     } else if (!currentlyIsPressed && isPressed) {
@@ -67,8 +69,8 @@ void TriggerKey::resetHold() {
 }
 
 PlayerInput::PlayerInput(PlayerSettings &playerSettings)
-    : handling(&playerSettings.handling), keyLeft(playerSettings.controls.moveLeft),
-      keyRight(playerSettings.controls.moveRight), rotateCW(playerSettings.controls.rotateCW),
+    : handling(&playerSettings.handling), keyLeft(playerSettings.controls.moveLeft, true),
+      keyRight(playerSettings.controls.moveRight, true), rotateCW(playerSettings.controls.rotateCW),
       rotateCCW(playerSettings.controls.rotateCCW), rotate180(playerSettings.controls.rotate180),
       softDrop(playerSettings.controls.softDrop), hardDrop(playerSettings.controls.hardDrop) {}
 

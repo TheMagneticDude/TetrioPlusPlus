@@ -16,7 +16,7 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
             if (color != BLACK) {
-                drawMino(pos_x + x * SCALE, height * SCALE - pos_y + y * SCALE, color);
+                drawMino(pos_x + x * SCALE, pos_y - y * SCALE, color);
             }
         }
     }

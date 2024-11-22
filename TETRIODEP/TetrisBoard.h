@@ -2,6 +2,7 @@
 
 #include "Grid.h"
 #include "Input.h"
+#include "Settings.h"
 #include "Tetromino.h"
 
 class TetrisBoard {
@@ -11,72 +12,19 @@ class TetrisBoard {
     // tetrominos, all centered around bottom left
 
     PlayerInput input;
+    PlayerSettings *settings;
 
-    // line horizontal
-    Grid Tetromno_I_H();
-    // line verticle
-    int Tetromno_I_V[4][4] = {
-        {1, 0, 0, 0},
-        {1, 0, 0, 0},
-        {1, 0, 0, 0},
-        {1, 0, 0, 0},
-    };
+    // These are grid coordinates
+    int fallingX = 5;
+    int fallingY = 20;
 
-    // square, only one rotation
-    int Tetromno_O[4][4] = {
-        {0, 0, 0, 0},
-        {0, 0, 0, 0},
-        {1, 1, 0, 0},
-        {1, 1, 0, 0},
-    };
-
-    // t shaped piece upright
-    int Tetromno_T_U[4][4] = {
-        {0, 0, 0, 0},
-        {0, 0, 0, 0},
-        {0, 1, 0, 0},
-        {1, 1, 1, 0},
-    };
-
-    // t shaped piece turned right
-    int Tetromno_T_R[4][4] = {
-        {0, 0, 0, 0},
-        {1, 0, 0, 0},
-        {1, 1, 0, 0},
-        {1, 0, 0, 0},
-    };
-
-    // t shaped piece turned upside down
-    int Tetromno_T_D[4][4] = {
-        {0, 0, 0, 0},
-        {0, 0, 0, 0},
-        {0, 1, 0, 0},
-        {1, 1, 1, 0},
-    };
-
-    // t shaped piece turned left
-    int Tetromno_T_L[4][4] = {
-        {0, 0, 0, 0},
-        {0, 1, 0, 0},
-        {1, 1, 0, 0},
-        {0, 1, 0, 0},
-    };
-
-    // right snake upright
-    int Tetromno_RS_U[4][4] = {
-        {0, 0, 0, 0},
-        {0, 0, 0, 0},
-        {0, 1, 1, 0},
-        {1, 1, 0, 0},
-    };
+    float gravityRate = 0.7;
+    std::chrono::high_resolution_clock::time_point lastGravity;
 
   public:
     // These are global screen coordinates
     int boardX;
     int boardY;
-    // These are grid coordinates
-    int fallingX;
-    int fallingY;
 
     TetrisBoard(int x, int y, PlayerSettings &playerSettings);
     void update();

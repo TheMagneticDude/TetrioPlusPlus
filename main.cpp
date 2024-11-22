@@ -13,8 +13,8 @@
 int main() {
     Settings settings = defaultSettings;
 
-    int board1Loc[2] = {40, 60};
-    int board2Loc[2] = {200, 60};
+    int board1Loc[2] = {40, 220};
+    int board2Loc[2] = {200, 220};
     TetrisBoard board1(board1Loc[0], board1Loc[1], settings.p1Settings);
     TetrisBoard board2(board2Loc[0], board2Loc[1], settings.p2Settings);
 

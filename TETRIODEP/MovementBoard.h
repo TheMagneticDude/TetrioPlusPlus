@@ -1,11 +1,14 @@
 #pragma once
 
 #include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/Key.h"
-#include <ctime>
+#include "../TETRIODEP/Settings.h"
+#include "Input.h"
+
 class MovementBoard {
   private:
     Grid grid;
+
+    PlayerInput input;
 
     // bounderies to confine the mino
     int xMin = 0; // tetris board coords
@@ -13,18 +16,6 @@ class MovementBoard {
 
     int xMax;
     int yMax;
-
-    // keys
-    enum class keyState {
-        CLICKED, // when first clicked
-        PRESSED, // pressed
-        INACTIVE // not being clicked
-    };
-
-    Key keyL;
-    Key keyR;
-    Key keyU;
-    Key keyD;
 
     // current moving piece's info
     int movingX;
@@ -38,10 +29,12 @@ class MovementBoard {
     float minoGravityTick = 1;
     time_t nextGravityTick;
 
+    void updateInput();
+
   public:
     int boardX;
     int boardY;
-    MovementBoard(int x, int y);
+    MovementBoard(int x, int y, PlayerSettings &playerSettings);
     bool isTimeUp(time_t now, time_t &target, float tick);
     bool isBetween(int n, int min, int max);
     void draw();
@@ -51,6 +44,4 @@ class MovementBoard {
     int convertToGridCoordsY(int y);
 
     void setMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
-
-    void updateKeys();
 };

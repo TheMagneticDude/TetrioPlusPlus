@@ -10,17 +10,16 @@
 #include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Tetromino.h"
 
-// for key and mouse input
-#include <Windows.h>
-
 int main() {
+    Settings settings = defaultSettings;
+
     int board1Loc[2] = {40, 60};
     int board2Loc[2] = {200, 60};
     TetrisBoard board1(board1Loc[0], board1Loc[1]);
-    MovementBoard movement1(board1Loc[0], board1Loc[1]);
+    MovementBoard movement1(board1Loc[0], board1Loc[1], settings.p1Settings);
     movement1.setMovingTetromino(0, 20 * SCALE, static_cast<Tetromino>(2), TetrominoOrientation::H);
     TetrisBoard board2(board2Loc[0], board2Loc[1]);
-    MovementBoard movement2(board1Loc[0], board1Loc[1]);
+    MovementBoard movement2(board1Loc[0], board1Loc[1], settings.p2Settings);
 
     Menu mainMenu = Menu();
 
@@ -32,12 +31,6 @@ int main() {
         // VK_RIGHT 	0x27 	RIGHT ARROW key
         // VK_DOWN 	0x28 	DOWN ARROW key
 
-        bool rotateMino = GetAsyncKeyState(VK_UP);
-        bool arrowDown = GetAsyncKeyState(VK_DOWN);
-        bool moveLeft = GetAsyncKeyState(VK_LEFT);
-        bool moveRight = GetAsyncKeyState(VK_RIGHT);
-
-        bool ctrl = GetAsyncKeyState(VK_CONTROL);
 
         // settings has not been implemented yet so disabled
 
@@ -55,13 +48,14 @@ int main() {
             board1.drawBorder();
             board2.drawBorder();
 
-            // update movement
+            //update movement
             movement1.update();
 
-            if (ctrl) {
-                board1.drawRandom();
-                board2.drawRandom();
-            }
+            // if (ctrl) {
+            //     board1.drawRandom();
+            //     board2.drawRandom();
+            // }
+
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 
@@ -95,8 +89,8 @@ int main() {
         LCD.Update();
 
         // debug mouse pointer
-        LPPOINT point;
-        GetCursorPos(point);
+        // LPPOINT point;
+        // GetCursorPos(point);
     }
 
     return 0;

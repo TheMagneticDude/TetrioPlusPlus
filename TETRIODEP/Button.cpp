@@ -126,7 +126,6 @@ void Button::updateButtonState() {
             if (currState == buttonState::active) {
                 currState = buttonState::held;
             }
-
         } else {
             // else clear touched location to off the screen
             triggered = false;

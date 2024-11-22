@@ -24,6 +24,7 @@ int main() {
     Menu mainMenu = Menu();
 
     while (1) {
+        LCD.Clear();
         // Buttons  can set up button bindings etc later
 
         // settings has not been implemented yet so disabled

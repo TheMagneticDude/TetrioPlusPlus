@@ -99,7 +99,7 @@ void Button::drawButton() {
 
 // redraws button and also updates its state
 void Button::updateButtonState() {
-    
+
     if (enabled) {
         bool withinX = false;
         bool withinY = false;
@@ -126,7 +126,7 @@ void Button::updateButtonState() {
             if (currState == buttonState::active) {
                 currState = buttonState::held;
             }
-            
+
         } else {
             // else clear touched location to off the screen
             triggered = false;
@@ -157,13 +157,11 @@ bool Button::onButtonReleased() { return currState == buttonState::released; }
 void Button::disable() {
     enabled = false;
     currColor = disabledColor;
-
 }
 
 void Button::enable() {
     enabled = true;
     currColor = defaultColor;
-
 }
 
 void Button::remove() {

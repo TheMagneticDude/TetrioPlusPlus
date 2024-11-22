@@ -12,9 +12,11 @@
 int buttonoffset = 30;
 
 Menu::Menu()
-    : start(10, 0+buttonoffset, 70, 20, "Start", BLUE, DARKBLUE), settings(10, 30+buttonoffset, 70, 20, "Settings", BLUE, DARKBLUE),
-      stats(10, 60+buttonoffset, 70, 20, "Stats", BLUE, DARKBLUE), instructions(10, 90+buttonoffset, 70, 20, "Instructions", BLUE, DARKBLUE),
-      credits(10, 120+buttonoffset, 70, 20, "Credits", BLUE, DARKBLUE), back(10, 0, 40, 20, "Back", BLUE, DARKBLUE) {
+    : start(10, 0 + buttonoffset, 70, 20, "Start", BLUE, DARKBLUE),
+      settings(10, 30 + buttonoffset, 70, 20, "Settings", BLUE, DARKBLUE),
+      stats(10, 60 + buttonoffset, 70, 20, "Stats", BLUE, DARKBLUE),
+      instructions(10, 90 + buttonoffset, 70, 20, "Instructions", BLUE, DARKBLUE),
+      credits(10, 120 + buttonoffset, 70, 20, "Credits", BLUE, DARKBLUE), back(10, 0, 40, 20, "Back", BLUE, DARKBLUE) {
     // initialize button instances
 
     // by default menue has not clicked into a page yet
@@ -25,16 +27,15 @@ void Menu::disable(Button &b) { b.disable(); }
 
 void Menu::update() {
 
-  if(currOption == Option::Back){
-    //clears screen loop right after back is clicked
-    LCD.Clear();
-    currOption = Option::None;
-  }
-    bool menuActive = currOption == Option::None; //if in subpage
-    
+    if (currOption == Option::Back) {
+        // clears screen loop right after back is clicked
+        LCD.Clear();
+        currOption = Option::None;
+    }
+    bool menuActive = currOption == Option::None; // if in subpage
 
     if (menuActive) {
-      //removes back button and draws menu buttons
+        // removes back button and draws menu buttons
         start.updateButtonState();
         settings.updateButtonState();
         stats.updateButtonState();
@@ -42,35 +43,32 @@ void Menu::update() {
         credits.updateButtonState();
 
         // update current option selected if a button triggers
-    if (renderSubPage(start)) {
-        currOption = Option::Start;
-    }
-    if (renderSubPage(settings)) {
-        currOption = Option::Settings;
-    }
-    if (renderSubPage(stats)) {
-        currOption = Option::Stats;
-    }
-    if (renderSubPage(instructions)) {
-        currOption = Option::Instructions;
-    }
-    if (renderSubPage(credits)) {
-        currOption = Option::Credits;
-    }
+        if (renderSubPage(start)) {
+            currOption = Option::Start;
+        }
+        if (renderSubPage(settings)) {
+            currOption = Option::Settings;
+        }
+        if (renderSubPage(stats)) {
+            currOption = Option::Stats;
+        }
+        if (renderSubPage(instructions)) {
+            currOption = Option::Instructions;
+        }
+        if (renderSubPage(credits)) {
+            currOption = Option::Credits;
+        }
     } else {
-      //removes menu buttons and draws back button
+        // removes menu buttons and draws back button
         remove();
         back.updateButtonState();
 
         if (renderSubPage(back)) {
-        currOption = Option::Back;
-        back.remove();
-        // back to menu
+            currOption = Option::Back;
+            back.remove();
+            // back to menu
+        }
     }
-    }
-
-    
-    
 }
 
 // returns true when its time to render a subpage for a given button
@@ -93,7 +91,7 @@ void Menu::renderBackButton() { back.updateButtonState(); }
 void Menu::removeBack() { back.remove(); }
 
 void Menu::remove() {
-  //clears all menu buttons
+    // clears all menu buttons
     start.remove();
     settings.remove();
     stats.remove();

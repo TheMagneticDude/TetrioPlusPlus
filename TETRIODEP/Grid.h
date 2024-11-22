@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../TETRIODEP/Tetromino.h"
-#include <vector>
 #include <FEHLCD.h>
+#include <vector>
 
 class Grid {
   private:
@@ -17,7 +17,7 @@ class Grid {
 
     Grid(int width, int height);
 
-    //adds mino with random color to the grid
+    // adds mino with random color to the grid
     void addMino(Tetromino mino, int x, int y);
     void draw(int pos_x, int pos_y);
     // void drawBoarder(int pos_x, int pos_y);

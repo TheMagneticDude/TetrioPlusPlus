@@ -6,9 +6,9 @@
 
 #include "../TETRIODEP/Grid.h"
 #include "../TETRIODEP/Menu.h"
+#include "../TETRIODEP/MovementBoard.h"
 #include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Tetromino.h"
-#include "../TETRIODEP/MovementBoard.h"
 
 // for key and mouse input
 #include <Windows.h>
@@ -18,7 +18,7 @@ int main() {
     int board2Loc[2] = {200, 60};
     TetrisBoard board1(board1Loc[0], board1Loc[1]);
     MovementBoard movement1(board1Loc[0], board1Loc[1]);
-    movement1.setMovingTetromino(0,20*SCALE,static_cast<Tetromino>(2), TetrominoOrientation::H);
+    movement1.setMovingTetromino(0, 20 * SCALE, static_cast<Tetromino>(2), TetrominoOrientation::H);
     TetrisBoard board2(board2Loc[0], board2Loc[1]);
     MovementBoard movement2(board1Loc[0], board1Loc[1]);
 
@@ -55,14 +55,13 @@ int main() {
             board1.drawBorder();
             board2.drawBorder();
 
-            //update movement
+            // update movement
             movement1.update();
 
             if (ctrl) {
                 board1.drawRandom();
                 board2.drawRandom();
             }
-
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 

@@ -39,10 +39,10 @@ bool MovementBoard::isTimeUp(time_t now, time_t &target, float tick) {
 void MovementBoard::draw() { grid.draw(boardX, boardY); }
 
 // updates the MovementBoard piece given keyboard inputs
-void MovementBoard::update() {
+void MovementBoard::update(bool L, bool R, bool U, bool D) {
     // mino gravity
     bool minoGravity = false;
-
+    ;
     time_t now = time(NULL);
 
     if (isTimeUp(now, nextGravityTick, minoGravityTick)) {

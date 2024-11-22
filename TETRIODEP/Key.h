@@ -18,12 +18,12 @@ class Key {
     // the type of key
     int key;
 
-    //time it takes until key is repeted rapidly in miliseconds
-    //ill change these variable names to something better 
+    // time it takes until key is repeted rapidly in miliseconds
+    // ill change these variable names to something better
     //...eventually
     unsigned int debounce;
 
-    unsigned long long  debounceEnd;
+    unsigned long long debounceEnd;
 
     bool debounceEnded;
 
@@ -40,7 +40,7 @@ class Key {
 
     bool onDebounceEnd();
 
-    //chrono related functions
+    // chrono related functions
     unsigned long long getTimeMS();
 };
 #endif

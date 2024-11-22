@@ -1,46 +1,42 @@
 #pragma once
 
-#include <ctime>
-#include "../TETRIODEP/Key.h"
 #include "../TETRIODEP/Grid.h"
+#include "../TETRIODEP/Key.h"
+#include <ctime>
 class MovementBoard {
   private:
     Grid grid;
 
-    //bounderies to confine the mino
-    int xMin = 0;//tetris board coords
+    // bounderies to confine the mino
+    int xMin = 0; // tetris board coords
     int yMin = 0;
-    
+
     int xMax;
     int yMax;
-    
-    //keys
-    enum class keyState{
-        CLICKED,//when first clicked
-        PRESSED,//pressed
-        INACTIVE//not being clicked
+
+    // keys
+    enum class keyState {
+        CLICKED, // when first clicked
+        PRESSED, // pressed
+        INACTIVE // not being clicked
     };
-
-    
-
 
     Key keyL;
     Key keyR;
     Key keyU;
     Key keyD;
 
-//current moving piece's info
+    // current moving piece's info
     int movingX;
     int movingY;
     Tetromino movingType;
     TetrominoOrientation movingOrientation;
 
-    //moving piece timing vars
-    
-    //gravity tick in seconds
+    // moving piece timing vars
+
+    // gravity tick in seconds
     float minoGravityTick = 1;
-    time_t nextGravityTick; 
-   
+    time_t nextGravityTick;
 
   public:
     int boardX;
@@ -54,10 +50,7 @@ class MovementBoard {
     int convertToGridCoordsX(int x);
     int convertToGridCoordsY(int y);
 
-
     void setMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
 
-
     void updateKeys();
-
 };

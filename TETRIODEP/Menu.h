@@ -4,13 +4,13 @@
 class Menu {
   private:
     enum class Option {
-        None,//back to menu
+        None, // back to menu
         Start,
         Settings, // can include page for player names, controls, themes, etcs
         Stats,
         Instructions,
         Credits,
-        Back,//limbo after back is pressed
+        Back, // limbo after back is pressed
     };
 
     // current option selected
@@ -26,7 +26,6 @@ class Menu {
     Button credits;
     Button back;
 
-
     Menu();
     bool renderSubPage(Button &b);
     void disable(Button &b);
@@ -36,6 +35,4 @@ class Menu {
     void removeBack();
 
     void remove();
-    
-
 };

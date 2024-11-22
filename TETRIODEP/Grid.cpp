@@ -16,19 +16,24 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
             if (color != BLACK) {
-                drawMino(pos_x + x * SCALE, pos_y + y * SCALE, color);
+                drawMino(pos_x + x * SCALE, height * SCALE - pos_y + y * SCALE, color);
             }
-
-            // LCD.SetFontColor(color);
-            // LCD.FillRectangle(pos_x + x * SCALE, pos_y + y * SCALE, SCALE, SCALE);
         }
     }
 }
 
-void Grid::addMino(Tetromino tetromino, int x, int y) {
+Tetromino Grid::getAtPos(int x, int y) {
+    return data[y * width + x];
+}
 
+void Grid::addMino(Tetromino tetromino, int x, int y) {
     auto mino = tetromino;
     data[y * width + x] = mino;
+}
+
+void Grid::removeMino(int pos_x, int pos_y) {
+   auto mino = Tetromino::E;
+    data[pos_y * width + pos_x] = mino;
 }
 
 // draws a mino with the bottom left corner at pos_x and pos_y
@@ -47,7 +52,4 @@ void Grid::drawMino(int pos_x, int pos_y, int color) {
     // left line
     LCD.DrawLine(pos_x, pos_y - SCALE, pos_x, pos_y);
 }
-void Grid::removeMino(int pos_x, int pos_y) {
-   auto mino = Tetromino::E;
-    data[pos_y * width + pos_x] = mino;
-}
+

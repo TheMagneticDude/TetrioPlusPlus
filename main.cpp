@@ -15,11 +15,8 @@ int main() {
 
     int board1Loc[2] = {40, 60};
     int board2Loc[2] = {200, 60};
-    TetrisBoard board1(board1Loc[0], board1Loc[1]);
-    MovementBoard movement1(board1Loc[0], board1Loc[1], settings.p2Settings);
-    movement1.setMovingTetromino(0, 0, Tetromino::J, TetrominoOrientation::H);
-    TetrisBoard board2(board2Loc[0], board2Loc[1]);
-    MovementBoard movement2(board1Loc[0], board1Loc[1], settings.p2Settings);
+    TetrisBoard board1(board1Loc[0], board1Loc[1], settings.p1Settings);
+    TetrisBoard board2(board2Loc[0], board2Loc[1], settings.p2Settings);
 
     Menu mainMenu = Menu();
 
@@ -36,16 +33,16 @@ int main() {
             LCD.WriteAt("\"Play\" Tetrio++ below!", 25, 25);
             mainMenu.remove();
 
+            board1.update();
+            board2.update();
+
             board1.draw();
             board2.draw();
 
-            board1.drawTetromino(0, 0, static_cast<Tetromino>(2), TetrominoOrientation::H);
             board1.drawBorder();
             board2.drawBorder();
 
             // update movement
-            movement1.update();
-
 
                 // board1.drawRandom();
             //     board2.drawRandom();

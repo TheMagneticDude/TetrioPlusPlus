@@ -1,7 +1,6 @@
-#include <cstdint>
-#ifndef TETROMINO_H
-#define TETROMINO_H
+#pragma once
 
+#include <cstdint>
 
 enum class Tetromino : uint8_t {
     E,// Empty, there is nothing here
@@ -20,4 +19,3 @@ enum class TetrominoOrientation {
     R,//right
     U//upsidedown
 };
-#endif

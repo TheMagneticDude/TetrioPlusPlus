@@ -1,5 +1,5 @@
-#ifndef GRID_H
-#define GRID_H
+#pragma once
+
 #include "../TETRIODEP/Tetromino.h"
 #include <vector>
 #include <FEHLCD.h>
@@ -27,5 +27,3 @@ class Grid {
     void drawMino(int pos_x, int pos_y, int color);
     void removeMino(int pos_x, int pos_y);
 };
-
-#endif

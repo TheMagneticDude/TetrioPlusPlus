@@ -1,5 +1,4 @@
-#ifndef TETRISBOARD.H
-#define TETRISBOARD .H
+#pragma once
 
 #include "../TETRIODEP/Grid.h"
 class TetrisBoard {
@@ -83,4 +82,3 @@ class TetrisBoard {
         void drawMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
 
 };
-#endif

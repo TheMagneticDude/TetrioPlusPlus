@@ -1,6 +1,4 @@
-#ifndef MENU.H
-#define MENU .H
-
+#pragma once
 #include "../TETRIODEP/Button.h"
 #include "../TETRIODEP/Grid.h"
 class Menu {
@@ -41,4 +39,3 @@ class Menu {
     
 
 };
-#endif

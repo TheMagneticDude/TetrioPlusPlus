@@ -1,5 +1,4 @@
-#ifndef BUTTON.H
-#define BUTTON .H
+#pragma once
 
 #include "../TETRIODEP/Grid.h"
 #include <FEHLCD.h>
@@ -77,6 +76,4 @@ class Button {
 
   void remove();
 
-  
 };
-#endif

@@ -1,5 +1,5 @@
-#ifndef MOVEMENTBOARD.H
-#define MOVEMENTBOARD .H
+#pragma once
+
 #include <ctime>
 #include "../TETRIODEP/Key.h"
 #include "../TETRIODEP/Grid.h"
@@ -61,4 +61,3 @@ class MovementBoard {
     void updateKeys();
 
 };
-#endif

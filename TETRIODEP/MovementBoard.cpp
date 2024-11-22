@@ -11,8 +11,10 @@
 int tetrisBoardWidth = 10;
 int tetrisBoardHeight = 20;
 
+int keyDebounce = 200;
+
 // initialize MovementBoard with a coordinate (top left corner)
-MovementBoard::MovementBoard(int Inx, int Iny) : grid(tetrisBoardWidth, tetrisBoardHeight),keyL(VK_LEFT,1000),keyR(VK_RIGHT,1000),keyU(VK_UP,1000),keyD(VK_DOWN,1000) {
+MovementBoard::MovementBoard(int Inx, int Iny) : grid(tetrisBoardWidth, tetrisBoardHeight),keyL(VK_LEFT,keyDebounce),keyR(VK_RIGHT,keyDebounce),keyU(VK_UP,keyDebounce),keyD(VK_DOWN,keyDebounce) {
     // these are where the board is built around in world coords (top left corner)
 
     xMax = xMin + (tetrisBoardWidth - 1) * SCALE;
@@ -51,15 +53,15 @@ void MovementBoard::update() {
     // keyboard inputs
 
     updateKeys();
-    if (keyL.onClick() && isBetween(movingX - 1, xMin, xMax)) {
+    if ((keyL.onClick()|| keyL.onDebounceEnd()) && isBetween(movingX - 1, xMin, xMax)) {
         grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingX -= SCALE;
     }
-    if (keyR.onClick() && isBetween(movingX + 1, xMin, xMax)) {
+    if ((keyR.onClick()|| keyR.onDebounceEnd()) && isBetween(movingX + 1, xMin, xMax)) {
         grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingX += SCALE;
     }
-    if (keyU.onClick() && isBetween(movingY + 1, yMin, yMax)) {
+    if ((keyU.onClick()|| keyU.onDebounceEnd()) && isBetween(movingY + 1, yMin, yMax)) {
         grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingY += SCALE;
     }

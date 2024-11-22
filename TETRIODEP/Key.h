@@ -19,9 +19,13 @@ class Key {
     int key;
 
     //time it takes until key is repeted rapidly in miliseconds
+    //ill change these variable names to something better 
+    //...eventually
     unsigned int debounce;
 
-    unsigned int debounceEnd;
+    unsigned long long  debounceEnd;
+
+    bool debounceEnded;
 
     // VK_LEFT 	0x25 	LEFT ARROW key
     // VK_UP 	0x26 	UP ARROW key
@@ -34,7 +38,9 @@ class Key {
     bool triggered();
     bool onRelease();
 
+    bool onDebounceEnd();
+
     //chrono related functions
-    auto getTimeMS();
+    unsigned long long getTimeMS();
 };
 #endif

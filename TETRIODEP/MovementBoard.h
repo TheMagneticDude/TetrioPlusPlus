@@ -1,7 +1,7 @@
 #ifndef MOVEMENTBOARD.H
 #define MOVEMENTBOARD .H
 #include <ctime>
-
+#include "../TETRIODEP/Key.h"
 #include "../TETRIODEP/Grid.h"
 class MovementBoard {
   private:
@@ -13,11 +13,21 @@ class MovementBoard {
     
     int xMax;
     int yMax;
+    
+    //keys
+    enum class keyState{
+        CLICKED,//when first clicked
+        PRESSED,//pressed
+        INACTIVE//not being clicked
+    };
 
-    bool keyL;
-    bool keyR;
-    bool keyU;
-    bool keyD;
+    
+
+
+    Key keyL;
+    Key keyR;
+    Key keyU;
+    Key keyD;
 
 //current moving piece's info
     int movingX;
@@ -39,13 +49,16 @@ class MovementBoard {
     bool isTimeUp(time_t now, time_t &target, float tick);
     bool isBetween(int n, int min, int max);
     void draw();
-    void update(bool L, bool R, bool U, bool D);
+    void update();
     void drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
     int convertToGridCoordsX(int x);
     int convertToGridCoordsY(int y);
 
 
-        void setMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
+    void setMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
+
+
+    void updateKeys();
 
 };
 #endif

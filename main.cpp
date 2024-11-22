@@ -56,7 +56,7 @@ int main() {
             board2.drawBorder();
 
             //update movement
-            movement1.update(moveLeft,moveRight,rotateMino,arrowDown);
+            movement1.update();
 
             if (ctrl) {
                 board1.drawRandom();

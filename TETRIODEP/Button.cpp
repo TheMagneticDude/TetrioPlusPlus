@@ -1,11 +1,7 @@
 #include "../TETRIODEP/Button.h"
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Tetromino.h"
-#include "FEHRandom.h"
 #include <FEHLCD.h>
 
-#include <iostream>
 #include <limits>
 #include <string>
 
@@ -130,7 +126,7 @@ void Button::updateButtonState() {
             if (currState == buttonState::active) {
                 currState = buttonState::held;
             }
-            cout << "PRESSED";
+            
         } else {
             // else clear touched location to off the screen
             triggered = false;

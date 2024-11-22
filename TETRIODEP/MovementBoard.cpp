@@ -2,30 +2,29 @@
 #include "../TETRIODEP/Grid.h"
 #include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Tetromino.h"
+#include "../TETRIODEP/Key.h"
 #include "FEHRandom.h"
 #include <FEHLCD.h>
-#include <iostream>
 #include <ctime>
+#include <iostream>
 
 int tetrisBoardWidth = 10;
 int tetrisBoardHeight = 20;
 
 // initialize MovementBoard with a coordinate (top left corner)
-MovementBoard::MovementBoard(int Inx, int Iny) : grid(tetrisBoardWidth, tetrisBoardHeight) {
+MovementBoard::MovementBoard(int Inx, int Iny) : grid(tetrisBoardWidth, tetrisBoardHeight),keyL(VK_LEFT,1000),keyR(VK_RIGHT,1000),keyU(VK_UP,1000),keyD(VK_DOWN,1000) {
     // these are where the board is built around in world coords (top left corner)
-    keyL = false;
-    keyR = false;
 
     xMax = xMin + (tetrisBoardWidth - 1) * SCALE;
-    yMax = yMin + (tetrisBoardHeight) * SCALE;
+    yMax = yMin + (tetrisBoardHeight)*SCALE;
 
     boardX = Inx;
     boardY = Iny;
 }
 
 bool MovementBoard::isBetween(int n, int min, int max) { return n >= min && n <= max; }
-bool MovementBoard::isTimeUp(time_t now, time_t &target, float tick){
-    if(target < now){
+bool MovementBoard::isTimeUp(time_t now, time_t &target, float tick) {
+    if (target < now) {
         target = now + tick;
         return true;
     }
@@ -36,51 +35,41 @@ bool MovementBoard::isTimeUp(time_t now, time_t &target, float tick){
 void MovementBoard::draw() { grid.draw(boardX, boardY); }
 
 // updates the MovementBoard piece given keyboard inputs
-void MovementBoard::update(bool L, bool R, bool U, bool D) {
-    //mino gravity
-    bool minoGravity = false;;
+void MovementBoard::update() {
+    // mino gravity
+    bool minoGravity = false;
+    
     time_t now = time(NULL);
 
-    if(isTimeUp(now, nextGravityTick, minoGravityTick)){
+    if (isTimeUp(now, nextGravityTick, minoGravityTick)) {
         minoGravity = true;
-        std::cout<<"GRAVITY!";
-    }else{
+        std::cout << "GRAVITY!";
+    } else {
         minoGravity = false;
     }
 
+    // keyboard inputs
 
-    //keyboard inputs
-    keyL = L;
-    keyR = R;
-    keyU = U;
-    keyD = D;
-
-    if (keyL && isBetween(movingX - 1, xMin, xMax)) {
-    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    movingX--;
-}
-if (keyR && isBetween(movingX + 1, xMin, xMax)) {
-    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    movingX++;
-}
-if (keyU && isBetween(movingY + 1, yMin, yMax)) {
-    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    movingY++;
-}
-//down triggers if minogravity needs to tick
-if ((minoGravity || keyD) && isBetween(movingY - 1, yMin, yMax)) {
-    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    if(keyD){
-        movingY--;
+    updateKeys();
+    if (keyL.onClick() && isBetween(movingX - 1, xMin, xMax)) {
+        grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+        movingX -= SCALE;
     }
-    if(minoGravity){
-        movingY -= SCALE;
+    if (keyR.onClick() && isBetween(movingX + 1, xMin, xMax)) {
+        grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+        movingX += SCALE;
     }
-    
+    if (keyU.onClick() && isBetween(movingY + 1, yMin, yMax)) {
+        grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+        movingY += SCALE;
+    }
+    // down triggers if minogravity needs to tick
+    if ((minoGravity || keyD.triggered()) && isBetween(movingY - 1, yMin, yMax)) {
+    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    movingY -= SCALE;
 }
 
-
-    //render mino
+    // render mino
     if (isBetween(movingX, xMin, xMax) && isBetween(movingY, yMin, yMax)) {
         grid.drawMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY), BLUE);
         // std::cout << convertToGridCoordsY(movingY);
@@ -112,4 +101,12 @@ void MovementBoard::setMovingTetromino(int pos_x, int pos_y, Tetromino type, Tet
     movingY = pos_y;
     movingType = type;
     movingOrientation = orientation;
+}
+
+
+void MovementBoard::updateKeys(){
+    keyL.update();
+    keyR.update();
+    keyU.update();
+    keyD.update();
 }

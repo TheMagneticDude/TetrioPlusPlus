@@ -232,8 +232,8 @@ void TetrisBoard::updateRotation() {
 
     if (foundOffset) {
         fallingGrid = newGrid;
-        fallingX += offsetX;
-        fallingY += offsetY;
+        fallingX -= offsetX;
+        fallingY -= offsetY;
         fallingRotation = newRot;
     }
 }
@@ -278,22 +278,22 @@ Grid TetrisBoard::createGrid(Tetromino type, TetrominoOrientation orientation) {
         newData = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
         break;
     case Tetromino::J:
-        newData = {2, 0, 0, 2, 2, 2, 0, 0, 0};
+        newData = {0, 0, 0, 2, 2, 2, 2, 0, 0};
         break;
     case Tetromino::L:
-        newData = {0, 0, 3, 3, 3, 3, 0, 0, 0};
+        newData = {0, 0, 0, 3, 3, 3, 0, 0, 3};
         break;
     case Tetromino::O:
-        newData = {0, 4, 4, 0, 4, 4, 0, 0, 0};
+        newData = {0, 0, 0, 0, 4, 4, 0, 4, 4};
         break;
     case Tetromino::S:
-        newData = {0, 5, 5, 5, 5, 0, 0, 0, 0};
+        newData = {0, 0, 0, 5, 5, 0, 0, 5, 5};
         break;
     case Tetromino::T:
-        newData = {0, 6, 0, 6, 6, 6, 0, 0, 0};
+        newData = {0, 0, 0, 6, 6, 6, 0, 6, 0};
         break;
     case Tetromino::Z:
-        newData = {7, 7, 0, 0, 7, 7, 0, 0, 0};
+        newData = {0, 0, 0, 0, 7, 7, 7, 7, 0};
         break;
     default:
         std::cerr << "Tried to create grid with invalid tetromino type: " << static_cast<int>(type) << std::endl;

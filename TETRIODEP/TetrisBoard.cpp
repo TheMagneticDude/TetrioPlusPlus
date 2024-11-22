@@ -1,22 +1,23 @@
 #include <iostream>
 
-#include "TetrisBoard.h"
 #include "FEHRandom.h"
 #include "Grid.h"
 #include "Input.h"
 #include "Settings.h"
+#include "TetrisBoard.h"
 #include "Tetromino.h"
 #include <FEHLCD.h>
 
 // initialize tetrisboard with a coordinate (top left corner)
-TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &settings) : grid(10, 20), fallingGrid(3, 3), input(settings) {
+TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
+    : grid(10, 20), fallingGrid(3, 3), input(_settings) {
+    settings = &_settings;
     // these are where the board is built around in world coords (top left corner)
     boardX = _boardX;
     boardY = _boardY;
     // TODO:
-    fallingX = 5;
-    fallingY = 10;
     fallingGrid = createGrid(Tetromino::Z, TetrominoOrientation::H);
+    lastGravity = std::chrono::high_resolution_clock::now();
 }
 
 // draws the entire tetrisboard
@@ -46,17 +47,17 @@ void TetrisBoard::drawBorder() {
     LCD.SetFontColor(WHITE);
 
     // bottom boarder
-    LCD.FillRectangle(pos_x - borderScale, pos_y + SCALE * (grid.height - 1), SCALE * (grid.width) + 2 * borderScale,
-                      borderScale);
+    LCD.FillRectangle(pos_x - borderScale, pos_y, SCALE * (grid.width) + 2 * borderScale, borderScale);
 
     // left and right boarders
 
     // Left boarder
     // LCD.FillRectangle(pos_x - SCALE, pos_y - SCALE*2, SCALE, SCALE * (grid.height + 2));
-    LCD.FillRectangle(pos_x - borderScale, pos_y - borderScale * 2, borderScale, SCALE * (grid.height) + borderScale);
+    LCD.FillRectangle(pos_x - borderScale, pos_y - grid.height * SCALE, borderScale,
+                      SCALE * (grid.height) + borderScale);
     // right boarder
     // LCD.FillRectangle(pos_x + SCALE * grid.width, pos_y - SCALE*2, SCALE, SCALE * (grid.height + 2));
-    LCD.FillRectangle(pos_x - borderScale + SCALE * grid.width + borderScale, pos_y - borderScale * 2, borderScale,
+    LCD.FillRectangle(pos_x - borderScale + SCALE * grid.width + borderScale, pos_y - grid.height * SCALE, borderScale,
                       SCALE * (grid.height) + borderScale);
 }
 
@@ -81,6 +82,20 @@ void TetrisBoard::update() {
             fallingX++;
         }
     }
+
+    auto now = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<float> lastGravityDuration = now - lastGravity;
+    float lastGravitySecs = lastGravityDuration.count();
+    float effectiveGravityRate = gravityRate;
+    if (input.softDrop.pressed()) {
+        effectiveGravityRate /= settings->handling.sdf;
+    }
+    if (lastGravitySecs >= effectiveGravityRate) {
+        lastGravity = now;
+        if (!checkCollision(fallingGrid, fallingX, fallingY - 1)) {
+            fallingY--;
+        }
+    }
 }
 
 bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {
@@ -88,7 +103,7 @@ bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {
         for (int y = 0; y < with.height; y++) {
             Tetromino withMino = with.getAtPos(x, y);
             Tetromino gridMino;
-            if (withX + x < 0 || withX + x >= 10) {
+            if (withX + x < 0 || withX + x >= 10 || withY + y < 0) {
                 gridMino = Tetromino::G;
             } else {
                 gridMino = grid.getAtPos(withX + x, withY + y);

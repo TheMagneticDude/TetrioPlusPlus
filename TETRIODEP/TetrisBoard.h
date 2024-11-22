@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../TETRIODEP/Grid.h"
+#include "Grid.h"
+
 class TetrisBoard {
   private:
     Grid grid;

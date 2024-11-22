@@ -1,12 +1,7 @@
-#include "../TETRIODEP/Menu.h"
-#include "../TETRIODEP/Button.h"
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/TetrisBoard.h"
-#include "../TETRIODEP/Tetromino.h"
-#include "FEHRandom.h"
+#include "Menu.h"
+#include "Button.h"
 
 #include <FEHLCD.h>
-#include <iostream>
 #include <string>
 
 int buttonoffset = 30;

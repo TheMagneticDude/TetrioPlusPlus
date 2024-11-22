@@ -1,8 +1,10 @@
 #pragma once
 
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/Settings.h"
+#include <ctime>
+
+#include "Grid.h"
 #include "Input.h"
+#include "Settings.h"
 
 class MovementBoard {
   private:

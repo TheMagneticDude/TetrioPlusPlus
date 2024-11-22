@@ -1,6 +1,8 @@
 #pragma once
-#include "../TETRIODEP/Button.h"
-#include "../TETRIODEP/Grid.h"
+
+#include "Button.h"
+#include "Grid.h"
+
 class Menu {
   private:
     enum class Option {

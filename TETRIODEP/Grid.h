@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../TETRIODEP/Tetromino.h"
-#include <FEHLCD.h>
 #include <vector>
+
+#include "Tetromino.h"
+#include <FEHLCD.h>
 
 class Grid {
   private:

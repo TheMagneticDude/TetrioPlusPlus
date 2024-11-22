@@ -1,11 +1,10 @@
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/Tetromino.h"
+#include <vector>
+#include <iostream>
+
+#include "Grid.h"
+#include "Tetromino.h"
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-#include <cstdint>
-#include <iostream>
-#include <optional>
-#include <vector>
 
 Grid::Grid(int width, int height) : width(width), height(height), data(width * height, Tetromino::E) {}
 

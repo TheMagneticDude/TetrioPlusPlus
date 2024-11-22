@@ -1,12 +1,11 @@
-#include "../TETRIODEP/MovementBoard.h"
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/TetrisBoard.h"
-#include "../TETRIODEP/Tetromino.h"
-#include "FEHRandom.h"
-#include "Settings.h"
-#include <FEHLCD.h>
 #include <ctime>
 #include <iostream>
+
+#include "Grid.h"
+#include "MovementBoard.h"
+#include "Settings.h"
+#include "Tetromino.h"
+#include <FEHLCD.h>
 
 int tetrisBoardWidth = 10;
 int tetrisBoardHeight = 20;

@@ -1,9 +1,8 @@
-#include "../TETRIODEP/Button.h"
-#include "../TETRIODEP/Tetromino.h"
-#include <FEHLCD.h>
-
 #include <limits>
 #include <string>
+
+#include "Button.h"
+#include <FEHLCD.h>
 
 using namespace std;
 

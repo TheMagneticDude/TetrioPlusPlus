@@ -1,9 +1,8 @@
-#include "../TETRIODEP/TetrisBoard.h"
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/Tetromino.h"
+#include "TetrisBoard.h"
 #include "FEHRandom.h"
+#include "Grid.h"
+#include "Tetromino.h"
 #include <FEHLCD.h>
-#include <iostream>
 
 // initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int Inx, int Iny) : grid(10, 20), movement(10, 10) {

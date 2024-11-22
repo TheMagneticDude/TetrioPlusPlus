@@ -1,10 +1,9 @@
 #pragma once
 
-#include "../TETRIODEP/Grid.h"
-#include <FEHLCD.h>
 #include <string>
 
-#include <pthread.h>
+#include "Grid.h"
+#include <FEHLCD.h>
 
 using namespace std;
 

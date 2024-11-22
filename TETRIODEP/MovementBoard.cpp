@@ -44,7 +44,6 @@ void MovementBoard::update() {
 
     if (isTimeUp(now, nextGravityTick, minoGravityTick)) {
         minoGravity = true;
-        std::cout << "GRAVITY!\n";
     } else {
         minoGravity = false;
     }
@@ -53,38 +52,22 @@ void MovementBoard::update() {
     input.update();
 
     if (input.keyLeft.newPress() && isBetween(movingX - 1, xMin, xMax)) {
-        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingX -= SCALE;
     }
     if (input.keyRight.newPress() && isBetween(movingX + 1, xMin, xMax)) {
-        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingX += SCALE;
     }
-    // if ((keyU.onClick() || keyU.onDebounceEnd()) && isBetween(movingY + 1, yMin, yMax)) {
-    //     // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    //     movingY += SCALE;
-    // }
-    // down triggers if minogravity needs to tick
+    
     if (input.softDrop.pressed() && isBetween(movingY - 1, yMin, yMax)) {
-        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingY -= SCALE;
     }
 
     // render mino
     if (isBetween(movingX, xMin, xMax) && isBetween(movingY, yMin, yMax)) {
-        // grid.drawMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY), BLUE);
         grid.addMino(movingType, convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         draw();
+            }
 
-        // std::cout << convertToGridCoordsY(movingY);
-    }
-
-    // std::cout << "Move X: " << movingX << ", Grid X: " << convertToGridCoordsX(movingX) << std::endl;
-    // std::cout << "Move Y: " << movingY << ", Grid Y: " << convertToGridCoordsY(movingY) << std::endl;
-    // std::cout << "movingX: " << movingX << ", XMax: " << (xMax) << std::endl;
-    // std::cout << "movingY: " << movingY << ", YMax: " << (yMax) << std::endl;
-    // LCD.DrawCircle(120,220,1);
-    // LCD.DrawCircle(40,60,1);
 
     draw();
 }

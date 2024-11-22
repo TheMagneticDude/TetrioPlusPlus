@@ -16,8 +16,8 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
     boardX = _boardX;
     boardY = _boardY;
     // TODO:
-    fallingGrid = createGrid(Tetromino::Z, TetrominoOrientation::H);
     lastGravity = std::chrono::high_resolution_clock::now();
+    startNewFalling();
 }
 
 // draws the entire tetrisboard
@@ -177,7 +177,7 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
             Tetromino mino = from.getAtPos(x, y);
             if (mino == Tetromino::E)
                 continue;
-            grid.addMino(mino, fromX + x, fromY + y);
+            grid.setAtPos(mino, fromX + x, fromY + y);
         }
     }
 }

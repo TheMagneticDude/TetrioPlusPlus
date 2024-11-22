@@ -22,10 +22,8 @@ class Grid {
     Grid(int width, int height);
 
     Tetromino getAtPos(int x, int y);
-    void addMino(Tetromino mino, int x, int y);
-    void removeMino(int pos_x, int pos_y);
+    void setAtPos(Tetromino mino, int x, int y);
+    void removeAtPos(int pos_x, int pos_y);
 
     void draw(int pos_x, int pos_y);
-    // void drawBoarder(int pos_x, int pos_y);
-
 };

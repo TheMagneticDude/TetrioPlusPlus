@@ -15,8 +15,8 @@ class TetrisBoard {
     PlayerSettings *settings;
 
     // These are grid coordinates
-    int fallingX = 5;
-    int fallingY = 20;
+    int fallingX;
+    int fallingY;
 
     float gravityRate = 0.7;
     std::chrono::high_resolution_clock::time_point lastGravity;

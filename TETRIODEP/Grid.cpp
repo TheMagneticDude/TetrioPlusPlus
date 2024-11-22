@@ -1,5 +1,4 @@
 #include <vector>
-#include <iostream>
 
 #include "Grid.h"
 #include "Tetromino.h"
@@ -22,17 +21,12 @@ void Grid::draw(int pos_x, int pos_y) {
     }
 }
 
-Tetromino Grid::getAtPos(int x, int y) {
-    return data[y * width + x];
-}
+Tetromino Grid::getAtPos(int x, int y) { return data[y * width + x]; }
 
-void Grid::addMino(Tetromino tetromino, int x, int y) {
-    auto mino = tetromino;
-    data[y * width + x] = mino;
-}
+void Grid::setAtPos(Tetromino tetromino, int x, int y) { data[y * width + x] = tetromino; }
 
-void Grid::removeMino(int pos_x, int pos_y) {
-   auto mino = Tetromino::E;
+void Grid::removeAtPos(int pos_x, int pos_y) {
+    auto mino = Tetromino::E;
     data[pos_y * width + pos_x] = mino;
 }
 
@@ -52,4 +46,3 @@ void Grid::drawMino(int pos_x, int pos_y, int color) {
     // left line
     LCD.DrawLine(pos_x, pos_y - SCALE, pos_x, pos_y);
 }
-

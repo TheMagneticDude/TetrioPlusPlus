@@ -29,8 +29,6 @@ ifeq ($(OS),Windows_NT)
 		( if exist "$(LIBRARYREPO)" \
 		( \
 			cd $(LIBRARYREPO) && \
-			$(GITBINARY) stash && \
-			$(GITBINARY) pull && \
 			cd .. \
 		) \
 		else \
@@ -48,8 +46,7 @@ else
 	else \
 		if [ -d "$(LIBRARYREPO)" ]; then \
 			cd $(LIBRARYREPO) ; \
-			$(GITBINARY) stash ; \
-      		$(GITBINARY) pull ; \
+			
       		cd .. ; \
 		else \
       		$(GITBINARY) clone https://code.osu.edu/fehelectronics/proteus_software/$(LIBRARYREPO).git ; \

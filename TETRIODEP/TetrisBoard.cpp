@@ -97,12 +97,25 @@ void TetrisBoard::update() {
         } else {
             // This is temporary
             settleGrid(fallingGrid, fallingX, fallingY);
-            Tetromino mino = static_cast<Tetromino>(Random.RandInt() % 7 + 1);
-            fallingGrid = createGrid(mino, TetrominoOrientation::H);
-            fallingX = 5;
-            fallingY = 20;
+            startNewFalling();
         }
     }
+
+    if (input.hardDrop.newPress()) {
+        int y = fallingY;
+        while (!checkCollision(fallingGrid, fallingX, y - 1)) {
+            y--;
+        }
+        settleGrid(fallingGrid, fallingX, y);
+        startNewFalling();
+    }
+}
+
+void TetrisBoard::startNewFalling() {
+    Tetromino mino = static_cast<Tetromino>(Random.RandInt() % 7 + 1);
+    fallingGrid = createGrid(mino, TetrominoOrientation::H);
+    fallingX = 4;
+    fallingY = 20;
 }
 
 bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {
@@ -162,7 +175,8 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
     for (int x = 0; x < from.width; x++) {
         for (int y = 0; y < from.height; y++) {
             Tetromino mino = from.getAtPos(x, y);
-            if (mino == Tetromino::E) continue;
+            if (mino == Tetromino::E)
+                continue;
             grid.addMino(mino, fromX + x, fromY + y);
         }
     }

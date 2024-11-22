@@ -32,6 +32,7 @@ class TetrisBoard {
     bool checkCollision(Grid with, int x, int y);
     Grid createGrid(Tetromino type, TetrominoOrientation orientation);
     void settleGrid(Grid from, int fromX, int fromY);
+    void startNewFalling();
 
     void draw();
     void drawRandom();

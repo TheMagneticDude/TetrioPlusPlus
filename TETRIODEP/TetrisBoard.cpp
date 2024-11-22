@@ -223,7 +223,7 @@ void TetrisBoard::updateRotation() {
         auto endOffset = offsetTable[static_cast<int>(newRot)][offsetNum];
         offsetX = endOffset.first - startOffset.first;
         offsetY = endOffset.second - startOffset.second;
-        bool collides = checkCollision(newGrid, fallingX + offsetX, fallingY + offsetY);
+        bool collides = checkCollision(newGrid, fallingX - offsetX, fallingY - offsetY);
         if (!collides) {
             foundOffset = true;
             break;

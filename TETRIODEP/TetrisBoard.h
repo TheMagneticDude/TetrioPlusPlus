@@ -14,6 +14,7 @@ class TetrisBoard {
     Grid holdGrid;
 
     Tetromino fallingMino;
+    TetrominoOrientation fallingRotation;
 
     PlayerInput input;
     PlayerSettings *settings;
@@ -35,6 +36,7 @@ class TetrisBoard {
 
     TetrisBoard(int x, int y, PlayerSettings &playerSettings);
     void update();
+    void updateRotation();
     // Returns true if a collision was detected
     bool checkCollision(Grid with, int x, int y);
     Grid createGrid(Tetromino type, TetrominoOrientation orientation);

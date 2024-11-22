@@ -10,12 +10,11 @@
 
 // initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
-    : grid(10, 20), fallingGrid(3, 3), holdGrid(3, 3), input(_settings) {
+    : grid(10, 22), fallingGrid(3, 3), holdGrid(3, 3), input(_settings) {
     settings = &_settings;
     // these are where the board is built around in world coords (top left corner)
     boardX = _boardX;
     boardY = _boardY;
-    // TODO:
     lastGravity = std::chrono::high_resolution_clock::now();
     startNewFalling();
 }
@@ -85,6 +84,8 @@ void TetrisBoard::update() {
         }
     }
 
+    updateRotation();
+
     // Get the time since gravity was last applied
     auto now = std::chrono::high_resolution_clock::now();
     std::chrono::duration<float> lastGravityDuration = now - lastGravity;
@@ -120,12 +121,120 @@ void TetrisBoard::update() {
     }
 
     if (input.swapHold.newPress() && !didHold) {
-        std::cout << "started hold" << std::endl;
         std::optional<Tetromino> oldHold = hold;
         hold = fallingMino;
         holdGrid = createGrid(fallingMino, TetrominoOrientation::H);
         startNewFalling(oldHold);
         didHold = true;
+    }
+}
+
+void TetrisBoard::updateRotation() {
+    TetrominoOrientation rotTable[3][4] = {
+        // Clockwise rotation
+        {TetrominoOrientation::R, TetrominoOrientation::U, TetrominoOrientation::H, TetrominoOrientation::L},
+        // Counterclockwise rotation
+        {TetrominoOrientation::L, TetrominoOrientation::H, TetrominoOrientation::U, TetrominoOrientation::R},
+        // 180 rotation
+        {TetrominoOrientation::U, TetrominoOrientation::L, TetrominoOrientation::R, TetrominoOrientation::H}};
+
+    bool didRotate;
+    TetrominoOrientation newRot = fallingRotation;
+
+    // Check to see if the different rotation keys were pressed
+    if (input.rotateCW.newPress()) {
+        newRot = rotTable[0][static_cast<int>(newRot)];
+        didRotate = true;
+    }
+    if (input.rotateCCW.newPress()) {
+        newRot = rotTable[1][static_cast<int>(newRot)];
+        didRotate = true;
+    }
+    if (input.rotate180.newPress()) {
+        newRot = rotTable[2][static_cast<int>(newRot)];
+        didRotate = true;
+    }
+
+    if (!didRotate)
+        return;
+
+    typedef std::vector<std::pair<int, int>> offsetTableTy[4];
+
+    // Tables were derived from Harddrop Wiki
+    // https://harddrop.com/wiki/SRS#:~:text=the%20player%20rotates.-,How%20Guideline%20SRS%20Really%20Works,-The%20internal%20true
+    offsetTableTy jlstzOffset = {
+        // 0
+        {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+        // R
+        {{0, 0}, {1, 0}, {1, -1}, {0, 2}, {1, 2}},
+        // L
+        {{0, 0}, {-1, 0}, {-1, -1}, {0, 2}, {-1, 2}},
+        // 2
+        {{0, 0}, {0, 0}, {0, 0}, {0, 0}, {0, 0}},
+    };
+    offsetTableTy iOffset = {
+        // 0
+        {{0, 0}, {-1, 0}, {+2, 0}, {-1, 0}, {+2, 0}},
+        // R
+        {{-1, 0}, {0, 0}, {0, 0}, {0, +1}, {0, -2}},
+        // L
+        {{0, +1}, {0, +1}, {0, +1}, {0, -1}, {0, +2}},
+        // 2
+        {{-1, +1}, {+1, +1}, {-2, +1}, {+1, 0}, {-2, 0}},
+    };
+    offsetTableTy oOffset = {
+        // 0
+        {{0, 0}},
+        // R
+        {{0, -1}},
+        // L
+        {{-1, 0}},
+        // 2
+        {{-1, -1}},
+    };
+
+    offsetTableTy *offsetTablePtr;
+    switch (fallingMino) {
+    case Tetromino::J:
+    case Tetromino::L:
+    case Tetromino::S:
+    case Tetromino::T:
+    case Tetromino::Z:
+        offsetTablePtr = &jlstzOffset;
+        break;
+    case Tetromino::I:
+        offsetTablePtr = &iOffset;
+        break;
+    case Tetromino::O:
+        offsetTablePtr = &oOffset;
+        break;
+    default:
+        break;
+    }
+    offsetTableTy &offsetTable = *offsetTablePtr;
+
+    Grid newGrid = createGrid(fallingMino, newRot);
+
+    int offsetX;
+    int offsetY;
+    bool foundOffset = false;
+    for (int offsetNum = 0; offsetNum < offsetTable[0].size(); offsetNum++) {
+        auto startOffset = offsetTable[static_cast<int>(fallingRotation)][offsetNum];
+        auto endOffset = offsetTable[static_cast<int>(newRot)][offsetNum];
+        offsetX = endOffset.first - startOffset.first;
+        offsetY = endOffset.second - startOffset.second;
+        bool collides = checkCollision(newGrid, fallingX + offsetX, fallingY + offsetY);
+        if (!collides) {
+            foundOffset = true;
+            break;
+        }
+    }
+
+    if (foundOffset) {
+        fallingGrid = newGrid;
+        fallingX += offsetX;
+        fallingY += offsetY;
+        fallingRotation = newRot;
     }
 }
 
@@ -135,6 +244,7 @@ void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     }
     fallingMino = *mino;
     fallingGrid = createGrid(*mino, TetrominoOrientation::H);
+    fallingRotation = TetrominoOrientation::H;
     fallingX = 4;
     fallingY = 20;
     lastGravity = std::chrono::high_resolution_clock::now();
@@ -188,9 +298,24 @@ Grid TetrisBoard::createGrid(Tetromino type, TetrominoOrientation orientation) {
     default:
         std::cerr << "Tried to create grid with invalid tetromino type: " << static_cast<int>(type) << std::endl;
     }
+
     for (int i = 0; i < newData.size(); i++) {
         newGrid.data[i] = static_cast<Tetromino>(newData[i]);
     }
+
+    // These cases intentionally fall through. This means that L creates 3 rotations, U rotates twice, and R rotates
+    // onces.
+    switch (orientation) {
+    case TetrominoOrientation::L:
+        newGrid = newGrid.rotate90();
+    case TetrominoOrientation::U:
+        newGrid = newGrid.rotate90();
+    case TetrominoOrientation::R:
+        newGrid = newGrid.rotate90();
+    default:
+        break;
+    }
+
     return newGrid;
 }
 

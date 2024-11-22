@@ -1,4 +1,5 @@
 #include <vector>
+#include <cassert>
 
 #include "Grid.h"
 #include "Tetromino.h"
@@ -23,7 +24,11 @@ void Grid::draw(int pos_x, int pos_y) {
 
 Tetromino Grid::getAtPos(int x, int y) { return data[y * width + x]; }
 
-void Grid::setAtPos(Tetromino tetromino, int x, int y) { data[y * width + x] = tetromino; }
+void Grid::setAtPos(Tetromino tetromino, int x, int y) {
+    assert(x >= 0 && y >= 0);
+    assert(x < width && y < height);
+    data[y * width + x] = tetromino;
+}
 
 void Grid::removeAtPos(int pos_x, int pos_y) {
     auto mino = Tetromino::E;
@@ -54,7 +59,7 @@ Grid Grid::rotate90() {
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             Tetromino mino = getAtPos(x, y);
-            newGrid.setAtPos(mino, y, width - x);
+            newGrid.setAtPos(mino, y, width - x - 1);
         }
     }
 

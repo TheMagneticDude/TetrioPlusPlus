@@ -21,29 +21,40 @@ int main() {
     Menu mainMenu = Menu();
 
     while (1) {
+        // Buttons  can set up button bindings etc later
 
-        // Button s = Button(0,0,70,20,"BUTTON");
-        // s.updateButtonState();
+        // VK_LEFT 	0x25 	LEFT ARROW key
+        // VK_UP 	0x26 	UP ARROW key
+        // VK_RIGHT 	0x27 	RIGHT ARROW key
+        // VK_DOWN 	0x28 	DOWN ARROW key
+
+        bool rotateMino = GetAsyncKeyState(VK_UP);
+        bool arrowDown = GetAsyncKeyState(VK_DOWN);
+        bool moveLeft = GetAsyncKeyState(VK_LEFT);
+        bool moveRight = GetAsyncKeyState(VK_RIGHT);
 
         // settings has not been implemented yet so disabled
 
         mainMenu.disable(mainMenu.settings);
 
-
         if (mainMenu.renderSubPage(mainMenu.start)) {
             LCD.SetFontColor(WHITE);
-            LCD.WriteAt("\"Play\" Tetrio++ below!", 25, 20);
+            LCD.WriteAt("\"Play\" Tetrio++ below!", 25, 25);
             mainMenu.remove();
 
             board1.draw();
             board2.draw();
 
             board1.drawTetromino(0, 0, static_cast<Tetromino>(2), TetrominoOrientation::H);
-
             board1.drawBorder();
             board2.drawBorder();
-            board1.drawRandom();
-            board2.drawRandom();
+
+            if (moveLeft) {
+                board1.drawRandom();
+            }
+            if (moveRight) {
+                board2.drawRandom();
+            }
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 
@@ -65,9 +76,9 @@ int main() {
             LCD.SetFontColor(WHITE);
             LCD.WriteAt("How to play Tetrio++", 0, 20);
             LCD.WriteAt("The goal is to clear lines", 0, 50);
-            LCD.WriteAt("faster than your opponent.",0,90);
+            LCD.WriteAt("faster than your opponent.", 0, 90);
             LCD.WriteAt("First to stack to the", 0, 120);
-            LCD.WriteAt("top looses",0,150);
+            LCD.WriteAt("top looses", 0, 150);
         }
 
         mainMenu.update();

@@ -6,14 +6,17 @@
 #include <iostream>
 
 // initialize tetrisboard with a coordinate (top left corner)
-TetrisBoard::TetrisBoard(int Inx, int Iny) : grid(10, 20) {
+TetrisBoard::TetrisBoard(int Inx, int Iny) : grid(10, 20), movement(10,10){
     // these are where the board is built around in world coords (top left corner)
     TetrisBoard::boardX = Inx;
     TetrisBoard::boardY = Iny;
 }
 
 // draws the entire tetrisboard
-void TetrisBoard::draw() { grid.draw(boardX, boardY); }
+void TetrisBoard::draw() {
+     grid.draw(boardX, boardY); 
+     movement.draw(boardX,boardY);
+     }
 // draws random minos across tetris board
 void TetrisBoard::drawRandom() {
     for (int x = 0; x < 10; x++) {
@@ -57,3 +60,10 @@ int *getOrientation(Tetromino type, TetrominoOrientation o) {}
 
 // draws a tetromino with the bottom left corner at pos_x and pos_y on the tetris board coordinate grid
 void TetrisBoard::drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {}
+
+
+
+// draws a moving tetromino starting with the bottom left corner at pos_x and pos_y on the tetris board coordinate grid
+void TetrisBoard::drawMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {
+    movement.drawMino(20,100,BLUE);
+}

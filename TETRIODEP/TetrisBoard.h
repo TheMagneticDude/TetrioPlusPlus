@@ -5,6 +5,7 @@
 class TetrisBoard {
   private:
     Grid grid;
+    Grid movement;
     // tetrominos, all centered around bottom left
 
     // line horizontal
@@ -76,5 +77,10 @@ class TetrisBoard {
     void drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
     int convertToGridCoordsX(int x);
     int convertToGridCoordsY(int y);
+
+
+    //movement methods
+        void drawMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
+
 };
 #endif

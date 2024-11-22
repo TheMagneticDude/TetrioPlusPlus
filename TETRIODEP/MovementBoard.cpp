@@ -5,6 +5,7 @@
 #include "FEHRandom.h"
 #include <FEHLCD.h>
 #include <iostream>
+#include <ctime>
 
 int tetrisBoardWidth = 10;
 int tetrisBoardHeight = 20;
@@ -23,12 +24,32 @@ MovementBoard::MovementBoard(int Inx, int Iny) : grid(tetrisBoardWidth, tetrisBo
 }
 
 bool MovementBoard::isBetween(int n, int min, int max) { return n >= min && n <= max; }
+bool MovementBoard::isTimeUp(time_t now, time_t &target, float tick){
+    if(target < now){
+        target = now + tick;
+        return true;
+    }
+    return false;
+}
 
 // draws the entire MovementBoard
 void MovementBoard::draw() { grid.draw(boardX, boardY); }
 
 // updates the MovementBoard piece given keyboard inputs
 void MovementBoard::update(bool L, bool R, bool U, bool D) {
+    //mino gravity
+    bool minoGravity = false;;
+    time_t now = time(NULL);
+
+    if(isTimeUp(now, nextGravityTick, minoGravityTick)){
+        minoGravity = true;
+        std::cout<<"GRAVITY!";
+    }else{
+        minoGravity = false;
+    }
+
+
+    //keyboard inputs
     keyL = L;
     keyR = R;
     keyU = U;
@@ -46,22 +67,31 @@ if (keyU && isBetween(movingY + 1, yMin, yMax)) {
     grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
     movingY++;
 }
-if (keyD && isBetween(movingY - 1, yMin, yMax)) {
+//down triggers if minogravity needs to tick
+if ((minoGravity || keyD) && isBetween(movingY - 1, yMin, yMax)) {
     grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    movingY--;
+    if(keyD){
+        movingY--;
+    }
+    if(minoGravity){
+        movingY -= SCALE;
+    }
+    
 }
 
+
+    //render mino
     if (isBetween(movingX, xMin, xMax) && isBetween(movingY, yMin, yMax)) {
         grid.drawMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY), BLUE);
         // std::cout << convertToGridCoordsY(movingY);
     }
 
-    std::cout << "Move X: " << movingX << ", Grid X: " << convertToGridCoordsX(movingX) << std::endl;
-    std::cout << "Move Y: " << movingY << ", Grid Y: " << convertToGridCoordsY(movingY) << std::endl;
+    // std::cout << "Move X: " << movingX << ", Grid X: " << convertToGridCoordsX(movingX) << std::endl;
+    // std::cout << "Move Y: " << movingY << ", Grid Y: " << convertToGridCoordsY(movingY) << std::endl;
     // std::cout << "movingX: " << movingX << ", XMax: " << (xMax) << std::endl;
     // std::cout << "movingY: " << movingY << ", YMax: " << (yMax) << std::endl;
-    LCD.DrawCircle(120,220,1);
-    LCD.DrawCircle(40,60,1);
+    // LCD.DrawCircle(120,220,1);
+    // LCD.DrawCircle(40,60,1);
 
     draw();
 }

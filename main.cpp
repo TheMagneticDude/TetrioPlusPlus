@@ -37,6 +37,8 @@ int main() {
         bool moveLeft = GetAsyncKeyState(VK_LEFT);
         bool moveRight = GetAsyncKeyState(VK_RIGHT);
 
+        bool ctrl = GetAsyncKeyState(VK_CONTROL);
+
         // settings has not been implemented yet so disabled
 
         mainMenu.disable(mainMenu.settings);
@@ -56,12 +58,11 @@ int main() {
             //update movement
             movement1.update(moveLeft,moveRight,rotateMino,arrowDown);
 
-            // if (moveLeft) {
-            //     board1.drawRandom();
-            // }
-            // if (moveRight) {
-            //     board2.drawRandom();
-            // }
+            if (ctrl) {
+                board1.drawRandom();
+                board2.drawRandom();
+            }
+
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 

@@ -1,5 +1,6 @@
 #ifndef MOVEMENTBOARD.H
 #define MOVEMENTBOARD .H
+#include <ctime>
 
 #include "../TETRIODEP/Grid.h"
 class MovementBoard {
@@ -23,12 +24,19 @@ class MovementBoard {
     int movingY;
     Tetromino movingType;
     TetrominoOrientation movingOrientation;
+
+    //moving piece timing vars
+    
+    //gravity tick in seconds
+    float minoGravityTick = 1;
+    time_t nextGravityTick; 
    
 
   public:
     int boardX;
     int boardY;
     MovementBoard(int x, int y);
+    bool isTimeUp(time_t now, time_t &target, float tick);
     bool isBetween(int n, int min, int max);
     void draw();
     void update(bool L, bool R, bool U, bool D);

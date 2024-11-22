@@ -6,15 +6,23 @@
 #include <FEHLCD.h>
 #include <iostream>
 
+int tetrisBoardWidth = 10;
+int tetrisBoardHeight = 20;
+
 // initialize MovementBoard with a coordinate (top left corner)
-MovementBoard::MovementBoard(int Inx, int Iny) : grid(10, 20) {
+MovementBoard::MovementBoard(int Inx, int Iny) : grid(tetrisBoardWidth, tetrisBoardHeight) {
     // these are where the board is built around in world coords (top left corner)
     keyL = false;
     keyR = false;
 
-    MovementBoard::boardX = Inx;
-    MovementBoard::boardY = Iny;
+    xMax = xMin + (tetrisBoardWidth - 1) * SCALE;
+    yMax = yMin + (tetrisBoardHeight) * SCALE;
+
+    boardX = Inx;
+    boardY = Iny;
 }
+
+bool MovementBoard::isBetween(int n, int min, int max) { return n >= min && n <= max; }
 
 // draws the entire MovementBoard
 void MovementBoard::draw() { grid.draw(boardX, boardY); }
@@ -26,28 +34,34 @@ void MovementBoard::update(bool L, bool R, bool U, bool D) {
     keyU = U;
     keyD = D;
 
-    if (keyL) {
-        // remove previous image before moving
-        grid.removeMino(movingX, movingY);
-        movingX--;
-    }
-    if (keyR) {
-        // remove previous image before moving
-        grid.removeMino(movingX, movingY);
-        movingX++;
-    }
-    if (keyU) {
-        grid.removeMino(movingX, movingY);
-        movingY--;
-    }
-    if (keyD) {
-        grid.removeMino(movingX, movingY);
-        movingY++;
+    if (keyL && isBetween(movingX - 1, xMin, xMax)) {
+    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    movingX--;
+}
+if (keyR && isBetween(movingX + 1, xMin, xMax)) {
+    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    movingX++;
+}
+if (keyU && isBetween(movingY + 1, yMin, yMax)) {
+    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    movingY++;
+}
+if (keyD && isBetween(movingY - 1, yMin, yMax)) {
+    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    movingY--;
+}
+
+    if (isBetween(movingX, xMin, xMax) && isBetween(movingY, yMin, yMax)) {
+        grid.drawMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY), BLUE);
+        // std::cout << convertToGridCoordsY(movingY);
     }
 
-    if (movingX != NULL && movingY != NULL) {
-        grid.drawMino(movingX, movingY, BLUE);
-    }
+    std::cout << "Move X: " << movingX << ", Grid X: " << convertToGridCoordsX(movingX) << std::endl;
+    std::cout << "Move Y: " << movingY << ", Grid Y: " << convertToGridCoordsY(movingY) << std::endl;
+    // std::cout << "movingX: " << movingX << ", XMax: " << (xMax) << std::endl;
+    // std::cout << "movingY: " << movingY << ", YMax: " << (yMax) << std::endl;
+    LCD.DrawCircle(120,220,1);
+    LCD.DrawCircle(40,60,1);
 
     draw();
 }
@@ -57,7 +71,7 @@ void MovementBoard::update(bool L, bool R, bool U, bool D) {
 int MovementBoard::convertToGridCoordsX(int x) { return x + boardX; }
 // transforms the MovementBoard coordinate grid (bottom left being 0,0) to grid coordinate system (world coordinate
 // system 0,0 top left)
-int MovementBoard::convertToGridCoordsY(int y) { return boardY + 20 * SCALE - y * SCALE; }
+int MovementBoard::convertToGridCoordsY(int y) { return boardY + tetrisBoardHeight * SCALE - y - SCALE; }
 
 // draws a tetromino with the bottom left corner at pos_x and pos_y on the MovementBoard coordinate grid
 void MovementBoard::drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {}

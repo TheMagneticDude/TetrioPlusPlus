@@ -6,6 +6,13 @@ class MovementBoard {
   private:
     Grid grid;
 
+    //bounderies to confine the mino
+    int xMin = 0;//tetris board coords
+    int yMin = 0;
+    
+    int xMax;
+    int yMax;
+
     bool keyL;
     bool keyR;
     bool keyU;
@@ -22,6 +29,7 @@ class MovementBoard {
     int boardX;
     int boardY;
     MovementBoard(int x, int y);
+    bool isBetween(int n, int min, int max);
     void draw();
     void update(bool L, bool R, bool U, bool D);
     void drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);

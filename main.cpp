@@ -18,7 +18,7 @@ int main() {
     int board2Loc[2] = {200, 60};
     TetrisBoard board1(board1Loc[0], board1Loc[1]);
     MovementBoard movement1(board1Loc[0], board1Loc[1]);
-    movement1.setMovingTetromino(50,50,static_cast<Tetromino>(2), TetrominoOrientation::H);
+    movement1.setMovingTetromino(0,0,static_cast<Tetromino>(2), TetrominoOrientation::H);
     TetrisBoard board2(board2Loc[0], board2Loc[1]);
     MovementBoard movement2(board1Loc[0], board1Loc[1]);
 
@@ -85,7 +85,7 @@ int main() {
             LCD.WriteAt("The goal is to clear lines", 0, 50);
             LCD.WriteAt("faster than your opponent.", 0, 90);
             LCD.WriteAt("First to stack to the", 0, 120);
-            LCD.WriteAt("top looses", 0, 150);
+            LCD.WriteAt("top loses", 0, 150);
         }
 
         mainMenu.update();

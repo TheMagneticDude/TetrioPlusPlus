@@ -1,8 +1,8 @@
 #include "../TETRIODEP/MovementBoard.h"
 #include "../TETRIODEP/Grid.h"
+#include "../TETRIODEP/Key.h"
 #include "../TETRIODEP/TetrisBoard.h"
 #include "../TETRIODEP/Tetromino.h"
-#include "../TETRIODEP/Key.h"
 #include "FEHRandom.h"
 #include <FEHLCD.h>
 #include <ctime>
@@ -14,7 +14,9 @@ int tetrisBoardHeight = 20;
 int keyDebounce = 200;
 
 // initialize MovementBoard with a coordinate (top left corner)
-MovementBoard::MovementBoard(int Inx, int Iny) : grid(tetrisBoardWidth, tetrisBoardHeight),keyL(VK_LEFT,keyDebounce),keyR(VK_RIGHT,keyDebounce),keyU(VK_UP,keyDebounce),keyD(VK_DOWN,keyDebounce) {
+MovementBoard::MovementBoard(int Inx, int Iny)
+    : grid(tetrisBoardWidth, tetrisBoardHeight), keyL(VK_LEFT, keyDebounce), keyR(VK_RIGHT, keyDebounce),
+      keyU(VK_UP, keyDebounce), keyD(VK_DOWN, keyDebounce) {
     // these are where the board is built around in world coords (top left corner)
 
     xMax = xMin + (tetrisBoardWidth - 1) * SCALE;
@@ -40,7 +42,7 @@ void MovementBoard::draw() { grid.draw(boardX, boardY); }
 void MovementBoard::update() {
     // mino gravity
     bool minoGravity = false;
-    
+
     time_t now = time(NULL);
 
     if (isTimeUp(now, nextGravityTick, minoGravityTick)) {
@@ -53,27 +55,30 @@ void MovementBoard::update() {
     // keyboard inputs
 
     updateKeys();
-    if ((keyL.onClick()|| keyL.onDebounceEnd()) && isBetween(movingX - 1, xMin, xMax)) {
-        grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    if ((keyL.onClick() || keyL.onDebounceEnd()) && isBetween(movingX - 1, xMin, xMax)) {
+        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingX -= SCALE;
     }
-    if ((keyR.onClick()|| keyR.onDebounceEnd()) && isBetween(movingX + 1, xMin, xMax)) {
-        grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    if ((keyR.onClick() || keyR.onDebounceEnd()) && isBetween(movingX + 1, xMin, xMax)) {
+        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingX += SCALE;
     }
-    if ((keyU.onClick()|| keyU.onDebounceEnd()) && isBetween(movingY + 1, yMin, yMax)) {
-        grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+    if ((keyU.onClick() || keyU.onDebounceEnd()) && isBetween(movingY + 1, yMin, yMax)) {
+        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
         movingY += SCALE;
     }
     // down triggers if minogravity needs to tick
     if ((minoGravity || keyD.triggered()) && isBetween(movingY - 1, yMin, yMax)) {
-    grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    movingY -= SCALE;
-}
+        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+        movingY -= SCALE;
+    }
 
     // render mino
     if (isBetween(movingX, xMin, xMax) && isBetween(movingY, yMin, yMax)) {
-        grid.drawMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY), BLUE);
+        // grid.drawMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY), BLUE);
+        grid.addMino(movingType, convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
+        draw();
+
         // std::cout << convertToGridCoordsY(movingY);
     }
 
@@ -105,8 +110,7 @@ void MovementBoard::setMovingTetromino(int pos_x, int pos_y, Tetromino type, Tet
     movingOrientation = orientation;
 }
 
-
-void MovementBoard::updateKeys(){
+void MovementBoard::updateKeys() {
     keyL.update();
     keyR.update();
     keyU.update();

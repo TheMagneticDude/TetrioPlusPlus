@@ -7,7 +7,7 @@
 #include <optional>
 #include <vector>
 
-Grid::Grid(int width, int height) : width(width), height(height), data(width * height) {}
+Grid::Grid(int width, int height) : width(width), height(height), data(width * height,Tetromino::E) {}
 
 void Grid::draw(int pos_x, int pos_y) {
     for (int x = 0; x < width; x++) {
@@ -16,17 +16,25 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
+            std::cout<<color;
             if (color != BLACK) {
                 drawMino(pos_x + x * SCALE, pos_y + y * SCALE, color);
+                
             }
 
-            //LCD.SetFontColor(color);
-            //LCD.FillRectangle(pos_x + x * SCALE, pos_y + y * SCALE, SCALE, SCALE);
+            // LCD.SetFontColor(color);
+            // LCD.FillRectangle(pos_x + x * SCALE, pos_y + y * SCALE, SCALE, SCALE);
         }
     }
 }
 
-void addMino(Tetromino mino) {}
+void Grid::addMino(Tetromino tetromino, int x, int y) {
+    // assigns color blue for now
+    auto mino = static_cast<Tetromino>(3);
+                std::cout<<"x:" << x << std::endl;
+                std::cout<<"y:" << y << std::endl;
+    data[y * width + x] = mino;
+}
 
 // draws a mino with the bottom left corner at pos_x and pos_y
 void Grid::drawMino(int pos_x, int pos_y, int color) {

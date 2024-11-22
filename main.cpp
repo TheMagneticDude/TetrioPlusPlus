@@ -26,12 +26,6 @@ int main() {
     while (1) {
         // Buttons  can set up button bindings etc later
 
-        // VK_LEFT 	0x25 	LEFT ARROW key
-        // VK_UP 	0x26 	UP ARROW key
-        // VK_RIGHT 	0x27 	RIGHT ARROW key
-        // VK_DOWN 	0x28 	DOWN ARROW key
-
-
         // settings has not been implemented yet so disabled
 
         mainMenu.disable(mainMenu.settings);
@@ -48,14 +42,13 @@ int main() {
             board1.drawBorder();
             board2.drawBorder();
 
-            //update movement
+            // update movement
             movement1.update();
 
             // if (ctrl) {
             //     board1.drawRandom();
             //     board2.drawRandom();
             // }
-
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 

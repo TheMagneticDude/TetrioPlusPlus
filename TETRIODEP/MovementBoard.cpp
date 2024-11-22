@@ -20,15 +20,33 @@ MovementBoard::MovementBoard(int Inx, int Iny) : grid(10, 20) {
 void MovementBoard::draw() { grid.draw(boardX, boardY); }
 
 // updates the MovementBoard piece given keyboard inputs
-void MovementBoard::update(bool L, bool R) {
+void MovementBoard::update(bool L, bool R, bool U, bool D) {
     keyL = L;
     keyR = R;
+    keyU = U;
+    keyD = D;
 
-    if(keyL){
+    if (keyL) {
+        // remove previous image before moving
+        grid.removeMino(movingX, movingY);
         movingX--;
     }
-    if(keyR){
+    if (keyR) {
+        // remove previous image before moving
+        grid.removeMino(movingX, movingY);
         movingX++;
+    }
+    if (keyU) {
+        grid.removeMino(movingX, movingY);
+        movingY--;
+    }
+    if (keyD) {
+        grid.removeMino(movingX, movingY);
+        movingY++;
+    }
+
+    if (movingX != NULL && movingY != NULL) {
+        grid.drawMino(movingX, movingY, BLUE);
     }
 
     draw();
@@ -45,7 +63,9 @@ int MovementBoard::convertToGridCoordsY(int y) { return boardY + 20 * SCALE - y 
 void MovementBoard::drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {}
 
 // draws a moving tetromino starting with the bottom left corner at pos_x and pos_y on the MovementBoard coordinate grid
-void MovementBoard::drawMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {
-
-    grid.drawMino(20, 100, BLUE);
+void MovementBoard::setMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {
+    movingX = pos_x;
+    movingY = pos_y;
+    movingType = type;
+    movingOrientation = orientation;
 }

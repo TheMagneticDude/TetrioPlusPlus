@@ -2,6 +2,7 @@
 #define GRID_H
 #include "../TETRIODEP/Tetromino.h"
 #include <vector>
+#include <FEHLCD.h>
 
 class Grid {
   private:
@@ -12,6 +13,8 @@ class Grid {
     int width;
     int height;
 
+    int backgroundColor = BLACK;
+
     Grid(int width, int height);
 
     void addMino(Tetromino mino);
@@ -21,6 +24,7 @@ class Grid {
     void minoShading(int pos_x, int pos_y, int color);
 
     void drawMino(int pos_x, int pos_y, int color);
+    void removeMino(int pos_x, int pos_y);
 };
 
 #endif

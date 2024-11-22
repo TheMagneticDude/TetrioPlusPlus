@@ -44,3 +44,7 @@ void Grid::drawMino(int pos_x, int pos_y, int color) {
     // left line
     LCD.DrawLine(pos_x, pos_y - SCALE, pos_x, pos_y);
 }
+void Grid::removeMino(int pos_x, int pos_y) {
+    LCD.SetFontColor(backgroundColor);
+    LCD.FillRectangle(pos_x, pos_y - SCALE, SCALE, SCALE);
+}

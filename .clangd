@@ -2,4 +2,4 @@ CompileFlags:
   Add:
     - "-I./TETRIODEP"
     - "-isystem"
-    - "/home/stack/ledump/Classes/Engr_1281.01H/TetrioPlusPlus/simulator_libraries"
+    - "/home/stack/Classes/Engr_1281.01H/TetrioPlusPlus/simulator_libraries"

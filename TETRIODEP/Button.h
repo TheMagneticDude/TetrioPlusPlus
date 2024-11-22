@@ -45,8 +45,10 @@ class Button {
     bool removed;
 
     Button();
+    Button(float x, float y, string text);
     Button(float x, float y, float w, float h, string text);
     Button(float x, float y, float w, float h, string text, unsigned int color, unsigned int trigColor);
+    Button(float x, float y, string text, unsigned int color, unsigned int trigColor);
     Button(float x, float y, float w, float h, string text, bool e);
 
     void drawButton();

@@ -4,14 +4,16 @@
 #include <FEHLCD.h>
 #include <string>
 
+#include <iostream>
+
 int buttonoffset = 30;
 
 Menu::Menu()
-    : start(10, 0 + buttonoffset, 70, 20, "Start", BLUE, DARKBLUE),
-      settings(10, 30 + buttonoffset, 70, 20, "Settings", BLUE, DARKBLUE),
-      stats(10, 60 + buttonoffset, 70, 20, "Stats", BLUE, DARKBLUE),
-      instructions(10, 90 + buttonoffset, 70, 20, "Instructions", BLUE, DARKBLUE),
-      credits(10, 120 + buttonoffset, 70, 20, "Credits", BLUE, DARKBLUE), back(10, 0, 40, 20, "Back", BLUE, DARKBLUE) {
+    : start(10, 0 + buttonoffset, "Start", BLUE, DARKBLUE),
+      settings(10, 30 + buttonoffset, "Settings", BLUE, DARKBLUE),
+      stats(10, 60 + buttonoffset, "Stats", BLUE, DARKBLUE),
+      instructions(10, 90 + buttonoffset, "Instructions", BLUE, DARKBLUE),
+      credits(10, 120 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Back", BLUE, DARKBLUE) {
     // initialize button instances
 
     // by default menue has not clicked into a page yet
@@ -21,7 +23,6 @@ Menu::Menu()
 void Menu::disable(Button &b) { b.disable(); }
 
 void Menu::update() {
-
     if (currOption == Option::Back) {
         // clears screen loop right after back is clicked
         LCD.Clear();
@@ -38,7 +39,7 @@ void Menu::update() {
         credits.updateButtonState();
 
         // update current option selected if a button triggers
-        if (renderSubPage(start)) {
+        if ((renderSubPage(start))) {
             currOption = Option::Start;
         }
         if (renderSubPage(settings)) {
@@ -69,13 +70,10 @@ void Menu::update() {
 // returns true when its time to render a subpage for a given button
 bool Menu::renderSubPage(Button &b) {
     bool render = false;
-    if (b.getButtonTriggered()) {
-        //  clear main menu screen
-        if (b.onButtonClicked()) {
-            LCD.Clear();
-        }
+    if(b.getButtonTriggered()){
         render = true;
-    } else if (b.onButtonReleased()) {
+    }
+    if(b.onButtonReleased()){
         LCD.Clear();
     }
     return render;

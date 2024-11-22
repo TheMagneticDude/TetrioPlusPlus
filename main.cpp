@@ -46,10 +46,7 @@ int main() {
             // update movement
             movement1.update();
 
-            // if (ctrl) {
-            //     board1.drawRandom();
-            //     board2.drawRandom();
-            // }
+        
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 

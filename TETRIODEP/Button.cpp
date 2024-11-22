@@ -11,6 +11,27 @@ unsigned int defaultTriggeredColor = GRAY;
 unsigned int defaultDisabledColor = 0x212121;
 
 Button::Button() {}
+Button::Button(float x, float y, string text) {
+
+    buttonX = x;
+    buttonY = y;
+    
+    buttonWidth = text.length() * LCD.getCharWidth();
+    buttonHeight = LCD.getCharHeight();
+
+    buttonText = text;
+
+    triggered = false;
+    enabled = true;
+
+    defaultColor = defaultNormColor;
+    triggeredColor = defaultTriggeredColor;
+    disabledColor = defaultDisabledColor;
+
+    removed = false;
+
+    currColor = defaultColor;
+}
 // creates a rectangular button with x and y being the top left of the rectangle
 Button::Button(float x, float y, float w, float h, string text) {
 
@@ -59,6 +80,28 @@ Button::Button(float x, float y, float w, float h, string text, unsigned int col
     currColor = defaultColor;
 }
 
+Button::Button(float x, float y, string text, unsigned int color, unsigned int trigColor) {
+
+    buttonX = x;
+    buttonY = y;
+    
+    buttonWidth = text.length() * LCD.getCharWidth();
+    buttonHeight = LCD.getCharHeight();
+
+    buttonText = text;
+
+    triggered = false;
+    enabled = true;
+
+    defaultColor = color;
+    triggeredColor = trigColor;
+    disabledColor = defaultDisabledColor;
+
+    removed = false;
+
+    currColor = defaultColor;
+}
+
 // initializes button values and whether button starts enabled or disabled
 Button::Button(float x, float y, float w, float h, string text, bool e) {
 
@@ -92,13 +135,12 @@ void Button::setDisabledColor(unsigned int color) { disabledColor = color; }
 void Button::drawButton() {
     removed = false;
     LCD.SetFontColor(currColor);
-    LCD.DrawRectangle(buttonX, buttonY, buttonWidth, buttonHeight);
+    LCD.DrawRectangle(buttonX - LCD.getCharWidth(), buttonY, buttonWidth+ LCD.getCharWidth() * 2, buttonHeight);
     LCD.WriteAt(buttonText, buttonX, buttonY + 4);
 }
 
 // redraws button and also updates its state
 void Button::updateButtonState() {
-
     if (enabled) {
         bool withinX = false;
         bool withinY = false;
@@ -113,11 +155,9 @@ void Button::updateButtonState() {
             withinY = touchedY >= buttonY && touchedY <= buttonY + buttonHeight;
         }
         if (withinX && withinY) {
+            currColor = triggeredColor;
             // button is touched
             triggered = true;
-            // trigger color change
-            currColor = triggeredColor;
-
             // toggle buttonState
             if (currState == buttonState::inactive) {
                 currState = buttonState::active;
@@ -126,10 +166,9 @@ void Button::updateButtonState() {
                 currState = buttonState::held;
             }
         } else {
+            currColor = defaultColor;
             // else clear touched location to off the screen
             triggered = false;
-            // reset color
-            currColor = defaultColor;
             touchedX = numeric_limits<float>::max();
             touchedY = numeric_limits<float>::max();
 

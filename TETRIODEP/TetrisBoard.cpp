@@ -18,10 +18,12 @@ void TetrisBoard::draw() {
 }
 // draws random minos across tetris board
 void TetrisBoard::drawRandom() {
+
     for (int x = 0; x < 10; x++) {
         for (int y = 0; y < 20; y++) {
             // was for generating random minos
             auto mino = static_cast<Tetromino>(Random.RandInt() % 7);
+
             grid.data[y * 10 + x] = mino;
         }
     }

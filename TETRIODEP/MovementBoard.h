@@ -46,4 +46,5 @@ class MovementBoard {
     int convertToGridCoordsY(int y);
 
     void setMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation);
+
 };

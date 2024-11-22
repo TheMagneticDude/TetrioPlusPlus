@@ -15,7 +15,6 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
-            std::cout << color << std::endl;
             if (color != BLACK) {
                 drawMino(pos_x + x * SCALE, pos_y + y * SCALE, color);
             }
@@ -27,10 +26,8 @@ void Grid::draw(int pos_x, int pos_y) {
 }
 
 void Grid::addMino(Tetromino tetromino, int x, int y) {
-    // assigns color blue for now
-    auto mino = static_cast<Tetromino>(3);
-    std::cout << "x:" << x << std::endl;
-    std::cout << "y:" << y << std::endl;
+
+    auto mino = tetromino;
     data[y * width + x] = mino;
 }
 
@@ -51,6 +48,6 @@ void Grid::drawMino(int pos_x, int pos_y, int color) {
     LCD.DrawLine(pos_x, pos_y - SCALE, pos_x, pos_y);
 }
 void Grid::removeMino(int pos_x, int pos_y) {
-    LCD.SetFontColor(backgroundColor);
-    LCD.FillRectangle(pos_x, pos_y - SCALE, SCALE, SCALE);
+   auto mino = Tetromino::E;
+    data[pos_y * width + pos_x] = mino;
 }

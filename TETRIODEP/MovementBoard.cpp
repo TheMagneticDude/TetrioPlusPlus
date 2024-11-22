@@ -16,8 +16,8 @@ int keyDebounce = 200;
 MovementBoard::MovementBoard(int Inx, int Iny, PlayerSettings &playerSettings)
     : grid(tetrisBoardWidth, tetrisBoardHeight), input(playerSettings) {
     // these are where the board is built around in world coords (top left corner)
-    xMax = xMin + (tetrisBoardWidth - 1) * SCALE;
-    yMax = yMin + (tetrisBoardHeight)*SCALE;
+    xMax = xMin + (tetrisBoardWidth - 1);
+    yMax = yMin + (tetrisBoardHeight);
 
     boardX = Inx;
     boardY = Iny;
@@ -44,7 +44,6 @@ void MovementBoard::update() {
 
     if (isTimeUp(now, nextGravityTick, minoGravityTick)) {
         minoGravity = true;
-        std::cout << "GRAVITY!\n";
     } else {
         minoGravity = false;
     }
@@ -53,38 +52,25 @@ void MovementBoard::update() {
     input.update();
 
     if (input.keyLeft.newPress() && isBetween(movingX - 1, xMin, xMax)) {
-        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-        movingX -= SCALE;
+        grid.removeMino(movingX,movingY);
+        movingX --;
     }
     if (input.keyRight.newPress() && isBetween(movingX + 1, xMin, xMax)) {
-        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-        movingX += SCALE;
+        grid.removeMino(movingX,movingY);
+        movingX ++;
     }
-    // if ((keyU.onClick() || keyU.onDebounceEnd()) && isBetween(movingY + 1, yMin, yMax)) {
-    //     // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-    //     movingY += SCALE;
-    // }
+
     // down triggers if minogravity needs to tick
     if (input.softDrop.pressed() && isBetween(movingY - 1, yMin, yMax)) {
-        // grid.removeMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-        movingY -= SCALE;
+        grid.removeMino(movingX,movingY);
+        movingY++;
     }
 
     // render mino
     if (isBetween(movingX, xMin, xMax) && isBetween(movingY, yMin, yMax)) {
-        // grid.drawMino(convertToGridCoordsX(movingX), convertToGridCoordsY(movingY), BLUE);
-        grid.addMino(movingType, convertToGridCoordsX(movingX), convertToGridCoordsY(movingY));
-        draw();
-
-        // std::cout << convertToGridCoordsY(movingY);
+        grid.addMino(movingType, (movingX), (movingY));
     }
 
-    // std::cout << "Move X: " << movingX << ", Grid X: " << convertToGridCoordsX(movingX) << std::endl;
-    // std::cout << "Move Y: " << movingY << ", Grid Y: " << convertToGridCoordsY(movingY) << std::endl;
-    // std::cout << "movingX: " << movingX << ", XMax: " << (xMax) << std::endl;
-    // std::cout << "movingY: " << movingY << ", YMax: " << (yMax) << std::endl;
-    // LCD.DrawCircle(120,220,1);
-    // LCD.DrawCircle(40,60,1);
 
     draw();
 }
@@ -99,10 +85,11 @@ int MovementBoard::convertToGridCoordsY(int y) { return boardY + tetrisBoardHeig
 // draws a tetromino with the bottom left corner at pos_x and pos_y on the MovementBoard coordinate grid
 void MovementBoard::drawTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {}
 
-// draws a moving tetromino starting with the bottom left corner at pos_x and pos_y on the MovementBoard coordinate grid
+// draws a moving tetromino starting with the top left corner being 0,0
 void MovementBoard::setMovingTetromino(int pos_x, int pos_y, Tetromino type, TetrominoOrientation orientation) {
     movingX = pos_x;
     movingY = pos_y;
     movingType = type;
     movingOrientation = orientation;
 }
+

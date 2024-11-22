@@ -94,6 +94,13 @@ void TetrisBoard::update() {
         lastGravity = now;
         if (!checkCollision(fallingGrid, fallingX, fallingY - 1)) {
             fallingY--;
+        } else {
+            // This is temporary
+            settleGrid(fallingGrid, fallingX, fallingY);
+            Tetromino mino = static_cast<Tetromino>(Random.RandInt() % 7 + 1);
+            fallingGrid = createGrid(mino, TetrominoOrientation::H);
+            fallingX = 5;
+            fallingY = 20;
         }
     }
 }
@@ -149,4 +156,14 @@ Grid TetrisBoard::createGrid(Tetromino type, TetrominoOrientation orientation) {
         newGrid.data[i] = static_cast<Tetromino>(newData[i]);
     }
     return newGrid;
+}
+
+void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
+    for (int x = 0; x < from.width; x++) {
+        for (int y = 0; y < from.height; y++) {
+            Tetromino mino = from.getAtPos(x, y);
+            if (mino == Tetromino::E) continue;
+            grid.addMino(mino, fromX + x, fromY + y);
+        }
+    }
 }

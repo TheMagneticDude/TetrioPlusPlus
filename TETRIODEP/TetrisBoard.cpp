@@ -28,6 +28,7 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
 
 // draws the entire tetrisboard
 void TetrisBoard::draw() {
+    drawBorder();
     grid.draw(boardX, boardY);
     holdGrid.draw(boardX - (holdGrid.width + 1) * SCALE, boardY - 17 * SCALE);
     fallingGrid.draw(boardX + fallingX * SCALE, boardY - fallingY * SCALE);

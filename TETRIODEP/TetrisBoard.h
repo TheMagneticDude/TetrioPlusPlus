@@ -9,6 +9,10 @@
 
 class TetrisBoard {
   private:
+    // These are global screen coordinates
+    int boardX;
+    int boardY;
+
     Grid grid;
     Grid fallingGrid;
     Grid holdGrid;
@@ -33,13 +37,6 @@ class TetrisBoard {
     std::vector<Tetromino> queue;
     std::vector<Tetromino> bag;
 
-  public:
-    // These are global screen coordinates
-    int boardX;
-    int boardY;
-
-    TetrisBoard(int x, int y, PlayerSettings &playerSettings);
-    void update();
     void updateRotation();
     // Returns true if a collision was detected
     bool checkCollision(Grid with, int x, int y);
@@ -49,7 +46,10 @@ class TetrisBoard {
     void clearLine(int y);
     Tetromino getNextFromQueue();
     Tetromino getNextFromBag();
-
-    void draw();
     void drawBorder();
+
+  public:
+    TetrisBoard(int x, int y, PlayerSettings &playerSettings);
+    void update();
+    void draw();
 };

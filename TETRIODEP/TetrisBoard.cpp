@@ -94,7 +94,6 @@ void TetrisBoard::update() {
         if (!checkCollision(fallingGrid, fallingX, fallingY - 1)) {
             fallingY--;
         } else {
-            // This is temporary
             settleGrid(fallingGrid, fallingX, fallingY);
             startNewFalling();
             return;
@@ -296,7 +295,7 @@ Grid TetrisBoard::createGrid(Tetromino type, TetrominoOrientation orientation) {
     }
 
     // These cases intentionally fall through. This means that L creates 3 rotations, U rotates twice, and R rotates
-    // onces.
+    // once.
     switch (orientation) {
     case TetrominoOrientation::L:
         newGrid = newGrid.rotate90();
@@ -319,6 +318,35 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
                 continue;
             grid.setAtPos(mino, fromX + x, fromY + y);
         }
+    }
+
+    // Check to see if any new lines can be cleared
+    for (int y = 0; y < 20; y++) {
+        bool hasSpace = false;
+        for (int x = 0; x < 10; x++) {
+            if (grid.getAtPos(x, y) == Tetromino::E) {
+                hasSpace = true;
+            }
+        }
+
+        if (!hasSpace) {
+            clearLine(y);
+            y--;
+        }
+    }
+}
+
+void TetrisBoard::clearLine(int startY) {
+    for (int y = startY; y < grid.height - 1; y++) {
+        for (int x = 0; x < 10; x++) {
+            auto mino = grid.getAtPos(x, y + 1);
+            grid.setAtPos(mino, x, y);
+        }
+    }
+
+    // Make sure to clear out the top most row
+    for (int x = 0; x < 10; x++) {
+        grid.setAtPos(Tetromino::E, x, grid.height - 1);
     }
 }
 

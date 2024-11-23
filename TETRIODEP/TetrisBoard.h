@@ -46,6 +46,7 @@ class TetrisBoard {
     Grid createGrid(Tetromino type, TetrominoOrientation orientation);
     void settleGrid(Grid from, int fromX, int fromY);
     void startNewFalling(std::optional<Tetromino> mino = {});
+    void clearLine(int y);
     Tetromino getNextFromQueue();
     Tetromino getNextFromBag();
 

@@ -238,9 +238,14 @@ void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     fallingGrid = createGrid(*mino, TetrominoOrientation::H);
     fallingRotation = TetrominoOrientation::H;
     fallingX = 4;
-    fallingY = 20;
+    fallingY = 19;
     lastGravity = std::chrono::high_resolution_clock::now();
     didHold = false;
+    if (checkCollision(fallingGrid, fallingX, fallingY)) {
+        // TODO: game over
+        std::cout << "Game Over!" << std::endl;
+        std::exit(0);
+    }
 }
 
 bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {

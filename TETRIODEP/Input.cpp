@@ -13,6 +13,18 @@
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <tigr.h>
+
+// my guy you are a madman
+Display *TriggerKey::getX11Display() {
+    // I'm sorry but it had to be done :)
+    // The TigrInternal structure is placed directly after Tigr (Tigr* is at offset 0 in LCD)
+    Tigr *internal = *reinterpret_cast<Tigr **>(&LCD) + 1;
+    // The Display* is at offset 48 in TigrInternal
+    uint8_t *disp_ptr = reinterpret_cast<uint8_t *>(internal) + 48;
+    // Now we have it
+    Display *display = *reinterpret_cast<Display **>(disp_ptr);
+    return display;
+}
 #endif
 
 TriggerKey::TriggerKey(int keyCode, bool useDAS = false)
@@ -25,16 +37,8 @@ void TriggerKey::update() {
     currentlyIsPressed = GetAsyncKeyState(keyCode);
 #endif
 
-// my guy you are a madman
 #if __linux__ && !__ANDROID__
-    // I'm sorry but it had to be done :)
-    // The TigrInternal structure is placed directly after Tigr (Tigr* is at offset 0 in LCD)
-    Tigr *internal = *reinterpret_cast<Tigr **>(&LCD) + 1;
-    // The Display* is at offset 48 in TigrInternal
-    uint8_t *disp_ptr = reinterpret_cast<uint8_t *>(internal) + 48;
-    // Now we have it
-    Display *display = *reinterpret_cast<Display **>(disp_ptr);
-
+    Display *display = getX11Display();
     char keymap[32];
     XQueryKeymap(display, keymap);
     int xKeyCode = XKeysymToKeycode(display, keyCode);
@@ -42,7 +46,6 @@ void TriggerKey::update() {
 #endif
 
     if (currentlyIsPressed && !isPressed) {
-
         isPressed = true;
         resetHold();
     } else if (!currentlyIsPressed && isPressed) {

@@ -12,7 +12,7 @@ class Grid {
 
   public:
     // scale of minos
-#define SCALE 8 // was 6
+#define SCALE 6 // was 6
     std::vector<Tetromino> data;
     int width;
     int height;

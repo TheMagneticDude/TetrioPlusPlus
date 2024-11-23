@@ -15,6 +15,13 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
     // these are where the board is built around in world coords (top left corner)
     boardX = _boardX;
     boardY = _boardY;
+
+    for (int i = 0; i < 5; i++) {
+        auto mino = getNextFromBag();
+        queue.push_back(mino);
+        queueGrids.push_back(createGrid(mino, TetrominoOrientation::H));
+    }
+
     lastGravity = std::chrono::high_resolution_clock::now();
     startNewFalling();
 }
@@ -24,6 +31,9 @@ void TetrisBoard::draw() {
     grid.draw(boardX, boardY);
     holdGrid.draw(boardX - (holdGrid.width + 1) * SCALE, boardY - 17 * SCALE);
     fallingGrid.draw(boardX + fallingX * SCALE, boardY - fallingY * SCALE);
+    for (int i = 0; i < queue.size(); i++) {
+        queueGrids[i].draw(boardX + 12 * SCALE, boardY - 19 * SCALE + i * 3 * SCALE);
+    }
 }
 
 // draws border around board excluding top
@@ -222,7 +232,7 @@ void TetrisBoard::updateRotation() {
 
 void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     if (!mino.has_value()) {
-        mino = static_cast<Tetromino>(Random.RandInt() % 7 + 1);
+        mino = getNextFromQueue();
     }
     fallingMino = *mino;
     fallingGrid = createGrid(*mino, TetrominoOrientation::H);
@@ -310,4 +320,26 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
             grid.setAtPos(mino, fromX + x, fromY + y);
         }
     }
+}
+
+Tetromino TetrisBoard::getNextFromBag() {
+    if (bag.size() == 0) {
+        bag = {Tetromino::I, Tetromino::J, Tetromino::L, Tetromino::O, Tetromino::S, Tetromino::T, Tetromino::Z};
+    }
+
+    int idx = Random.RandInt() % bag.size();
+    auto mino = bag[idx];
+    bag.erase(bag.begin() + idx);
+    return mino;
+}
+
+Tetromino TetrisBoard::getNextFromQueue() {
+    auto mino = queue[0];
+    queue.erase(queue.begin());
+    queueGrids.erase(queueGrids.begin());
+
+    auto next = getNextFromBag();
+    queue.push_back(next);
+    queueGrids.push_back(createGrid(next, TetrominoOrientation::H));
+    return mino;
 }

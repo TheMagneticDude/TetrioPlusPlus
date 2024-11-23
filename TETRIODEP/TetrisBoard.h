@@ -12,6 +12,7 @@ class TetrisBoard {
     Grid grid;
     Grid fallingGrid;
     Grid holdGrid;
+    std::vector<Grid> queueGrids;
 
     Tetromino fallingMino;
     TetrominoOrientation fallingRotation;
@@ -29,6 +30,9 @@ class TetrisBoard {
     std::optional<Tetromino> hold;
     bool didHold = false;
 
+    std::vector<Tetromino> queue;
+    std::vector<Tetromino> bag;
+
   public:
     // These are global screen coordinates
     int boardX;
@@ -42,6 +46,8 @@ class TetrisBoard {
     Grid createGrid(Tetromino type, TetrominoOrientation orientation);
     void settleGrid(Grid from, int fromX, int fromY);
     void startNewFalling(std::optional<Tetromino> mino = {});
+    Tetromino getNextFromQueue();
+    Tetromino getNextFromBag();
 
     void draw();
     void drawBorder();

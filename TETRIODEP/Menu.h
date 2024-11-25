@@ -5,7 +5,19 @@
 
 class Menu {
   private:
-    enum class Option {
+  int buttonoffset = 50;
+  public:
+    Button start;
+    Button settings;
+    Button stats;
+    Button instructions;
+    Button credits;
+    Button back;
+
+
+
+//had to make option enum visible to call isPageActive
+enum class Option {
         None, // back to menu
         Start,
         Settings, // can include page for player names, controls, themes, etcs
@@ -18,18 +30,10 @@ class Menu {
     // current option selected
     Option currOption = Option::None;
 
-    bool inPage;
-
-  public:
-    Button start;
-    Button settings;
-    Button stats;
-    Button instructions;
-    Button credits;
-    Button back;
 
     Menu();
     bool renderSubPage(Button &b);
+    bool isPageActive(Option page);
     void disable(Button &b);
     void update();
 

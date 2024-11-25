@@ -1,15 +1,14 @@
 #include <limits>
 #include <string>
 
-#include "Button.h"
+#include "ToggleButton.h"
 #include <FEHLCD.h>
 
 using namespace std;
 
-
-
-Button::Button() {}
-Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
+ToggleButton::ToggleButton() {}
+//draws centered button
+ToggleButton::ToggleButton(int y, string text, unsigned int color, unsigned int trigColor) {
 
     buttonX = (screenWidth/2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
     buttonY = y;
@@ -30,7 +29,7 @@ Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
 
     currColor = defaultColor;
 }
-Button::Button(float x, float y, string text) {
+ToggleButton::ToggleButton(float x, float y, string text) {
 
     buttonX = x;
     buttonY = y;
@@ -51,55 +50,8 @@ Button::Button(float x, float y, string text) {
 
     currColor = defaultColor;
 }
-// creates a rectangular button with x and y being the top left of the rectangle
-Button::Button(float x, float y, float w, float h, string text) {
 
-    buttonX = x;
-    buttonY = y;
-    buttonCenterX = x + w / 2;
-    buttonCenterY = y + h / 2;
-    buttonWidth = w;
-    buttonHeight = h;
-
-    buttonText = text;
-
-    triggered = false;
-    enabled = true;
-
-    defaultColor = defaultNormColor;
-    triggeredColor = defaultTriggeredColor;
-    disabledColor = defaultDisabledColor;
-
-    removed = false;
-
-    currColor = defaultColor;
-}
-
-// creates a rectangular button with x and y being the top left of the rectangle
-Button::Button(float x, float y, float w, float h, string text, unsigned int color, unsigned int trigColor) {
-
-    buttonX = x;
-    buttonY = y;
-    buttonCenterX = x + w / 2;
-    buttonCenterY = y + h / 2;
-    buttonWidth = w;
-    buttonHeight = h;
-
-    buttonText = text;
-
-    triggered = false;
-    enabled = true;
-
-    defaultColor = color;
-    triggeredColor = trigColor;
-    disabledColor = defaultDisabledColor;
-
-    removed = false;
-
-    currColor = defaultColor;
-}
-
-Button::Button(float x, float y, string text, unsigned int color, unsigned int trigColor) {
+ToggleButton::ToggleButton(float x, float y, string text, unsigned int color, unsigned int trigColor) {
 
     buttonX = x;
     buttonY = y;
@@ -121,37 +73,12 @@ Button::Button(float x, float y, string text, unsigned int color, unsigned int t
     currColor = defaultColor;
 }
 
-// initializes button values and whether button starts enabled or disabled
-Button::Button(float x, float y, float w, float h, string text, bool e) {
 
-    buttonX = x;
-    buttonY = y;
-    buttonCenterX = x + w / 2;
-    buttonCenterY = y + h / 2;
-    buttonWidth = w;
-    buttonHeight = h;
+void ToggleButton::setDefaultColor(unsigned int color) { defaultColor = color; }
+void ToggleButton::setTriggeredColor(unsigned int color) { triggeredColor = color; }
+void ToggleButton::setDisabledColor(unsigned int color) { disabledColor = color; }
 
-    buttonText = text;
-
-    triggered = false;
-    enabled = e;
-
-    defaultColor = defaultNormColor;
-    triggeredColor = defaultTriggeredColor;
-    disabledColor = defaultDisabledColor;
-    removed = false;
-    if (e) {
-        currColor = disabledColor;
-    } else {
-        currColor = defaultColor;
-    }
-}
-
-void Button::setDefaultColor(unsigned int color) { defaultColor = color; }
-void Button::setTriggeredColor(unsigned int color) { triggeredColor = color; }
-void Button::setDisabledColor(unsigned int color) { disabledColor = color; }
-
-void Button::drawButton() {
+void ToggleButton::drawButton() {
     removed = false;
     LCD.SetFontColor(currColor);
     LCD.DrawRectangle(buttonX - LCD.getCharWidth(), buttonY, buttonWidth + LCD.getCharWidth() * 2, buttonHeight);
@@ -159,7 +86,7 @@ void Button::drawButton() {
 }
 
 // redraws button and also updates its state
-void Button::updateButtonState() {
+void ToggleButton::updateButtonState() {
     if (enabled) {
         bool withinX = false;
         bool withinY = false;
@@ -182,10 +109,10 @@ void Button::updateButtonState() {
                 }
                 currColor = triggeredColor;
                 // button is touched
-                triggered = true;
+                triggered = !triggered;
                 // toggle buttonState
 
-            } else {
+            } else if(!triggered){
                 // no touch
                 if (currState == buttonState::held) {
                     currState = buttonState::released;
@@ -205,9 +132,9 @@ void Button::updateButtonState() {
     drawButton();
 }
 
-bool Button::getButtonTriggered() { return triggered; }
+bool ToggleButton::getButtonTriggered() { return triggered; }
 
-bool Button::onButtonClicked() {
+bool ToggleButton::onButtonClicked() {
     bool clicked = false;
     if (currState == buttonState::active) {
         currState = buttonState::held;
@@ -216,7 +143,7 @@ bool Button::onButtonClicked() {
     return clicked;
 }
 
-bool Button::onButtonReleased() {
+bool ToggleButton::onButtonReleased() {
     bool released = false;
     if (currState == buttonState::released) {
         currState = buttonState::inactive;
@@ -225,17 +152,27 @@ bool Button::onButtonReleased() {
     return released;
 }
 
-void Button::disable() {
+void ToggleButton::disable() {
     enabled = false;
     currColor = disabledColor;
 }
 
-void Button::enable() {
+void ToggleButton::enable() {
     enabled = true;
     currColor = defaultColor;
 }
 
-void Button::remove() {
+void ToggleButton::setTriggered(bool t){
+    triggered = t;
+    if(t){
+        currState == buttonState::held;
+    }else{
+        currState == buttonState::released;
+    }
+}
+
+
+void ToggleButton::remove() {
     if (!removed) {
         int backColor = BLACK;
         LCD.SetFontColor(backColor);

@@ -6,26 +6,21 @@
 
 #include <iostream>
 
-int buttonoffset = 30;
 
 Menu::Menu()
-    : start(10, 0 + buttonoffset, "Start", BLUE, DARKBLUE),
-      settings(10, 30 + buttonoffset, "Settings", BLUE, DARKBLUE),
-      stats(10, 60 + buttonoffset, "Stats", BLUE, DARKBLUE),
-      instructions(10, 90 + buttonoffset, "Instructions", BLUE, DARKBLUE),
-      credits(10, 120 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Back", BLUE, DARKBLUE) {
-    // initialize button instances
-
-    // by default menue has not clicked into a page yet
-    inPage = false;
-};
+    : start(0 + buttonoffset, "Start", BLUE, DARKBLUE),
+    stats(30 + buttonoffset, "Stats", BLUE, DARKBLUE), 
+    settings(60 + buttonoffset, "Settings", BLUE, DARKBLUE),
+      instructions(90 + buttonoffset, "Instructions", BLUE, DARKBLUE),
+      credits(120 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Back", BLUE, DARKBLUE) {
+          // initialize button instances
+      };
 
 void Menu::disable(Button &b) { b.disable(); }
 
 void Menu::update() {
+
     if (currOption == Option::Back) {
-        // clears screen loop right after back is clicked
-        LCD.Clear();
         currOption = Option::None;
     }
     bool menuActive = currOption == Option::None; // if in subpage
@@ -69,14 +64,12 @@ void Menu::update() {
 
 // returns true when its time to render a subpage for a given button
 bool Menu::renderSubPage(Button &b) {
-    bool render = false;
-    if(b.getButtonTriggered()){
-        render = true;
-    }
-    if(b.onButtonReleased()){
-        LCD.Clear();
-    }
-    return render;
+
+    return b.onButtonReleased();
+}
+
+bool Menu::isPageActive(Option page){
+    return currOption == page;
 }
 
 void Menu::renderBackButton() { back.updateButtonState(); }

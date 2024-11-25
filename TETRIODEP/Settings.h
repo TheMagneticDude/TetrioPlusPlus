@@ -41,6 +41,8 @@
 #define KEY_LEFT_ALT VK_LMENU
 #define KEY_RIGHT_ALT VK_RMENU
 
+
+
 #endif
 
 #if __linux__ && !__ANDROID__

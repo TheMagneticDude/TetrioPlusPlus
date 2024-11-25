@@ -7,7 +7,8 @@
 
 using namespace std;
 
-class Button {
+// like normal button class but it stays triggered instead of resetting
+class ToggleButton {
   private:
     const unsigned int screenWidth = 320;
     const unsigned int screenHeight = 240;
@@ -29,6 +30,8 @@ class Button {
 
     int currColor = defaultColor;
 
+
+
   public:
     float buttonX;
     float buttonY;
@@ -48,14 +51,11 @@ class Button {
 
     bool removed;
 
-    Button();
+    ToggleButton();
     //creates centered button
-    Button(int y, string text, unsigned int color, unsigned int trigColor);
-    Button(float x, float y, string text);
-    Button(float x, float y, float w, float h, string text);
-    Button(float x, float y, float w, float h, string text, unsigned int color, unsigned int trigColor);
-    Button(float x, float y, string text, unsigned int color, unsigned int trigColor);
-    Button(float x, float y, float w, float h, string text, bool e);
+    ToggleButton(int y, string text, unsigned int color, unsigned int trigColor);
+    ToggleButton(float x, float y, string text);
+    ToggleButton(float x, float y, string text, unsigned int color, unsigned int trigColor);
 
     void drawButton();
 
@@ -75,6 +75,8 @@ class Button {
 
     void disable();
     void enable();
+
+    void setTriggered(bool t);
 
     void remove();
 };

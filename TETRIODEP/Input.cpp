@@ -1,8 +1,15 @@
+#include <unordered_map>
+#include <vector>
+#include <map>
+
 #include <chrono>
 
 #include "Input.h"
 #include "Settings.h"
 #include <FEHLCD.h>
+#include <iostream>
+
+
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -15,14 +22,20 @@
 #include <tigr.h>
 #endif
 
+
 TriggerKey::TriggerKey(int keyCode, bool useDAS = false)
     : keyCode(keyCode), useDAS(useDAS), isPressed(false), isNewPress(false) {}
 
+    void TriggerKey::setKeyCode(int k){
+        keyCode = k;
+        std::cout<<"KEYCODE: "<< keyCode;
+    }
 void TriggerKey::update() {
     bool currentlyIsPressed;
 
 #ifdef _WIN32
-    currentlyIsPressed = GetAsyncKeyState(keyCode);
+    currentlyIsPressed = GetAsyncKeyState(keyCode) & 0x8000;
+
 #endif
 
 #if __linux__ && !__ANDROID__
@@ -51,6 +64,7 @@ void TriggerKey::update() {
 bool TriggerKey::newPress() {
     bool wasNewPress = isNewPress;
     isNewPress = false;
+    //if (wasNewPress)std::cout<<keyCode;
     return wasNewPress;
 }
 
@@ -70,7 +84,18 @@ PlayerInput::PlayerInput(PlayerSettings &playerSettings)
     : handling(&playerSettings.handling), keyLeft(playerSettings.controls.moveLeft),
       keyRight(playerSettings.controls.moveRight), rotateCW(playerSettings.controls.rotateCW),
       rotateCCW(playerSettings.controls.rotateCCW), rotate180(playerSettings.controls.rotate180),
-      softDrop(playerSettings.controls.softDrop), hardDrop(playerSettings.controls.hardDrop) {}
+      softDrop(playerSettings.controls.softDrop), hardDrop(playerSettings.controls.hardDrop){
+        
+        //create keymap
+        
+        keyBinds.emplace(KeyAction::MoveLeft,&keyLeft);
+        keyBinds.emplace(KeyAction::MoveRight, &keyRight);
+        keyBinds.emplace(KeyAction::RotateCW,&rotateCW);
+        keyBinds.emplace(KeyAction::RotateCCW, &rotateCCW);
+        keyBinds.emplace(KeyAction::Rotate180, &rotate180);
+        keyBinds.emplace(KeyAction::SoftDrop, &softDrop);
+        keyBinds.emplace(KeyAction::HardDrop, &hardDrop);
+      }
 
 void PlayerInput::update() {
     keyLeft.update();
@@ -83,6 +108,25 @@ void PlayerInput::update() {
 
     handleDAS(repeatingLeft, keyLeft);
     handleDAS(repeatingRight, keyRight);
+}
+
+void PlayerInput::setKey(KeyAction key, int keyCode){
+    keyBinds[key]->setKeyCode(keyCode);
+}
+
+//scans keys and stores them into a vector
+std::vector<int> PlayerInput::scanKey(){
+    scannedKeys.clear();
+        // Iterate through possible virtual key codes (0x20 to 0xFE) (spacebar to clear key)
+        for (int key = 0x20; key <= 0xFE; key++) {
+            // check if the key is pressed
+            //0x8000 is doing a bitwise and operation on what asyncjkey returns so it basically makes sure key is being pressed
+            if (GetAsyncKeyState(key) & 0x8000) {
+                //adds key to pressedKeys
+                scannedKeys.push_back(key);
+            }
+        }
+        return scannedKeys;
 }
 
 void PlayerInput::handleDAS(bool &isRepeating, TriggerKey &key) {

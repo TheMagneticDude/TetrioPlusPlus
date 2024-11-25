@@ -6,6 +6,10 @@
 
 #include "Settings.h"
 
+#if __linux__ && !__ANDROID__
+#include <X11/Xlib.h>
+#endif
+
 class TriggerKey {
   private:
     int keyCode;
@@ -13,6 +17,10 @@ class TriggerKey {
     bool isPressed;
     bool isNewPress;
     bool useDAS;
+
+#if __linux__ && !__ANDROID__
+    static Display *getX11Display();
+#endif
 
   public:
   //default constructor
@@ -68,6 +76,7 @@ class PlayerInput {
 
     std::vector<int> scannedKeys;
     
+    TriggerKey swapHold;
     
     PlayerInput(PlayerSettings &playerSettings);
     //options page 

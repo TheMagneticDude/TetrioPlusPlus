@@ -1,5 +1,5 @@
 #include <vector>
-#include <iostream>
+#include <cassert>
 
 #include "Grid.h"
 #include "Tetromino.h"
@@ -16,19 +16,23 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
             if (color != BLACK) {
-                drawMino(pos_x + x * SCALE, pos_y + y * SCALE, color);
+                drawMino(pos_x + x * SCALE, pos_y - y * SCALE, color);
             }
-
-            // LCD.SetFontColor(color);
-            // LCD.FillRectangle(pos_x + x * SCALE, pos_y + y * SCALE, SCALE, SCALE);
         }
     }
 }
 
-void Grid::addMino(Tetromino tetromino, int x, int y) {
-    // assigns color blue for now
-    auto mino = static_cast<Tetromino>(3);
-    data[y * width + x] = mino;
+Tetromino Grid::getAtPos(int x, int y) { return data[y * width + x]; }
+
+void Grid::setAtPos(Tetromino tetromino, int x, int y) {
+    assert(x >= 0 && y >= 0);
+    assert(x < width && y < height);
+    data[y * width + x] = tetromino;
+}
+
+void Grid::removeAtPos(int pos_x, int pos_y) {
+    auto mino = Tetromino::E;
+    data[pos_y * width + pos_x] = mino;
 }
 
 // draws a mino with the bottom left corner at pos_x and pos_y
@@ -47,6 +51,17 @@ void Grid::drawMino(int pos_x, int pos_y, int color) {
     // left line
     LCD.DrawLine(pos_x, pos_y - SCALE, pos_x, pos_y);
 }
-void Grid::removeMino(int pos_x, int pos_y) {
-    addMino(Tetromino::E,pos_x,pos_y);
+
+Grid Grid::rotate90() {
+    // We are essentially transposing the grid here
+    Grid newGrid(height, width);
+
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            Tetromino mino = getAtPos(x, y);
+            newGrid.setAtPos(mino, y, width - x - 1);
+        }
+    }
+
+    return newGrid;
 }

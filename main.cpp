@@ -1,15 +1,7 @@
+#include "TETRIODEP/Menu.h"
+#include "TETRIODEP/TetrisBoard.h"
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-#include <cstdint>
-#include <optional>
-#include <vector>
-
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/Menu.h"
-#include "../TETRIODEP/MovementBoard.h"
-#include "../TETRIODEP/Options.h"
-#include "../TETRIODEP/TetrisBoard.h"
-#include "../TETRIODEP/Tetromino.h"
 
 int main() {
     Settings settings = defaultSettings;
@@ -27,10 +19,11 @@ int main() {
     Options optionsPage = Options(settings.p2Settings);
 
     Menu mainMenu = Menu();
+    // settings has not been implemented yet so disabled
+    mainMenu.disable(mainMenu.settings);
 
     while (1) {
         LCD.Clear();
-        // Buttons  can set up button bindings etc later
 
         // settings has not been implemented yet so disabled
 
@@ -40,6 +33,9 @@ int main() {
             LCD.SetFontColor(WHITE);
             LCD.WriteAt("\"Play\" Tetrio++ below!", 25, 25);
             mainMenu.remove();
+
+            board1.update();
+            board2.update();
 
             board1.draw();
             board2.draw();
@@ -80,15 +76,7 @@ int main() {
             LCD.WriteAt("top loses", 0, 150);
         }
 
-        mainMenu.update();
-
-        // board1.drawMino(0,0);
-
         LCD.Update();
-
-        // debug mouse pointer
-        // LPPOINT point;
-        // GetCursorPos(point);
     }
 
     return 0;

@@ -1,4 +1,3 @@
-
 # Prerequisites
 *.d
 
@@ -40,6 +39,3 @@
 
 # Project specific
 game
-
-# Nix
-.direnv

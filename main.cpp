@@ -1,14 +1,7 @@
+#include "TETRIODEP/Menu.h"
+#include "TETRIODEP/TetrisBoard.h"
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-#include <cstdint>
-#include <optional>
-#include <vector>
-
-#include "../TETRIODEP/Grid.h"
-#include "../TETRIODEP/Menu.h"
-#include "../TETRIODEP/MovementBoard.h"
-#include "../TETRIODEP/TetrisBoard.h"
-#include "../TETRIODEP/Tetromino.h"
 
 int main() {
     Settings settings = defaultSettings;
@@ -19,14 +12,13 @@ int main() {
     TetrisBoard board2(board2Loc[0], board2Loc[1], settings.p2Settings);
 
     Menu mainMenu = Menu();
+    // settings has not been implemented yet so disabled
+    mainMenu.disable(mainMenu.settings);
 
     while (1) {
         LCD.Clear();
-        // Buttons  can set up button bindings etc later
 
-        // settings has not been implemented yet so disabled
-
-        mainMenu.disable(mainMenu.settings);
+        mainMenu.update();
 
         if (mainMenu.renderSubPage(mainMenu.start)) {
             LCD.SetFontColor(WHITE);
@@ -38,15 +30,6 @@ int main() {
 
             board1.draw();
             board2.draw();
-
-            board1.drawBorder();
-            board2.drawBorder();
-
-            // update movement
-
-                // board1.drawRandom();
-            //     board2.drawRandom();
-
         }
         if (mainMenu.renderSubPage(mainMenu.stats)) {
 
@@ -73,15 +56,7 @@ int main() {
             LCD.WriteAt("top loses", 0, 150);
         }
 
-        mainMenu.update();
-
-        // board1.drawMino(0,0);
-
         LCD.Update();
-
-        // debug mouse pointer
-        // LPPOINT point;
-        // GetCursorPos(point);
     }
 
     return 0;

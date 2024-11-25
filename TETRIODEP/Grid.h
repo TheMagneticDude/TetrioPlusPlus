@@ -12,7 +12,7 @@ class Grid {
 
   public:
     // scale of minos
-#define SCALE 8 // was 6
+#define SCALE 6 // was 6
     std::vector<Tetromino> data;
     int width;
     int height;
@@ -22,10 +22,10 @@ class Grid {
     Grid(int width, int height);
 
     Tetromino getAtPos(int x, int y);
-    void addMino(Tetromino mino, int x, int y);
-    void removeMino(int pos_x, int pos_y);
+    void setAtPos(Tetromino mino, int x, int y);
+    void removeAtPos(int pos_x, int pos_y);
+
+    Grid rotate90();
 
     void draw(int pos_x, int pos_y);
-    // void drawBoarder(int pos_x, int pos_y);
-
 };

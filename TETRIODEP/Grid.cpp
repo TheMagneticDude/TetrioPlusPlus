@@ -1,5 +1,5 @@
 #include <vector>
-#include <iostream>
+#include <cassert>
 
 #include "Grid.h"
 #include "Tetromino.h"
@@ -22,17 +22,16 @@ void Grid::draw(int pos_x, int pos_y) {
     }
 }
 
-Tetromino Grid::getAtPos(int x, int y) {
-    return data[y * width + x];
+Tetromino Grid::getAtPos(int x, int y) { return data[y * width + x]; }
+
+void Grid::setAtPos(Tetromino tetromino, int x, int y) {
+    assert(x >= 0 && y >= 0);
+    assert(x < width && y < height);
+    data[y * width + x] = tetromino;
 }
 
-void Grid::addMino(Tetromino tetromino, int x, int y) {
-    auto mino = tetromino;
-    data[y * width + x] = mino;
-}
-
-void Grid::removeMino(int pos_x, int pos_y) {
-   auto mino = Tetromino::E;
+void Grid::removeAtPos(int pos_x, int pos_y) {
+    auto mino = Tetromino::E;
     data[pos_y * width + pos_x] = mino;
 }
 
@@ -53,3 +52,16 @@ void Grid::drawMino(int pos_x, int pos_y, int color) {
     LCD.DrawLine(pos_x, pos_y - SCALE, pos_x, pos_y);
 }
 
+Grid Grid::rotate90() {
+    // We are essentially transposing the grid here
+    Grid newGrid(height, width);
+
+    for (int x = 0; x < width; x++) {
+        for (int y = 0; y < height; y++) {
+            Tetromino mino = getAtPos(x, y);
+            newGrid.setAtPos(mino, y, width - x - 1);
+        }
+    }
+
+    return newGrid;
+}

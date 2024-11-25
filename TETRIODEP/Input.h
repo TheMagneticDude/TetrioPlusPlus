@@ -4,6 +4,10 @@
 
 #include "Settings.h"
 
+#if __linux__ && !__ANDROID__
+#include <X11/Xlib.h>
+#endif
+
 class TriggerKey {
   private:
     int keyCode;
@@ -11,6 +15,10 @@ class TriggerKey {
     bool isPressed;
     bool isNewPress;
     bool useDAS;
+
+#if __linux__ && !__ANDROID__
+    static Display *getX11Display();
+#endif
 
   public:
     TriggerKey(int keyCode, bool useDAS);
@@ -42,6 +50,7 @@ class PlayerInput {
     TriggerKey rotate180;
     TriggerKey softDrop;
     TriggerKey hardDrop;
+    TriggerKey swapHold;
 
     PlayerInput(PlayerSettings &playerSettings);
     void update();

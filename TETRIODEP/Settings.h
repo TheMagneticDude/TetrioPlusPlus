@@ -38,6 +38,8 @@
 
 #define KEY_COMMA VK_OEM_COMMA
 
+#define KEY_SPACE VK_SPACE
+#define KEY_SHIFT VK_SHIFT
 #define KEY_LEFT_ALT VK_LMENU
 #define KEY_RIGHT_ALT VK_RMENU
 
@@ -80,6 +82,8 @@
 
 #define KEY_COMMA XK_comma
 
+#define KEY_SPACE XK_space
+#define KEY_SHIFT XK_Shift_L
 #define KEY_LEFT_ALT XK_Alt_L
 #define KEY_RIGHT_ALT XK_Alt_R
 
@@ -129,11 +133,11 @@ inline constexpr Settings defaultSettings = Settings {
             .moveLeft = KEY_F,
             .moveRight = KEY_H,
             .softDrop = KEY_G,
-            .hardDrop = KEY_F,
+            .hardDrop = KEY_SPACE,
             .rotateCCW = KEY_X,
             .rotateCW = KEY_C,
             .rotate180 = KEY_Z,
-            .swapHold = KEY_F,
+            .swapHold = KEY_SHIFT,
         }
     },
     .p2Settings = {

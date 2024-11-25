@@ -24,7 +24,7 @@ int main() {
     movement2.setMovingTetromino(0, 0, Tetromino::L, TetrominoOrientation::H);
 
     // Options page (set up for p1 for now ill create sliders and switches to change later)
-    Options optionsPage = Options(settings.p1Settings);
+    Options optionsPage = Options(settings.p2Settings);
 
     Menu mainMenu = Menu();
 

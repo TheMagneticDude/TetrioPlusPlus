@@ -64,7 +64,6 @@ void TriggerKey::update() {
 bool TriggerKey::newPress() {
     bool wasNewPress = isNewPress;
     isNewPress = false;
-    //if (wasNewPress)std::cout<<keyCode;
     return wasNewPress;
 }
 
@@ -114,6 +113,8 @@ void PlayerInput::setKey(KeyAction key, int keyCode){
     keyBinds[key]->setKeyCode(keyCode);
 }
 
+//Windows scanKey will figure out linux later
+#ifdef _WIN32
 //scans keys and stores them into a vector
 std::vector<int> PlayerInput::scanKey(){
     scannedKeys.clear();
@@ -128,6 +129,7 @@ std::vector<int> PlayerInput::scanKey(){
         }
         return scannedKeys;
 }
+#endif
 
 void PlayerInput::handleDAS(bool &isRepeating, TriggerKey &key) {
     if (!key.pressed() && isRepeating) {

@@ -1,4 +1,6 @@
 #include <iostream>
+#include <optional>
+
 
 #include "FEHRandom.h"
 #include "Grid.h"

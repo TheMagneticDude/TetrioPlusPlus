@@ -1,33 +1,27 @@
 #include "TETRIODEP/Menu.h"
 #include "TETRIODEP/TetrisBoard.h"
+#include "TETRIODEP/Options.h"
 #include <FEHLCD.h>
 #include <FEHRandom.h>
 
 int main() {
     Settings settings = defaultSettings;
 
-    int board1Loc[2] = {40, 60};
-    int board2Loc[2] = {200, 60};
-    TetrisBoard board1(board1Loc[0], board1Loc[1]);
-    MovementBoard movement1(board1Loc[0], board1Loc[1], settings.p2Settings);
-    movement1.setMovingTetromino(0, 0, Tetromino::O, TetrominoOrientation::H);
-    TetrisBoard board2(board2Loc[0], board2Loc[1]);
-    MovementBoard movement2(board2Loc[0], board2Loc[1], settings.p1Settings);
-    movement2.setMovingTetromino(0, 0, Tetromino::L, TetrominoOrientation::H);
-
+    int board1Loc[2] = {40, 220};
+    int board2Loc[2] = {200, 220};
+    TetrisBoard board1(board1Loc[0], board1Loc[1], settings.p1Settings);
+    
+    TetrisBoard board2(board2Loc[0], board2Loc[1], settings.p2Settings);
+    
     // Options page (set up for p1 for now ill create sliders and switches to change later)
-    Options optionsPage = Options(settings.p2Settings);
+    Options optionsPage = Options(settings.p1Settings);
 
     Menu mainMenu = Menu();
-    // settings has not been implemented yet so disabled
-    mainMenu.disable(mainMenu.settings);
 
     while (1) {
         LCD.Clear();
+        mainMenu.update();
 
-        // settings has not been implemented yet so disabled
-
-        // mainMenu.disable(mainMenu.settings);
 
         if (mainMenu.isPageActive(Menu::Option::Start)) {
             LCD.SetFontColor(WHITE);
@@ -38,14 +32,7 @@ int main() {
             board2.update();
 
             board1.draw();
-            board2.draw();
-
-            board1.drawTetromino(0, 0, static_cast<Tetromino>(2), TetrominoOrientation::H);
-            board1.drawBorder();
-            board2.drawBorder();
-
-            // update movement
-            movement1.update();
+            board2.draw();   
         }
         if (mainMenu.isPageActive(Menu::Option::Settings)) {
             optionsPage.update();
@@ -78,6 +65,8 @@ int main() {
 
         LCD.Update();
     }
+
+    
 
     return 0;
 }

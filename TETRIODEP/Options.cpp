@@ -272,7 +272,7 @@ void Options::updateButtonNames(){
     softDrop.setString("Soft Drop: " + getKeyName(currSetting->controls.softDrop));
     hardDrop.setString("Hard Drop: " + getKeyName(currSetting->controls.hardDrop));
     rotateCCW.setString("Rotate CCW: " + getKeyName(currSetting->controls.rotateCCW));
-    rotateCW.setString("Move Left: " + getKeyName(currSetting->controls.rotateCW));
+    rotateCW.setString("Rotate CW: " + getKeyName(currSetting->controls.rotateCW));
     rotate180.setString("Rotate 180: " + getKeyName(currSetting->controls.rotate180));
     swapHold.setString("Swap Hold: " + getKeyName(currSetting->controls.swapHold));
 }

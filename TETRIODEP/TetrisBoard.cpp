@@ -26,6 +26,7 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
 
     lastGravity = std::chrono::high_resolution_clock::now();
     startNewFalling();
+    ended = false;
 }
 
 // draws the entire tetrisboard
@@ -246,7 +247,8 @@ void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     if (checkCollision(fallingGrid, fallingX, fallingY)) {
         // TODO: game over
         std::cout << "Game Over!" << std::endl;
-        std::exit(0);
+        ended = true;
+        // std::exit(0);
     }
 }
 
@@ -378,4 +380,8 @@ Tetromino TetrisBoard::getNextFromQueue() {
     queue.push_back(next);
     queueGrids.push_back(createGrid(next, TetrominoOrientation::H));
     return mino;
+}
+
+bool TetrisBoard::gameEnded(){
+    return ended;
 }

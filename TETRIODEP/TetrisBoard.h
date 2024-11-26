@@ -37,6 +37,8 @@ class TetrisBoard {
     std::vector<Tetromino> queue;
     std::vector<Tetromino> bag;
 
+    bool ended;
+
     void updateRotation();
     // Returns true if a collision was detected
     bool checkCollision(Grid with, int x, int y);
@@ -52,4 +54,5 @@ class TetrisBoard {
     TetrisBoard(int x, int y, PlayerSettings &playerSettings);
     void update();
     void draw();
+    bool gameEnded();
 };

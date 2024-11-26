@@ -53,6 +53,8 @@ enum class Option {
     void renderBackButton();
     void removeBack();
 
+    void returnToMenu();
+
     void run();
 
     void remove();

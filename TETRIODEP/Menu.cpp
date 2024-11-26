@@ -28,10 +28,6 @@ void Menu::disable(Button &b) { b.disable(); }
 
 void Menu::update() {
 
-    
-
-    
-
     if (currOption == Option::Back) {
         currOption = Option::None;
     }
@@ -104,6 +100,12 @@ void Menu::remove() {
     credits.remove();
 }
 
+void Menu::returnToMenu(){
+    currOption = Option::Back;
+            back.remove();
+            // back to menu
+}
+
 
 //moved logic from main to here
 void Menu::run(){
@@ -129,6 +131,12 @@ void Menu::run(){
 
             board1.draw();
             board2.draw();
+
+            //exit if game ends
+            if(board1.gameEnded() || board2.gameEnded()){
+                returnToMenu();
+            }
+
         }
         if (isPageActive(Menu::Option::Settings)) {
             optionsPage.update();

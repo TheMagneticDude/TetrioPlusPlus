@@ -5,6 +5,9 @@
 #include <FEHLCD.h>
 #include <FEHRandom.h>
 
+#include <mmsystem.h>      
+#include <windows.h>        
+
 int main() {
 
     Menu mainMenu = Menu();

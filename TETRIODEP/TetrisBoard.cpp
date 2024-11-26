@@ -1,7 +1,6 @@
 #include <iostream>
 #include <optional>
 
-
 #include "FEHRandom.h"
 #include "Grid.h"
 #include "Input.h"
@@ -9,6 +8,9 @@
 #include "TetrisBoard.h"
 #include "Tetromino.h"
 #include <FEHLCD.h>
+
+#include <mmsystem.h>    
+#include <windows.h>     
 
 // initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
@@ -70,12 +72,19 @@ void TetrisBoard::update() {
     // Handle Left/Right movement keys
     bool pressedLeft = input.keyLeft.newPress();
     bool pressedRight = input.keyRight.newPress();
+
     if (pressedLeft && !pressedRight) {
+        
         if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
+            // play sound
+        PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
             fallingX--;
         }
     } else if (pressedRight && !pressedLeft) {
+        
         if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
+            // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
+        PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
             fallingX++;
         }
     }
@@ -382,6 +391,4 @@ Tetromino TetrisBoard::getNextFromQueue() {
     return mino;
 }
 
-bool TetrisBoard::gameEnded(){
-    return ended;
-}
+bool TetrisBoard::gameEnded() { return ended; }

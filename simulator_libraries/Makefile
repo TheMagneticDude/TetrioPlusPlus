@@ -6,7 +6,8 @@ INC_DIRS = -I. -I..
 OBJS = FEHLCD.o FEHRandom.o FEHSD.o tigr.o FEHUtility.o FEHImages.o
 
 ifeq ($(OS),Windows_NT)
-	LDFLAGS = -lopengl32 -lgdi32
+	LDFLAGS = -lopengl32 -lgdi32 -lwinmm 
+	# lwinmm for SOUNDDD
 	EXEC = game.exe
 else
 	UNAME := $(shell uname)
@@ -57,6 +58,8 @@ FEHImages.o: FEHImages.cpp FEHImages.h
 
 tigr.o: tigr.c tigr.h
 	$(CC) $(IGNORED_WARNINGS) $(INC_DIRS) -c tigr.c
+
+
 
 clean:
 	@rm -f *.o ../$(EXEC)

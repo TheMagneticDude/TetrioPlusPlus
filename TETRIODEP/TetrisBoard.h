@@ -50,6 +50,7 @@ class TetrisBoard {
     Tetromino getNextFromBag();
     void drawBorder();
 
+
   public:
     TetrisBoard(int x, int y, PlayerSettings &playerSettings);
     void update();

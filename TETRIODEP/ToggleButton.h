@@ -1,7 +1,6 @@
 #pragma once
-
+#include <chrono>
 #include <string>
-
 #include "Grid.h"
 #include <FEHLCD.h>
 
@@ -29,6 +28,9 @@ class ToggleButton {
     int disabledColor;  // color of button when disabled
 
     int currColor = defaultColor;
+
+    std::chrono::high_resolution_clock::time_point lastPress;
+
 
 
 
@@ -77,6 +79,12 @@ class ToggleButton {
     void enable();
 
     void setTriggered(bool t);
+
+    void flashRed();
+
+    void setString(std::string s);
+
+    void recenter();
 
     void remove();
 };

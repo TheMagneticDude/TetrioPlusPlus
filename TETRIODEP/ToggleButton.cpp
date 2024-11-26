@@ -1,6 +1,5 @@
 #include <limits>
 #include <string>
-
 #include "ToggleButton.h"
 #include <FEHLCD.h>
 
@@ -28,6 +27,8 @@ ToggleButton::ToggleButton(int y, string text, unsigned int color, unsigned int 
     removed = false;
 
     currColor = defaultColor;
+    //initializes time
+    lastPress = std::chrono::high_resolution_clock::now();
 }
 ToggleButton::ToggleButton(float x, float y, string text) {
 
@@ -49,6 +50,8 @@ ToggleButton::ToggleButton(float x, float y, string text) {
     removed = false;
 
     currColor = defaultColor;
+    //initializes time
+    lastPress = std::chrono::high_resolution_clock::now();
 }
 
 ToggleButton::ToggleButton(float x, float y, string text, unsigned int color, unsigned int trigColor) {
@@ -71,6 +74,8 @@ ToggleButton::ToggleButton(float x, float y, string text, unsigned int color, un
     removed = false;
 
     currColor = defaultColor;
+    //initializes time
+    lastPress = std::chrono::high_resolution_clock::now();
 }
 
 
@@ -87,7 +92,12 @@ void ToggleButton::drawButton() {
 
 // redraws button and also updates its state
 void ToggleButton::updateButtonState() {
+    //update button to fit text
+    buttonWidth = buttonText.length() * LCD.getCharWidth();
+    buttonHeight = LCD.getCharHeight();
+
     if (enabled) {
+        
         bool withinX = false;
         bool withinY = false;
         // update touched location
@@ -102,6 +112,9 @@ void ToggleButton::updateButtonState() {
             withinY = touchedY >= buttonY && touchedY <= buttonY + buttonHeight;
         }
         if (withinX && withinY) {
+            auto currTime = std::chrono::high_resolution_clock::now();
+            float debounceTime = 0.1; // debounce time in seconds
+            if (std::chrono::duration<float>(currTime - lastPress).count() > debounceTime) {
                 if (currState == buttonState::inactive) {
                     currState = buttonState::active;
                 } else if (currState == buttonState::active) {
@@ -111,7 +124,8 @@ void ToggleButton::updateButtonState() {
                 // button is touched
                 triggered = !triggered;
                 // toggle buttonState
-
+                lastPress = std::chrono::high_resolution_clock::now();
+            }
             } else if(!triggered){
                 // no touch
                 if (currState == buttonState::held) {
@@ -169,6 +183,18 @@ void ToggleButton::setTriggered(bool t){
     }else{
         currState == buttonState::released;
     }
+}
+
+void ToggleButton::flashRed(){
+    currColor = RED;
+}
+
+void ToggleButton::setString(std::string s){
+    buttonText = s;
+}
+
+void ToggleButton::recenter(){
+    buttonX = (screenWidth/2.0) - ((buttonText.length() / 2.0) * LCD.getCharWidth());
 }
 
 

@@ -80,6 +80,10 @@ public:
     void DrawRectangle(int x, int y, int width, int height);
     void FillRectangle(int x, int y, int width, int height);
     void DrawCircle(int x0, int y0, int r);
+
+void DrawEllipse(float x0, float y0, float a, float b);
+void DrawFilledEllipse(float x0, float y0, float a, float b);
+
     void FillCircle(int x0, int y0, int r);
     void DrawHorizontalLine(int y, int x1, int x2);
     void DrawVerticalLine(int x, int y1, int y2);

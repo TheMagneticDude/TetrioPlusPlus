@@ -75,6 +75,7 @@ class Button {
 
     void disable();
     void enable();
+    void setString(std::string s); 
 
     void remove();
 };

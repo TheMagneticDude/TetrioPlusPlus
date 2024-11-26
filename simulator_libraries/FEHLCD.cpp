@@ -3,6 +3,7 @@
 #include "FEHSD.h"
 #include "FEHUtility.h"
 #include <iostream>
+#include <math.h>
 
 #define WINDOW_WIDTH                                                                                                   \
     LCD_WIDTH // TODO: Consider changing the actual window width and height to have a border around the "screen"
@@ -348,6 +349,38 @@ void FEHLCD::DrawCircle(int x0, int y0, int r) {
         DrawPixel(x0 - y, y0 + x);
         DrawPixel(x0 + y, y0 - x);
         DrawPixel(x0 - y, y0 - x);
+    }
+}
+
+
+
+void FEHLCD::DrawEllipse(float x0, float y0, float a, float b) {
+    //paramatization of an ellipse is <acost,bsint> for the form x^2/a^2 + y^2/b^2 = 1
+    //for t frm 0 to 2pi
+    float t = 0;
+    float step = 0.04;
+    float tEnd = 2 * M_PI;
+    for(t; t <= tEnd; t+=step){
+        float x = a * cos(t) + x0;
+        float y = b * sin(t) + y0;
+        DrawPixel(x,y);
+    }
+}
+
+void FEHLCD::DrawFilledEllipse(float x0, float y0, float a, float b) {
+    //paramatization of an ellipse is <acost,bsint> for the form x^2/a^2 + y^2/b^2 = 1
+    //for t frm 0 to 2pi
+    float t = 0;
+    float t2 = 2 * M_PI;
+    float step = 0.04;
+    float tEnd = M_PI;
+    for(t; t <= tEnd; t+=step){
+        float x1 = a * cos(t) + x0;
+        float y1 = b * sin(t) + y0;
+        float x2 = a * cos(t2) + x0;
+        float y2 = b * sin(t2) + y0;
+        DrawLine(x1,y1,x2,y2);
+        t2 -= step;
     }
 }
 

@@ -59,6 +59,7 @@ class PlayerInput {
     TriggerKey rotate180;//5
     TriggerKey softDrop;//6
     TriggerKey hardDrop;//7
+    TriggerKey swapHold;
 
 
     enum class KeyAction {
@@ -68,7 +69,8 @@ class PlayerInput {
             RotateCCW,
             Rotate180,
             SoftDrop,
-            HardDrop
+            HardDrop,
+            SwapHold
         };
 
 
@@ -76,7 +78,6 @@ class PlayerInput {
 
     std::vector<int> scannedKeys;
     
-    TriggerKey swapHold;
     
     PlayerInput(PlayerSettings &playerSettings);
     //options page 

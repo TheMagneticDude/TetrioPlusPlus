@@ -235,6 +235,10 @@ void Button::enable() {
     currColor = defaultColor;
 }
 
+void Button::setString(std::string s){
+    buttonText = s;
+}
+
 void Button::remove() {
     if (!removed) {
         int backColor = BLACK;

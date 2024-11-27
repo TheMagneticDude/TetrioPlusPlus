@@ -66,25 +66,32 @@ void TetrisBoard::drawBorder() {
                       SCALE * (grid.height) + borderScale);
 }
 
+void* TetrisBoard::playSound(void* vargp){
+    PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+    return NULL;
+}
+
 void TetrisBoard::update() {
     input.update();
 
     // Handle Left/Right movement keys
     bool pressedLeft = input.keyLeft.newPress();
     bool pressedRight = input.keyRight.newPress();
+    pthread_t soundThreadID;
 
     if (pressedLeft && !pressedRight) {
-        
         if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
             // play sound
-        PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_join(soundThreadID, NULL);
             fallingX--;
         }
     } else if (pressedRight && !pressedLeft) {
         
         if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
             // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
-        PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_join(soundThreadID, NULL);
             fallingX++;
         }
     }

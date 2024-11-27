@@ -56,4 +56,6 @@ class TetrisBoard {
     void update();
     void draw();
     bool gameEnded();
+
+    static void* playSound(void* vargp);
 };

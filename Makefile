@@ -2,23 +2,25 @@ GITBINARY := git
 PINGURL := google.com
 LIBRARYREPO := simulator_libraries
 
+# SDL2 Directories
+SDL2_INCLUDE := -I/usr/include/SDL2
+SDL2_LIBS := -L/usr/lib -lSDL2
 
 ifeq ($(OS),Windows_NT)	
 	SHELL := CMD
+	SDL2_INCLUDE := -IC:/path/to/SDL2/include
+	SDL2_LIBS := -LC:/path/to/SDL2/lib -lSDL2main -lSDL2
 endif
 
 all: update
 ifeq ($(OS),Windows_NT)	
-	@cd $(LIBRARYREPO) && mingw32-make
+	@cd $(LIBRARYREPO) && mingw32-make SDL2_INCLUDE="$(SDL2_INCLUDE)" SDL2_LIBS="$(SDL2_LIBS)"
 else
-	@cd $(LIBRARYREPO) && make
+	@cd $(LIBRARYREPO) && make SDL2_INCLUDE="$(SDL2_INCLUDE)" SDL2_LIBS="$(SDL2_LIBS)"
 endif
 
 update:
 ifeq ($(OS),Windows_NT)	
-# check for internet connection
-# if there's internet, check to see if Libraries folder exists
-# if it does, remove it before cloning the repo
 	@ping -n 1 -w 1000 $(PINGURL) > NUL & \
 	if errorlevel 1 \
 	( \
@@ -39,14 +41,12 @@ ifeq ($(OS),Windows_NT)
 		) \
 	) 
 else
-# Mac/Linux
 	@ping -c 1 -W 1000 $(PINGURL) > /dev/null ; \
 	if [ "$$?" -ne 0 ]; then \
 		echo Warning: No internet connection!; \
 	else \
 		if [ -d "$(LIBRARYREPO)" ]; then \
 			cd $(LIBRARYREPO) ; \
-			
       		cd .. ; \
 		else \
       		$(GITBINARY) clone https://code.osu.edu/fehelectronics/proteus_software/$(LIBRARYREPO).git ; \

@@ -1,15 +1,18 @@
-#include <limits>
-#include <string>
 #include "ToggleButton.h"
 #include <FEHLCD.h>
+#include <limits>
+#include <string>
+
+#include <mmsystem.h>
+#include <windows.h>
 
 using namespace std;
 
 ToggleButton::ToggleButton() {}
-//draws centered button
+// draws centered button
 ToggleButton::ToggleButton(int y, string text, unsigned int color, unsigned int trigColor) {
 
-    buttonX = (screenWidth/2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
+    buttonX = (screenWidth / 2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
     buttonY = y;
 
     buttonWidth = text.length() * LCD.getCharWidth();
@@ -23,11 +26,13 @@ ToggleButton::ToggleButton(int y, string text, unsigned int color, unsigned int 
     defaultColor = color;
     triggeredColor = trigColor;
     disabledColor = defaultDisabledColor;
+    highlighted = false;
+    wasHighlighted = false;
 
     removed = false;
 
     currColor = defaultColor;
-    //initializes time
+    // initializes time
     lastPress = std::chrono::high_resolution_clock::now();
 }
 ToggleButton::ToggleButton(float x, float y, string text) {
@@ -46,11 +51,13 @@ ToggleButton::ToggleButton(float x, float y, string text) {
     defaultColor = defaultNormColor;
     triggeredColor = defaultTriggeredColor;
     disabledColor = defaultDisabledColor;
+    highlighted = false;
+    wasHighlighted = false;
 
     removed = false;
 
     currColor = defaultColor;
-    //initializes time
+    // initializes time
     lastPress = std::chrono::high_resolution_clock::now();
 }
 
@@ -70,14 +77,15 @@ ToggleButton::ToggleButton(float x, float y, string text, unsigned int color, un
     defaultColor = color;
     triggeredColor = trigColor;
     disabledColor = defaultDisabledColor;
+    highlighted = false;
+    wasHighlighted = false;
 
     removed = false;
 
     currColor = defaultColor;
-    //initializes time
+    // initializes time
     lastPress = std::chrono::high_resolution_clock::now();
 }
-
 
 void ToggleButton::setDefaultColor(unsigned int color) { defaultColor = color; }
 void ToggleButton::setTriggeredColor(unsigned int color) { triggeredColor = color; }
@@ -92,14 +100,21 @@ void ToggleButton::drawButton() {
 
 // redraws button and also updates its state
 void ToggleButton::updateButtonState() {
-    //update button to fit text
+    // update button to fit text
     buttonWidth = buttonText.length() * LCD.getCharWidth();
     buttonHeight = LCD.getCharHeight();
 
     if (enabled) {
-        
+
         bool withinX = false;
         bool withinY = false;
+
+        // read where cursor is
+        LCD.Touch(&touchedX, &touchedY, false);
+        // change button highlight
+        highlighted = touchedX >= buttonX && touchedX <= buttonX + buttonWidth && touchedY >= buttonY &&
+                      touchedY <= buttonY + buttonHeight;
+
         // update touched location
         if (!LCD.Touch(&touchedX, &touchedY, false)) {
 
@@ -126,21 +141,34 @@ void ToggleButton::updateButtonState() {
                 // toggle buttonState
                 lastPress = std::chrono::high_resolution_clock::now();
             }
-            } else if(!triggered){
-                // no touch
-                if (currState == buttonState::held) {
-                    currState = buttonState::released;
-                } else if (currState == buttonState::released) {
-                    currState = buttonState::inactive;
-                }
-                currColor = defaultColor;
-                // else clear touched location to off the screen
-                triggered = false;
-                touchedX = numeric_limits<float>::max();
-                touchedY = numeric_limits<float>::max();
-
-                // reset buttonState
+        } else if (!triggered) {
+            // no touch
+            if (currState == buttonState::held) {
+                currState = buttonState::released;
+            } else if (currState == buttonState::released) {
+                currState = buttonState::inactive;
             }
+            // highlight color
+            if (highlighted) {
+                currColor = highlightedColor;
+                if (!wasHighlighted) {
+                    // play click sound when highlighted
+                    PlaySound(NULL, NULL, 0);
+                    PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+                    wasHighlighted = true;
+                }
+
+            } else {
+                currColor = defaultColor;
+                wasHighlighted = false;
+            }
+            // else clear touched location to off the screen
+            triggered = false;
+            touchedX = numeric_limits<float>::max();
+            touchedY = numeric_limits<float>::max();
+
+            // reset buttonState
+        }
     }
     // redraws button
     drawButton();
@@ -176,27 +204,20 @@ void ToggleButton::enable() {
     currColor = defaultColor;
 }
 
-void ToggleButton::setTriggered(bool t){
+void ToggleButton::setTriggered(bool t) {
     triggered = t;
-    if(t){
+    if (t) {
         currState == buttonState::held;
-    }else{
+    } else {
         currState == buttonState::released;
     }
 }
 
-void ToggleButton::flashRed(){
-    currColor = RED;
-}
+void ToggleButton::flashRed() { currColor = RED; }
 
-void ToggleButton::setString(std::string s){
-    buttonText = s;
-}
+void ToggleButton::setString(std::string s) { buttonText = s; }
 
-void ToggleButton::recenter(){
-    buttonX = (screenWidth/2.0) - ((buttonText.length() / 2.0) * LCD.getCharWidth());
-}
-
+void ToggleButton::recenter() { buttonX = (screenWidth / 2.0) - ((buttonText.length() / 2.0) * LCD.getCharWidth()); }
 
 void ToggleButton::remove() {
     if (!removed) {

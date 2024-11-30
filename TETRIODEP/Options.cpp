@@ -263,7 +263,13 @@ bool Options::anyButtonToggled(){
 }
 
 std::string Options::getKeyName(int key){
-    return keyNameMap[key];
+    //if key exists as text return the key
+    if(keyNameMap.find(key)!= keyNameMap.end()){
+        return keyNameMap[key];
+    }
+
+    //returns UNKNOWN key
+    return keyNameMap[-1];
 }
 
 void Options::updateButtonNames(){

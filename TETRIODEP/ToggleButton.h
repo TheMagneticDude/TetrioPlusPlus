@@ -4,6 +4,9 @@
 #include "Grid.h"
 #include <FEHLCD.h>
 
+#include "Input.h"
+
+
 using namespace std;
 
 // like normal button class but it stays triggered instead of resetting
@@ -26,6 +29,9 @@ class ToggleButton {
     int defaultColor;   // normal color of button
     int triggeredColor; // color of button when triggered
     int disabledColor;  // color of button when disabled
+    int highlightedColor = BLUEVIOLET;
+    bool highlighted;
+    bool wasHighlighted = false;
 
     int currColor = defaultColor;
 

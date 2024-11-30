@@ -1,9 +1,9 @@
 #pragma once
 
 #include <string>
-
-#include "Grid.h"
 #include <FEHLCD.h>
+
+#include "Input.h"
 
 using namespace std;
 
@@ -26,6 +26,9 @@ class Button {
     int defaultColor;   // normal color of button
     int triggeredColor; // color of button when triggered
     int disabledColor;  // color of button when disabled
+    int highlightedColor = BLUEVIOLET;
+    bool highlighted;
+    bool wasHighlighted = false;
 
     int currColor = defaultColor;
 
@@ -49,7 +52,7 @@ class Button {
     bool removed;
 
     Button();
-    //creates centered button
+    // creates centered button
     Button(int y, string text, unsigned int color, unsigned int trigColor);
     Button(float x, float y, string text);
     Button(float x, float y, float w, float h, string text);
@@ -75,7 +78,7 @@ class Button {
 
     void disable();
     void enable();
-    void setString(std::string s); 
+    void setString(std::string s);
 
     void remove();
 };

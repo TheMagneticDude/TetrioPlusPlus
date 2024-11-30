@@ -3,15 +3,16 @@
 
 #include "Button.h"
 #include <FEHLCD.h>
+#include <iostream>
+#include <mmsystem.h>
+#include <windows.h>
 
 using namespace std;
-
-
 
 Button::Button() {}
 Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
 
-    buttonX = (screenWidth/2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
+    buttonX = (screenWidth / 2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
     buttonY = y;
 
     buttonWidth = text.length() * LCD.getCharWidth();
@@ -21,6 +22,8 @@ Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
 
     triggered = false;
     enabled = true;
+    highlighted = false;
+    wasHighlighted = false;
 
     defaultColor = color;
     triggeredColor = trigColor;
@@ -42,6 +45,8 @@ Button::Button(float x, float y, string text) {
 
     triggered = false;
     enabled = true;
+    highlighted = false;
+    wasHighlighted = false;
 
     defaultColor = defaultNormColor;
     triggeredColor = defaultTriggeredColor;
@@ -65,6 +70,8 @@ Button::Button(float x, float y, float w, float h, string text) {
 
     triggered = false;
     enabled = true;
+    highlighted = false;
+    wasHighlighted = false;
 
     defaultColor = defaultNormColor;
     triggeredColor = defaultTriggeredColor;
@@ -89,6 +96,8 @@ Button::Button(float x, float y, float w, float h, string text, unsigned int col
 
     triggered = false;
     enabled = true;
+    highlighted = false;
+    wasHighlighted = false;
 
     defaultColor = color;
     triggeredColor = trigColor;
@@ -111,6 +120,8 @@ Button::Button(float x, float y, string text, unsigned int color, unsigned int t
 
     triggered = false;
     enabled = true;
+    highlighted = false;
+    wasHighlighted = false;
 
     defaultColor = color;
     triggeredColor = trigColor;
@@ -135,6 +146,8 @@ Button::Button(float x, float y, float w, float h, string text, bool e) {
 
     triggered = false;
     enabled = e;
+    highlighted = false;
+    wasHighlighted = false;
 
     defaultColor = defaultNormColor;
     triggeredColor = defaultTriggeredColor;
@@ -163,9 +176,14 @@ void Button::updateButtonState() {
     if (enabled) {
         bool withinX = false;
         bool withinY = false;
+
+        // read where cursor is
+        LCD.Touch(&touchedX, &touchedY, false);
+        // change button highlight
+        highlighted = touchedX >= buttonX && touchedX <= buttonX + buttonWidth && touchedY >= buttonY &&
+                      touchedY <= buttonY + buttonHeight;
         // update touched location
         if (!LCD.Touch(&touchedX, &touchedY, false)) {
-
             // wait until touch happens
         } else if (LCD.Touch(&xTrash, &yTrash, false)) {
             // wait until touch releases
@@ -174,32 +192,47 @@ void Button::updateButtonState() {
             withinX = touchedX >= buttonX && touchedX <= buttonX + buttonWidth;
             withinY = touchedY >= buttonY && touchedY <= buttonY + buttonHeight;
         }
+
         if (withinX && withinY) {
-                if (currState == buttonState::inactive) {
-                    currState = buttonState::active;
-                } else if (currState == buttonState::active) {
-                    currState = buttonState::held;
+            if (currState == buttonState::inactive) {
+                currState = buttonState::active;
+            } else if (currState == buttonState::active) {
+                currState = buttonState::held;
+            }
+            currColor = triggeredColor;
+            // button is touched
+            triggered = true;
+            // toggle buttonState
+
+        } else {
+            // no touch
+            if (currState == buttonState::held) {
+                currState = buttonState::released;
+            } else if (currState == buttonState::released) {
+                currState = buttonState::inactive;
+            }
+
+            // highlight color
+            if (highlighted) {
+                currColor = highlightedColor;
+                if (!wasHighlighted) {
+                    // play click sound when highlighted
+                    PlaySound(NULL, NULL, 0);
+                    PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+                    wasHighlighted = true;
                 }
-                currColor = triggeredColor;
-                // button is touched
-                triggered = true;
-                // toggle buttonState
 
             } else {
-                // no touch
-                if (currState == buttonState::held) {
-                    currState = buttonState::released;
-                } else if (currState == buttonState::released) {
-                    currState = buttonState::inactive;
-                }
                 currColor = defaultColor;
-                // else clear touched location to off the screen
-                triggered = false;
-                touchedX = numeric_limits<float>::max();
-                touchedY = numeric_limits<float>::max();
-
-                // reset buttonState
+                wasHighlighted = false;
             }
+            // else clear touched location to off the screen
+            triggered = false;
+            touchedX = numeric_limits<float>::max();
+            touchedY = numeric_limits<float>::max();
+
+            // reset buttonState
+        }
     }
     // redraws button
     drawButton();
@@ -235,9 +268,7 @@ void Button::enable() {
     currColor = defaultColor;
 }
 
-void Button::setString(std::string s){
-    buttonText = s;
-}
+void Button::setString(std::string s) { buttonText = s; }
 
 void Button::remove() {
     if (!removed) {

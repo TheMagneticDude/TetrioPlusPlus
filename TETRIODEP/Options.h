@@ -191,8 +191,8 @@ class Options {
     {0xFB, "Zoom"},
     {0xFC, "Noname"},
     {0xFD, "PA1"},
-    {0xFE, "OEM Clear"}
-
+    {0xFE, "OEM Clear"},
+    {-1, "UNKNOWN"}
       };
   public:
     Options(Settings &set);

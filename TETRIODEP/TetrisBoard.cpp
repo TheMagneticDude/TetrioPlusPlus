@@ -11,6 +11,7 @@
 
 #include <mmsystem.h>    
 #include <windows.h>     
+#pragma comment(lib, "winmm.lib")
 
 // initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings)
@@ -82,16 +83,22 @@ void TetrisBoard::update() {
     if (pressedLeft && !pressedRight) {
         if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
             // play sound
+            std::cout<<"SOUNDPLAYED"<<std::endl;
+            PlaySound(NULL, NULL, 0);
         pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
         pthread_join(soundThreadID, NULL);
+        std::cout<<"SOUNDDONE"<<std::endl;
             fallingX--;
         }
     } else if (pressedRight && !pressedLeft) {
         
         if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
             // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
+        std::cout<<"SOUNDPLAYED"<<std::endl;
+        PlaySound(NULL, NULL, 0);
         pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
         pthread_join(soundThreadID, NULL);
+        std::cout<<"SOUNDDONE"<<std::endl;
             fallingX++;
         }
     }

@@ -91,6 +91,9 @@ class ToggleButton {
     void setString(std::string s);
 
     void recenter();
+    void setXPos(int x);
+    void setYPos(int y);
+    std::string getString();
 
     void remove();
 };

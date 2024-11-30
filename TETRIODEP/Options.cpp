@@ -8,42 +8,61 @@
 #include <iostream>
 
 Options::Options(Settings &set)
-    : left(0 + buttonoffset, "Move Left: Default", BLUE, DARKBLUE), 
-    right(20 + buttonoffset, "Move Right: Default", BLUE, DARKBLUE),
+    : left(20 + buttonoffset, "Move Left: Default", BLUE, DARKBLUE),
+      right(20 + buttonoffset, "Move Right: Default", BLUE, DARKBLUE),
       softDrop(40 + buttonoffset, "Soft Drop: Default", BLUE, DARKBLUE),
       hardDrop(60 + buttonoffset, "Hard Drop: Default", BLUE, DARKBLUE),
       rotateCCW(80 + buttonoffset, "Rotate CCW: Default", BLUE, DARKBLUE),
       rotateCW(100 + buttonoffset, "Rotate CW: Default", BLUE, DARKBLUE),
       rotate180(120 + buttonoffset, "Rotate 180: Default", BLUE, DARKBLUE),
-      swapHold(140 + buttonoffset, "Swap Hold: Default", BLUE, DARKBLUE), 
-      p1Input(set.p1Settings), 
-      p2Input(set.p2Settings),
-      togglePlayer(10,"P1", BLUE,GRAY,8,6)
-       {
+      swapHold(140 + buttonoffset, "Swap Hold: Default", BLUE, DARKBLUE), p1Input(set.p1Settings),
+      p2Input(set.p2Settings), togglePlayer(0, "P1", BLUE, GRAY, 8, 6), arr("ARR", 30, 200, 0, BLUE, DARKBLUE, 0, 10),
+      das("DAS", 50, 200, 0, BLUE, DARKBLUE, 0, 10), dcd("DCD", 70, 200, 0, BLUE, DARKBLUE, 0, 10),
+      sdf("SDF", 90, 200, 0, BLUE, DARKBLUE, 0, 10) {
     settings = &set;
-    //initialize currSetting
+    // initialize currSetting
     currSetting = &(settings->p1Settings);
-    //initialize pointer
+    // initialize pointer
     currentPlayerInput = &p1Input;
-    //update buttons to match their default 
+    // update buttons to match their default
     updateButtonNames();
-    
+    updateSliderValues();
+    switchToggled = false;
+    wasToggled = false;
 }
 
 void Options::update() {
-    //update switch
+    // update slides
+    arr.update();
+    das.update();
+    dcd.update();
+    sdf.update();
+    // update switch
     togglePlayer.update();
-    if(togglePlayer.getToggled()){
+    if (togglePlayer.getToggled()) {
         currentPlayerInput = &p2Input;
         togglePlayer.setString("P2");
         currSetting = &(settings->p2Settings);
         updateButtonNames();
-    }else{
+        if(!wasToggled){
+            wasToggled = true;
+            switchToggled = true;
+            updateSliderValues();
+        }
+        
+            } else {
         currentPlayerInput = &p1Input;
         togglePlayer.setString("P1");
         currSetting = &(settings->p1Settings);
         updateButtonNames();
+        if(wasToggled){
+            wasToggled = false;
+            switchToggled = false;
+            updateSliderValues();
+        }
     }
+
+            
 
     // update all button states
     left.updateButtonState();
@@ -55,9 +74,9 @@ void Options::update() {
     rotate180.updateButtonState();
     swapHold.updateButtonState();
 
-    //recenter all buttons
-    left.recenter();
-    right.recenter();
+    // recenter all buttons
+    //  left.recenter();
+    //  right.recenter();
     softDrop.recenter();
     hardDrop.recenter();
     rotateCCW.recenter();
@@ -65,7 +84,15 @@ void Options::update() {
     rotate180.recenter();
     swapHold.recenter();
 
-    
+    // due to lack of space and me not wanting to implement scrolling lol
+    // left and right need to be next to each other
+    recenterButtonPair(left, right);
+
+    // slider set values
+    currSetting->handling.arr = arr.getValue();
+    currSetting->handling.das = das.getValue();
+    currSetting->handling.dcd = dcd.getValue();
+    currSetting->handling.sdf = sdf.getValue();
 
     // deboucnce
     bool buttonClicked = left.onButtonClicked() || right.onButtonClicked() || softDrop.onButtonClicked() ||
@@ -81,19 +108,15 @@ void Options::update() {
     // to prevent keys from being read too often
     float debounceTime = 0.1; // debounce time in seconds
     if (std::chrono::duration<float>(currTime - lastPress).count() > debounceTime) {
-        //if no buttons are toggled then reset to none
-        if(!anyButtonToggled()){
+        // if no buttons are toggled then reset to none
+        if (!anyButtonToggled()) {
             currActive = buttons::none;
         }
 
-        if(currActive == buttons::none){
+        if (currActive == buttons::none) {
             getCurrentButton();
         }
 
-        
-        
-
-        
         if (currActive == buttons::left) {
             handleButtonToggle(left);
             // gets first key pressed in the array read.
@@ -123,7 +146,7 @@ void Options::update() {
         }
         if (currActive == buttons::softDrop) {
             handleButtonToggle(softDrop);
-             auto keys = currentPlayerInput->scanKey();
+            auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
                 int key = keys.front();
                 currSetting->controls.softDrop = key;
@@ -196,7 +219,7 @@ void Options::update() {
     }
 }
 
-void Options::handleButtonToggle(ToggleButton &b){
+void Options::handleButtonToggle(ToggleButton &b) {
     if (otherButtonToggled(b)) {
         b.flashRed();
         // Untoggle other buttons
@@ -204,27 +227,27 @@ void Options::handleButtonToggle(ToggleButton &b){
     }
 }
 
-void Options::getCurrentButton(){
-    //get current button that is toggled
-        if(left.getButtonTriggered()){
-            currActive = buttons::left;
-        }else if(right.getButtonTriggered()){
-            currActive = buttons::right;
-        }else if(softDrop.getButtonTriggered()){
-            currActive = buttons::softDrop;
-        }else if(hardDrop.getButtonTriggered()){
-            currActive = buttons::hardDrop;
-        }else if(rotateCCW.getButtonTriggered()){
-            currActive = buttons::rotateCCW;
-        }else if(rotateCW.getButtonTriggered()){
-            currActive = buttons::rotateCW;
-        }else if(rotate180.getButtonTriggered()){
-            currActive = buttons::rotate180;
-        }else if(swapHold.getButtonTriggered()){
-            currActive = buttons::swapHold;
-        }else{
-            currActive = buttons::none;
-        }
+void Options::getCurrentButton() {
+    // get current button that is toggled
+    if (left.getButtonTriggered()) {
+        currActive = buttons::left;
+    } else if (right.getButtonTriggered()) {
+        currActive = buttons::right;
+    } else if (softDrop.getButtonTriggered()) {
+        currActive = buttons::softDrop;
+    } else if (hardDrop.getButtonTriggered()) {
+        currActive = buttons::hardDrop;
+    } else if (rotateCCW.getButtonTriggered()) {
+        currActive = buttons::rotateCCW;
+    } else if (rotateCW.getButtonTriggered()) {
+        currActive = buttons::rotateCW;
+    } else if (rotate180.getButtonTriggered()) {
+        currActive = buttons::rotate180;
+    } else if (swapHold.getButtonTriggered()) {
+        currActive = buttons::swapHold;
+    } else {
+        currActive = buttons::none;
+    }
 }
 
 // untoggles all other buttons
@@ -251,7 +274,7 @@ bool Options::otherButtonToggled(ToggleButton &b) {
     return false;
 }
 
-bool Options::anyButtonToggled(){
+bool Options::anyButtonToggled() {
     ToggleButton *buttons[] = {&left, &right, &softDrop, &hardDrop, &rotateCCW, &rotateCW, &rotate180, &swapHold};
 
     for (ToggleButton *TB : buttons) {
@@ -262,17 +285,17 @@ bool Options::anyButtonToggled(){
     return false;
 }
 
-std::string Options::getKeyName(int key){
-    //if key exists as text return the key
-    if(keyNameMap.find(key)!= keyNameMap.end()){
+std::string Options::getKeyName(int key) {
+    // if key exists as text return the key
+    if (keyNameMap.find(key) != keyNameMap.end()) {
         return keyNameMap[key];
     }
 
-    //returns UNKNOWN key
+    // returns UNKNOWN key
     return keyNameMap[-1];
 }
 
-void Options::updateButtonNames(){
+void Options::updateButtonNames() {
     left.setString("Move Left: " + getKeyName(currSetting->controls.moveLeft));
     right.setString("Move Right: " + getKeyName(currSetting->controls.moveRight));
     softDrop.setString("Soft Drop: " + getKeyName(currSetting->controls.softDrop));
@@ -281,6 +304,22 @@ void Options::updateButtonNames(){
     rotateCW.setString("Rotate CW: " + getKeyName(currSetting->controls.rotateCW));
     rotate180.setString("Rotate 180: " + getKeyName(currSetting->controls.rotate180));
     swapHold.setString("Swap Hold: " + getKeyName(currSetting->controls.swapHold));
+}
+
+void Options::updateSliderValues() {
+    arr.setValue(currSetting->handling.arr);
+    das.setValue(currSetting->handling.das);
+    dcd.setValue(currSetting->handling.dcd);
+    sdf.setValue(currSetting->handling.sdf);
+}
+
+void Options::recenterButtonPair(ToggleButton &b1, ToggleButton &b2) {
+    unsigned int gapFromCenter = 8;
+    float screenCenterX = screenWidth / 2.0;
+    std::string b1Text = b1.getString();
+    std::string b2Text = b2.getString();
+    b1.setXPos(screenCenterX - gapFromCenter - (b1Text.length() * LCD.getCharWidth()));
+    b2.setXPos(screenCenterX + gapFromCenter);
 }
 
 void Options::remove() {

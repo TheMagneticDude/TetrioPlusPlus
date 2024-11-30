@@ -4,13 +4,24 @@
 #include "Input.h"
 #include "Settings.h"
 #include "Switch.h"
+#include "Slider.h"
 #include "ToggleButton.h"
 
 class Options {
   private:
+    const unsigned int screenWidth = 320;
+    const unsigned int screenHeight = 240;
+    
     Switch togglePlayer;
+    bool switchToggled;
+    bool wasToggled;
+
+    Slider arr;
+    Slider das;
+    Slider dcd;
+    Slider sdf;
   
-    int buttonoffset = 60;
+    int buttonoffset = 80;
     Settings* settings;
 
     PlayerInput p1Input;
@@ -206,4 +217,7 @@ class Options {
     std::string getKeyName(int key);
 
     void updateButtonNames();
+    void updateSliderValues();
+
+    void recenterButtonPair(ToggleButton &b1,ToggleButton &b2);
 };

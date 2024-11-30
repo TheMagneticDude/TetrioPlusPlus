@@ -163,7 +163,7 @@ void ToggleButton::updateButtonState() {
                 wasHighlighted = false;
             }
             // else clear touched location to off the screen
-            triggered = false;
+            // triggered = false;
             touchedX = numeric_limits<float>::max();
             touchedY = numeric_limits<float>::max();
 
@@ -219,6 +219,15 @@ void ToggleButton::setString(std::string s) { buttonText = s; }
 
 void ToggleButton::recenter() { buttonX = (screenWidth / 2.0) - ((buttonText.length() / 2.0) * LCD.getCharWidth()); }
 
+void ToggleButton::setXPos(int x){
+    buttonX = x;
+}
+void ToggleButton::setYPos(int y){
+    buttonY = y;
+}
+std::string ToggleButton::getString(){
+    return buttonText;
+}
 void ToggleButton::remove() {
     if (!removed) {
         int backColor = BLACK;

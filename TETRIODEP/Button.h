@@ -79,6 +79,9 @@ class Button {
     void disable();
     void enable();
     void setString(std::string s);
+    void setXPos(int x);
+    void setYPos(int y);
+    std::string getString();
 
     void remove();
 };

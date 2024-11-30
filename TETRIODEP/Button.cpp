@@ -270,6 +270,15 @@ void Button::enable() {
 
 void Button::setString(std::string s) { buttonText = s; }
 
+void Button::setXPos(int x){
+    buttonX = x;
+}
+void Button::setYPos(int y){
+    buttonY = y;
+}
+std::string Button::getString(){
+    return buttonText;
+}
 void Button::remove() {
     if (!removed) {
         int backColor = BLACK;

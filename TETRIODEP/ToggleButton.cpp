@@ -154,7 +154,7 @@ void ToggleButton::updateButtonState() {
                 if (!wasHighlighted) {
                     // play click sound when highlighted
                     PlaySound(NULL, NULL, 0);
-                    PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+                    PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
                     wasHighlighted = true;
                 }
 

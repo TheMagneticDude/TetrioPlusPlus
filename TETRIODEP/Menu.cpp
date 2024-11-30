@@ -4,7 +4,9 @@
 
 #include <FEHLCD.h>
 #include <string>
-
+#include "Input.h"
+#include <mmsystem.h>
+#include <windows.h>
 #include <iostream>
 
 
@@ -20,7 +22,13 @@ Menu::Menu()
       {
           // initialize button instances
           onStartclicked = false;
+          //start playing background music
+          //this will error im not sure why but it compiles so who cares
+          mciSendString(TEXT("play \"TETRIODEP/TetrisBackground.mp3\""),NULL,0,0);
 
+        //   mciSendString(TEXT("open \"TETRIODEPTetrisBackground.wav\" alias TetrisBlip"),NULL,0,0);
+        //   mciSendString(TEXT("play TetrisBlip repeat"),NULL,0,0);
+          
           
       };
 

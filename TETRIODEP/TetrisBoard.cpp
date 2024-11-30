@@ -68,7 +68,7 @@ void TetrisBoard::drawBorder() {
 }
 
 void* TetrisBoard::playSound(void* vargp){
-    PlaySound(TEXT("TETRIODEP/TetrioMovement-Side.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+    PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
     return NULL;
 }
 
@@ -83,22 +83,18 @@ void TetrisBoard::update() {
     if (pressedLeft && !pressedRight) {
         if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
             // play sound
-            std::cout<<"SOUNDPLAYED"<<std::endl;
             PlaySound(NULL, NULL, 0);
         pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
         pthread_join(soundThreadID, NULL);
-        std::cout<<"SOUNDDONE"<<std::endl;
             fallingX--;
         }
     } else if (pressedRight && !pressedLeft) {
         
         if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
             // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
-        std::cout<<"SOUNDPLAYED"<<std::endl;
         PlaySound(NULL, NULL, 0);
         pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
         pthread_join(soundThreadID, NULL);
-        std::cout<<"SOUNDDONE"<<std::endl;
             fallingX++;
         }
     }
@@ -132,6 +128,8 @@ void TetrisBoard::update() {
         int y = fallingY;
         while (!checkCollision(fallingGrid, fallingX, y - 1)) {
             y--;
+            pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_join(soundThreadID, NULL);
         }
         settleGrid(fallingGrid, fallingX, y);
         startNewFalling();
@@ -144,6 +142,8 @@ void TetrisBoard::update() {
         holdGrid = createGrid(fallingMino, TetrominoOrientation::H);
         startNewFalling(oldHold);
         didHold = true;
+        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_join(soundThreadID, NULL);
     }
 }
 
@@ -158,19 +158,26 @@ void TetrisBoard::updateRotation() {
 
     bool didRotate;
     TetrominoOrientation newRot = fallingRotation;
+    pthread_t soundThreadID;
 
     // Check to see if the different rotation keys were pressed
     if (input.rotateCW.newPress()) {
         newRot = rotTable[0][static_cast<int>(newRot)];
         didRotate = true;
+        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_join(soundThreadID, NULL);
     }
     if (input.rotateCCW.newPress()) {
         newRot = rotTable[1][static_cast<int>(newRot)];
         didRotate = true;
+        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_join(soundThreadID, NULL);
     }
     if (input.rotate180.newPress()) {
         newRot = rotTable[2][static_cast<int>(newRot)];
         didRotate = true;
+        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_join(soundThreadID, NULL);
     }
 
     if (!didRotate)

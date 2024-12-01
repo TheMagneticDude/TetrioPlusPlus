@@ -7,6 +7,9 @@
 
 class Menu {
   private:
+  unsigned int screenWidth = 320;
+  unsigned int screenHeight = 240;
+
   int buttonoffset = 50;
   public:
   bool onStartclicked;
@@ -19,10 +22,13 @@ class Menu {
     Button back;
 
     //main logic
-    int board1Loc[2] = {40, 220};
-    int board2Loc[2] = {200, 220};
+    int board1Loc[2] = {50, 220};
+    int board2Loc[2] = {210, 220};
 
-    Settings set = defaultSettings;;
+    bool gameEnded;
+
+    Settings set = defaultSettings;
+    Statistics playerStats = statistics;
     TetrisBoard board1;
     TetrisBoard board2;
     Options optionsPage;

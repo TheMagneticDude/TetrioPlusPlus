@@ -54,6 +54,7 @@ class Button {
     Button();
     // creates centered button
     Button(int y, string text, unsigned int color, unsigned int trigColor);
+    Button(int y, string text, unsigned int color);
     Button(float x, float y, string text);
     Button(float x, float y, float w, float h, string text);
     Button(float x, float y, float w, float h, string text, unsigned int color, unsigned int trigColor);

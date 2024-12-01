@@ -28,4 +28,6 @@ class Grid {
     Grid rotate90();
 
     void draw(int pos_x, int pos_y);
+
+    void clear();
 };

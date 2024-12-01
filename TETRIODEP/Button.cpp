@@ -33,6 +33,30 @@ Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
 
     currColor = defaultColor;
 }
+
+//starts out disabled and centered to act as a display
+Button::Button(int y, string text, unsigned int color) {
+
+    buttonX = (screenWidth / 2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
+    buttonY = y;
+
+    buttonWidth = text.length() * LCD.getCharWidth();
+    buttonHeight = LCD.getCharHeight();
+
+    buttonText = text;
+
+    triggered = false;
+    enabled = false;
+    highlighted = false;
+    wasHighlighted = false;
+
+    defaultColor = color;
+    disabledColor = color;
+
+    removed = false;
+
+    currColor = defaultColor;
+}
 Button::Button(float x, float y, string text) {
 
     buttonX = x;
@@ -132,6 +156,9 @@ Button::Button(float x, float y, string text, unsigned int color, unsigned int t
     currColor = defaultColor;
 }
 
+
+
+
 // initializes button values and whether button starts enabled or disabled
 Button::Button(float x, float y, float w, float h, string text, bool e) {
 
@@ -217,7 +244,6 @@ void Button::updateButtonState() {
                 currColor = highlightedColor;
                 if (!wasHighlighted) {
                     // play click sound when highlighted
-                    PlaySound(NULL, NULL, 0);
                     PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
                     wasHighlighted = true;
                 }

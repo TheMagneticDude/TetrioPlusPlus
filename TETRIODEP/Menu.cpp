@@ -8,6 +8,7 @@
 #include <mmsystem.h>
 #include <windows.h>
 #include <iostream>
+#include <FEHRandom.h>
 
 
 Menu::Menu()
@@ -16,20 +17,19 @@ Menu::Menu()
     settings(60 + buttonoffset, "Settings", BLUE, DARKBLUE),
       instructions(90 + buttonoffset, "Instructions", BLUE, DARKBLUE),
       credits(120 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Back", BLUE, DARKBLUE),
-      board1(board1Loc[0], board1Loc[1], set.p1Settings),
-      board2(board2Loc[0], board2Loc[1], set.p2Settings),
+      board1(board1Loc[0], board1Loc[1], set.p1Settings,playerStats),
+      board2(board2Loc[0], board2Loc[1], set.p2Settings,playerStats),
       optionsPage(set)
       {
           // initialize button instances
           onStartclicked = false;
           //start playing background music
           //this will error im not sure why but it compiles so who cares
-          mciSendString(TEXT("play \"TETRIODEP/TetrisBackground.mp3\""),NULL,0,0);
+        //   mciSendString(TEXT("play \"TETRIODEP/TetrisBackground.mp3\""),NULL,0,0);
 
-        //   mciSendString(TEXT("open \"TETRIODEPTetrisBackground.wav\" alias TetrisBlip"),NULL,0,0);
-        //   mciSendString(TEXT("play TetrisBlip repeat"),NULL,0,0);
-          
-          
+          mciSendString(TEXT("open \"TETRIODEP/TetrisBackground.mp3\" type mpegvideo alias Background"),NULL,0,NULL);
+          mciSendString(TEXT("play Background repeat"),NULL,0,0);
+          gameEnded = false;
       };
 
 void Menu::disable(Button &b) { b.disable(); }
@@ -121,17 +121,24 @@ void Menu::run(){
 
     if (isPageActive(Menu::Option::Start)) {
 
+        //while game has not ended run game
+        if(!(board1.gameEnded() || board2.gameEnded())){
+
         if (onStartclicked) {
             // creates new boards with updated settings
-            board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings);
-            board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings);
-
+            board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings,playerStats);
+            board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings,playerStats);
+            //needs to add a clear method
+            board1.clear();
+            board2.clear();
             onStartclicked = false;
+            gameEnded = false;
         }
 
 
-            LCD.SetFontColor(WHITE);
-            LCD.WriteAt("\"Play\" Tetrio++ below!", 25, 25);
+            LCD.SetFontColor(BLUE);
+            std::string pageTitle = "P1 VS P2";
+            LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
             remove();
 
             board1.update();
@@ -139,11 +146,36 @@ void Menu::run(){
 
             board1.draw();
             board2.draw();
-
-            //exit if game ends
-            if(board1.gameEnded() || board2.gameEnded()){
-                returnToMenu();
+        }else{
+            std::string playerWon = "";
+            //p2 won
+            if(board1.gameEnded()){
+                if(!gameEnded){
+                    playerStats.p2Stats.gamesWon++;
+                    gameEnded = true;
+                }
+                
+                playerWon += "P2 Won!";
+            }else{
+                //player1 won
+                if(!gameEnded){
+                    playerStats.p1Stats.gamesWon++;
+                    gameEnded = true;
+                }
+                
+                playerWon += "P1 Won!";
             }
+            //color array for funy colors
+            unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
+            //display won page
+            int r = Random.RandInt() % 7;
+            //draws wintext with funy colors
+            Button winText = Button(40,playerWon,colors[r]);
+            winText.updateButtonState();
+            //play confetti noise yey you won
+            PlaySound(TEXT("TETRIODEP/TetrioWin.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+        }
+
 
         }
         if (isPageActive(Menu::Option::Settings)) {
@@ -152,14 +184,51 @@ void Menu::run(){
 
         if (isPageActive(Menu::Option::Stats)) {
 
-            LCD.SetFontColor(WHITE);
-            LCD.WriteAt("\"High\" score: 253", 0, 40);
-            LCD.WriteAt("Best 40 line time: 3:42", 0, 70);
-            LCD.WriteAt("Total Lines cleared: 512", 0, 100);
+            LCD.SetFontColor(BLUE);
+
+            Button p1BannerButton = Button(10,"P1 Stats",BLUE);
+            p1BannerButton.updateButtonState();
+
+            //"high score"
+            std::string P1highScore;
+            if(playerStats.p1Stats.linesCleared < 10){
+                P1highScore = "\"High\" score: " + std::to_string(playerStats.p1Stats.linesCleared);
+            }else{
+                P1highScore = "High score: " + std::to_string(playerStats.p1Stats.linesCleared);
+            }
+            //using button bc it is set up already and looks decent
+            Button P1hsButton = Button(40,P1highScore,BLUE);
+            P1hsButton.updateButtonState();
+            
+            // LCD.WriteAt("Best 40 line time: 3:42", 0, 70);
+
+            std::string P1GamesWon = "Games won: " + std::to_string(playerStats.p1Stats.gamesWon);
+            Button P1gwButton = Button(60,P1GamesWon,BLUE);
+            P1gwButton.updateButtonState();
+
+
+
+            Button p2BannerButton = Button(100,"P2 Stats",BLUE);
+            p2BannerButton.updateButtonState();
+            //"high score"
+            std::string P2highScore;
+            if(playerStats.p2Stats.linesCleared < 10){
+                P2highScore = "\"High\" score: " + std::to_string(playerStats.p2Stats.linesCleared);
+            }else{
+                P2highScore = "High score: " + std::to_string(playerStats.p2Stats.linesCleared);
+            }
+            Button P2hsButton = Button(140,P2highScore,BLUE);
+            P2hsButton.updateButtonState();
+
+            std::string P2GamesWon = "Games won: " + std::to_string(playerStats.p2Stats.gamesWon);
+
+            Button P2gwButton = Button(160,P2GamesWon,BLUE);
+            P2gwButton.updateButtonState();
+
         }
         if (isPageActive(Menu::Option::Credits)) {
 
-            LCD.SetFontColor(WHITE);
+            LCD.SetFontColor(BLUE);
             LCD.WriteAt("Tetrio++ Written by:", 0, 20);
             LCD.WriteAt("Nathan Cheng", 0, 50);
             LCD.WriteAt("Ojas Landge", 0, 90);
@@ -167,7 +236,7 @@ void Menu::run(){
 
         if (isPageActive(Menu::Option::Instructions)) {
 
-            LCD.SetFontColor(WHITE);
+            LCD.SetFontColor(BLUE);
             LCD.WriteAt("How to play Tetrio++", 0, 20);
             LCD.WriteAt("The goal is to clear lines", 0, 50);
             LCD.WriteAt("faster than your opponent.", 0, 90);

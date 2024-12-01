@@ -22,6 +22,10 @@ void Grid::draw(int pos_x, int pos_y) {
     }
 }
 
+void Grid::clear(){
+    data.clear();
+}
+
 Tetromino Grid::getAtPos(int x, int y) { return data[y * width + x]; }
 
 void Grid::setAtPos(Tetromino tetromino, int x, int y) {

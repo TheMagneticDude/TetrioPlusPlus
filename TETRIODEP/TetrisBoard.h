@@ -30,12 +30,17 @@ class TetrisBoard {
 
     float gravityRate = 0.7;
     std::chrono::high_resolution_clock::time_point lastGravity;
+    std::chrono::high_resolution_clock::time_point timeStart;
+    float elapsedTime;
+    std::string timeDisplay;
 
     std::optional<Tetromino> hold;
     bool didHold = false;
 
     std::vector<Tetromino> queue;
     std::vector<Tetromino> bag;
+
+    int linesCleared;
 
     bool ended;
 
@@ -49,13 +54,16 @@ class TetrisBoard {
     Tetromino getNextFromQueue();
     Tetromino getNextFromBag();
     void drawBorder();
+    void drawStats();
 
 
   public:
-    TetrisBoard(int x, int y, PlayerSettings &playerSettings);
+    TetrisBoard(int x, int y, PlayerSettings &playerSettings,Statistics &playerStats);
     void update();
     void draw();
     bool gameEnded();
+    int getLinesCleared();
+    void clear();
 
     static void* playSound(void* vargp);
 };

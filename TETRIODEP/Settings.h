@@ -113,6 +113,11 @@ struct PlayerControls {
     int swapHold;
 };
 
+struct PlayerStats{
+    int linesCleared;
+    int gamesWon;
+};
+
 struct PlayerSettings {
     PlayerHandling handling;
     PlayerControls controls;
@@ -121,6 +126,22 @@ struct PlayerSettings {
 struct Settings {
     PlayerSettings p1Settings;
     PlayerSettings p2Settings;
+};
+
+struct Statistics{
+    PlayerStats p1Stats;
+    PlayerStats p2Stats;
+};
+inline constexpr Statistics statistics = Statistics {
+    .p1Stats = {
+        .linesCleared = 0,
+        .gamesWon = 0
+    },
+
+    .p2Stats = {
+        .linesCleared = 0,
+        .gamesWon = 0
+    }
 };
 
 inline constexpr Settings defaultSettings = Settings {

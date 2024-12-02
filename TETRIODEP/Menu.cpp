@@ -120,6 +120,11 @@ void Menu::run() {
 
         // while game has not ended run game
         if (!(board1.gameEnded() || board2.gameEnded())) {
+            FEHImage background2;
+            background2.Open("TETRIODEP/TetrioGameBackground.png");
+            background2.Draw(0, 0);
+            background2.Close();
+            
 
             if (onStartclicked) {
                 // creates new boards with updated settings
@@ -132,10 +137,7 @@ void Menu::run() {
                 gameEnded = false;
             }
 
-            FEHImage background2;
-            background2.Open("TETRIODEP/TetrioGameBackground.png");
-            background2.Draw(0, 0);
-            background2.Close();
+            
 
             LCD.SetFontColor(BLUE);
             std::string pageTitle = "P1 VS P2";
@@ -185,6 +187,8 @@ void Menu::run() {
             // play confetti noise yey you won
             PlaySound(TEXT("TETRIODEP/TetrioWin.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
         }
+        //render back button on top
+            back.drawButton();
     }
     if (isPageActive(Menu::Option::Settings)) {
         optionsPage.update();

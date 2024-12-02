@@ -1,4 +1,7 @@
+#ifdef __linux__ && !__ANDROID__
 #include <X11/Xlib.h>
+#endif
+
 #include <chrono>
 
 #include "Input.h"

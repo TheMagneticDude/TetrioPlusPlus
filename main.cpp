@@ -1,4 +1,5 @@
 #include "TETRIODEP/Menu.h"
+#include "TETRIODEP/Sound.h"
 #include <FEHLCD.h>
 #include <FEHRandom.h>
 

@@ -13,8 +13,9 @@
 #include <iomanip>
 
 // initialize tetrisboard with a coordinate (top left corner)
-TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, Statistics &playerStats)
-    : grid(10, 22), fallingGrid(3, 3), holdGrid(3, 3), input(_settings) {
+TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, Statistics &playerStats,
+                         TetrisBoard *opponent)
+    : grid(10, 22), fallingGrid(3, 3), holdGrid(3, 3), input(_settings), opponent(opponent) {
     settings = &_settings;
     // these are where the board is built around in world coords (top left corner)
     boardX = _boardX;
@@ -297,6 +298,24 @@ void TetrisBoard::updateRotation() {
 }
 
 void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
+    int garbageHole = Random.RandInt() % 10;
+    for (int i = 0; i < pendingGarbage; i++) {
+        for (int y = grid.height - 1; y > 0; y--) {
+            for (int x = 0; x < 10; x++) {
+                auto mino = grid.getAtPos(x, y - 1);
+                grid.setAtPos(mino, x, y);
+            }
+        }
+        for (int x = 0; x < 10; x++) {
+            if (x == garbageHole) {
+                grid.setAtPos(Tetromino::E, x, 0);
+            } else {
+                grid.setAtPos(Tetromino::G, x, 0);
+            }
+        }
+    }
+    pendingGarbage = 0;
+
     if (!mino.has_value()) {
         mino = getNextFromQueue();
     }
@@ -393,6 +412,8 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
         }
     }
 
+    int linesClearedNow = 0;
+
     // Check to see if any new lines can be cleared
     for (int y = 0; y < 20; y++) {
         bool hasSpace = false;
@@ -404,10 +425,42 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
 
         if (!hasSpace) {
             clearLine(y);
-            // increase linesCleared stat for this board
-            linesCleared++;
+            linesClearedNow++;
             y--;
         }
+    }
+
+    // increase linesCleared stat for this board
+    linesCleared += linesClearedNow;
+
+    // TODO: t-spins
+    int attack;
+    switch (linesClearedNow) {
+    case 2:
+        attack = 1;
+        break;
+    case 3:
+        attack = 2;
+        break;
+    case 4:
+        attack = 4;
+        break;
+    default:
+        attack = 0;
+    }
+    attackOpponent(attack);
+
+    bool isPC = true;
+    for (int y = 0; y < 20; y++) {
+        for (int x = 0; x < 10; x++) {
+            if (grid.getAtPos(x, y) != Tetromino::E) {
+                isPC = false;
+            }
+        }
+    }
+
+    if (isPC) {
+        attackOpponent(10);
     }
 }
 
@@ -459,4 +512,17 @@ void TetrisBoard::clear() {
     grid.clear();
     fallingGrid.clear();
     holdGrid.clear();
+}
+
+void TetrisBoard::receiveLines(int numLines) { pendingGarbage += numLines; }
+
+void TetrisBoard::attackOpponent(int numLines) {
+    if (!opponent)
+        return;
+    if (pendingGarbage >= numLines) {
+        pendingGarbage -= numLines;
+    } else {
+        opponent->receiveLines(numLines - pendingGarbage);
+        pendingGarbage = 0;
+    }
 }

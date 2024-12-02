@@ -41,6 +41,8 @@ class TetrisBoard {
     std::vector<Tetromino> bag;
 
     int linesCleared;
+    int pendingGarbage = 0;
+    TetrisBoard *opponent;
 
     std::string fourtyLineTime;
 
@@ -53,14 +55,15 @@ class TetrisBoard {
     void settleGrid(Grid from, int fromX, int fromY);
     void startNewFalling(std::optional<Tetromino> mino = {});
     void clearLine(int y);
+    void receiveLines(int numLines);
+    void attackOpponent(int numLines);
     Tetromino getNextFromQueue();
     Tetromino getNextFromBag();
     void drawBorder();
     void drawStats();
 
-
   public:
-    TetrisBoard(int x, int y, PlayerSettings &playerSettings,Statistics &playerStats);
+    TetrisBoard(int x, int y, PlayerSettings &playerSettings, Statistics &playerStats, TetrisBoard *opponent);
     void update();
     void draw();
     bool gameEnded();
@@ -71,5 +74,5 @@ class TetrisBoard {
   
     void clear();
 
-    static void* playSound(void* vargp);
+    static void *playSound(void *vargp);
 };

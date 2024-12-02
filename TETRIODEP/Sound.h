@@ -3,23 +3,21 @@
 #include <string>
 
 #ifdef _WIN32
-// #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+// This needs to come after windows.h
 #include <mmsystem.h>
-
 #pragma comment(lib, "winmm.lib")
-#include <codecvt>
-#include <locale>
-#include "Input.h"
 #endif
 
 #if __linux__ && !__ANDROID__
-#include <stdlib.h>
+#include <linux/prctl.h>
+#include <signal.h>
+#include <sys/prctl.h>
+#include <unistd.h>
 #endif
 
 inline void PlayAudioFile(std::string_view path) {
 #ifdef _WIN32
-    
     PlaySoundA(path.data(), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
 #endif
 #if __linux__ && !__ANDROID__
@@ -37,6 +35,11 @@ inline void PlayBackgroundMusic() {
     mciSendString(TEXT("play Background repeat"), NULL, 0, 0);
 #endif
 #if __linux__ && !__ANDROID__
-    system("mplayer TETRIODEP/TetrisBackground.mp3 &");
+    pid_t childPid = fork();
+    if (childPid == 0) {
+        prctl(PR_SET_PDEATHSIG, SIGHUP);
+        execlp("/usr/bin/mplayer", "mplayer", "TETRIODEP/TetrisBackground.mp3", NULL);
+        exit(0);
+    }
 #endif
 }

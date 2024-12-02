@@ -13,9 +13,9 @@ Menu::Menu()
       stats(60 + buttonoffset, "Stats", BLUE, DARKBLUE), settings(90 + buttonoffset, "Settings", BLUE, DARKBLUE),
       instructions(120 + buttonoffset, "Instructions", BLUE, DARKBLUE),
       credits(150 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Exit", BLUE, DARKBLUE),
-      board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats),
-      board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats),
-      singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats), optionsPage(set) {
+      board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2),
+      board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1),
+      singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL), optionsPage(set) {
     // initialize button instances
     onStartclicked = false;
     // start playing background music
@@ -125,8 +125,8 @@ void Menu::run() {
     if (isPageActive(Menu::MenuOption::Start)) {
         if (onStartclicked) {
             // creates new boards with updated settings
-            board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats);
-            board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats);
+            board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2);
+            board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1);
             onStartclicked = false;
             gameEnded = false;
         }
@@ -150,8 +150,12 @@ void Menu::run() {
             board1.draw();
             board2.draw();
         } else {
-
             confetti.Draw(0, 0);
+
+            if (!gameEnded) {
+                // play confetti noise yey you won
+                PlayAudioFile("TETRIODEP/TetrioWin.wav");
+            }
 
             std::string playerWon = "";
             // p2 won
@@ -178,9 +182,6 @@ void Menu::run() {
             // draws wintext with funy colors
             Button winText = Button(40, playerWon, colors[r]);
             winText.updateButtonState();
-            // play confetti noise yey you won
-            // Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
-            PlayAudioFile("TETRIODEP/TetrioWin.wav");
         }
         // render back button on top
         back.drawButton();
@@ -189,13 +190,6 @@ void Menu::run() {
     // singleplayer 30 line clear
     if (isPageActive(MenuOption::Single)) {
         remove();
-
-        if (onSingleClicked) {
-            singleBoard = TetrisBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats);
-            onSingleClicked = false;
-            gameEnded = false;
-            std::cout << "BOARD RESET";
-        }
 
         if (!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()) {
             playBackground.Draw(0, 0);
@@ -210,7 +204,7 @@ void Menu::run() {
             singleBoard.draw();
         } else if (singleBoard.gameEnded()) {
             // sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
-            PlayAudioFile("TETRIODEP/wompwomp.wav");
+            if (gameEnded) PlayAudioFile("TETRIODEP/wompwomp.wav");
             Button lossText = Button(40, "Womp Womp you lost :[ Try again next game", RED);
             lossText.updateButtonState();
 
@@ -220,7 +214,7 @@ void Menu::run() {
 
             // play confetti noise yey you won
             // Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
-            PlayAudioFile("TETRIODEP/TetrioWin.wav");
+            if (gameEnded) PlayAudioFile("TETRIODEP/TetrioWin.wav");
 
             // color array for funy colors
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
@@ -230,6 +224,13 @@ void Menu::run() {
             // draws wintext with funy colors
             Button singleWin = Button(40, "You cleared fourty lines! Check your stats page!", colors[r]);
             singleWin.updateButtonState();
+        }
+
+        if (onSingleClicked) {
+            singleBoard = TetrisBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL);
+            onSingleClicked = false;
+            gameEnded = false;
+            std::cout << "BOARD RESET";
         }
 
         // render back button on top

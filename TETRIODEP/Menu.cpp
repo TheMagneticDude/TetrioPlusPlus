@@ -31,6 +31,8 @@ Menu::Menu()
     menuBackground.Open("TETRIODEP/TetrioBackground-2.png");
     playBackground.Open("TETRIODEP/TetrioGameBackground.png");
     confetti.Open("TETRIODEP/TetrisConfetti.png");
+    creditsImage.Open("TETRIODEP/CreditsPage.png");
+    howToPlay.Open("TETRIODEP/TetrioHowToPlay.png");
 };
 
 void Menu::disable(Button &b) { b.disable(); }
@@ -236,20 +238,30 @@ void Menu::run() {
         P2gwButton.updateButtonState();
     }
     if (isPageActive(Menu::Option::Credits)) {
+        creditsImage.Draw(0, 0);
 
-        LCD.SetFontColor(BLUE);
-        LCD.WriteAt("Tetrio++ Written by:", 0, 20);
-        LCD.WriteAt("Nathan Cheng", 0, 50);
-        LCD.WriteAt("Ojas Landge", 0, 90);
+        
+        //render back button on top
+            back.drawButton();
+
+            
+        // LCD.SetFontColor(BLUE);
+        // LCD.WriteAt("Tetrio++ Written by:", 0, 20);
+        // LCD.WriteAt("Nathan Cheng", 0, 50);
+        // LCD.WriteAt("Ojas Landge", 0, 90);
     }
 
     if (isPageActive(Menu::Option::Instructions)) {
+        howToPlay.Draw(0,0);
 
-        LCD.SetFontColor(BLUE);
-        LCD.WriteAt("How to play Tetrio++", 0, 20);
-        LCD.WriteAt("The goal is to clear lines", 0, 50);
-        LCD.WriteAt("faster than your opponent.", 0, 90);
-        LCD.WriteAt("First to stack to the", 0, 120);
-        LCD.WriteAt("top loses", 0, 150);
+        //render back button on top
+            back.drawButton();
+
+        // LCD.SetFontColor(BLUE);
+        // LCD.WriteAt("How to play Tetrio++", 0, 20);
+        // LCD.WriteAt("The goal is to clear lines", 0, 50);
+        // LCD.WriteAt("faster than your opponent.", 0, 90);
+        // LCD.WriteAt("First to stack to the", 0, 120);
+        // LCD.WriteAt("top loses", 0, 150);
     }
 }

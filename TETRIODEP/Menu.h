@@ -37,6 +37,8 @@ class Menu {
     FEHImage menuBackground;
     FEHImage playBackground;
     FEHImage confetti;
+    FEHImage creditsImage;
+    FEHImage howToPlay;
 
 
 

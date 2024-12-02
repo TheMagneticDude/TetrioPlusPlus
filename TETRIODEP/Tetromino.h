@@ -20,3 +20,13 @@ enum class TetrominoOrientation : uint8_t {
     L, // L = state resulting from a counter-clockwise ("left") rotation from spawn
     U  // 2 = state resulting from 2 successive rotations in either direction from spawn.
 };
+
+inline int getSpawnOffset(Tetromino mino) {
+    switch (mino) {
+    case Tetromino::I:
+        return -1;
+        break;
+    default:
+        return 0;
+    }
+}

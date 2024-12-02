@@ -39,10 +39,11 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, St
 void TetrisBoard::draw() {
     drawBorder();
     grid.draw(boardX, boardY);
-    holdGrid.draw(boardX - (holdGrid.width + 1) * SCALE, boardY - 17 * SCALE);
+    holdGrid.draw(boardX - (holdGrid.width + 1 + getSpawnOffset(hold.value_or(Tetromino::E))) * SCALE,
+                  boardY - 17 * SCALE);
     fallingGrid.draw(boardX + fallingX * SCALE, boardY - fallingY * SCALE);
     for (int i = 0; i < queue.size(); i++) {
-        queueGrids[i].draw(boardX + 12 * SCALE, boardY - 19 * SCALE + i * 3 * SCALE);
+        queueGrids[i].draw(boardX + (12 + getSpawnOffset(queue[i])) * SCALE, boardY - 19 * SCALE + i * 3 * SCALE);
     }
 }
 
@@ -159,7 +160,6 @@ void TetrisBoard::update() {
     if (onGround) {
         std::chrono::duration<float> durationOnGround = now - startedOnGround;
         float secsOnGround = durationOnGround.count();
-        std::cout << secsOnGround << std::endl;
         if (secsOnGround >= 1.0) {
             settleGrid(fallingGrid, fallingX, fallingY);
             startNewFalling();
@@ -340,7 +340,7 @@ void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     fallingMino = *mino;
     fallingGrid = createGrid(*mino, TetrominoOrientation::H);
     fallingRotation = TetrominoOrientation::H;
-    fallingX = 4;
+    fallingX = 3 + getSpawnOffset(fallingMino);
     fallingY = 19;
     lastGravity = std::chrono::high_resolution_clock::now();
     didHold = false;

@@ -14,8 +14,10 @@ class Menu {
   int buttonoffset = 70;
   public:
   bool onStartclicked;
+  bool onSingleClicked;
 
     Button start;
+    Button singleplayer;
     Button settings;
     Button stats;
     Button instructions;
@@ -26,12 +28,15 @@ class Menu {
     int board1Loc[2] = {50, 220};
     int board2Loc[2] = {210, 220};
 
+    int singleBoardLoc[2] = {80,220};
+
     bool gameEnded;
 
     Settings set = defaultSettings;
     Statistics playerStats = statistics;
     TetrisBoard board1;
     TetrisBoard board2;
+    TetrisBoard singleBoard;
     Options optionsPage;
 
     FEHImage menuBackground;
@@ -46,6 +51,7 @@ class Menu {
 enum class Option {
         None, // back to menu
         Start,
+        Single,//singleplayer 40 line
         Settings, // can include page for player names, controls, themes, etcs
         Stats,
         Instructions,

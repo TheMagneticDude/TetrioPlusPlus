@@ -42,6 +42,8 @@ class TetrisBoard {
 
     int linesCleared;
 
+    std::string fourtyLineTime;
+
     bool ended;
 
     void updateRotation();
@@ -62,6 +64,7 @@ class TetrisBoard {
     void update();
     void draw();
     bool gameEnded();
+    bool fourtyLinesEnded();
     int getLinesCleared();
     void clear();
 

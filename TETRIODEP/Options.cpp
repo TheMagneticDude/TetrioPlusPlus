@@ -219,6 +219,7 @@ void Options::update() {
     }
 }
 
+//flashes red if another button is pressed and untoggles all others
 void Options::handleButtonToggle(ToggleButton &b) {
     if (otherButtonToggled(b)) {
         b.flashRed();
@@ -226,9 +227,9 @@ void Options::handleButtonToggle(ToggleButton &b) {
         untoggleOthers(b);
     }
 }
-
+//get current button that is toggled
 void Options::getCurrentButton() {
-    // get current button that is toggled
+    
     if (left.getButtonTriggered()) {
         currActive = buttons::left;
     } else if (right.getButtonTriggered()) {

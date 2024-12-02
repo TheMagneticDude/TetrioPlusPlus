@@ -116,6 +116,7 @@ struct PlayerControls {
 struct PlayerStats{
     int linesCleared;
     int gamesWon;
+    int lineTime;
 };
 
 struct PlayerSettings {
@@ -131,6 +132,7 @@ struct Settings {
 struct Statistics{
     PlayerStats p1Stats;
     PlayerStats p2Stats;
+    PlayerStats singleplayerStats;
 };
 inline constexpr Statistics statistics = Statistics {
     .p1Stats = {
@@ -139,6 +141,10 @@ inline constexpr Statistics statistics = Statistics {
     },
 
     .p2Stats = {
+        .linesCleared = 0,
+        .gamesWon = 0
+    },
+    .singleplayerStats = {
         .linesCleared = 0,
         .gamesWon = 0
     }

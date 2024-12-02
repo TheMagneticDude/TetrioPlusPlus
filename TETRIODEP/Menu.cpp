@@ -12,12 +12,16 @@
 #include <windows.h>
 
 Menu::Menu()
-    : start(0 + buttonoffset, "Start", BLUE, DARKBLUE), stats(30 + buttonoffset, "Stats", BLUE, DARKBLUE),
-      settings(60 + buttonoffset, "Settings", BLUE, DARKBLUE),
-      instructions(90 + buttonoffset, "Instructions", BLUE, DARKBLUE),
-      credits(120 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Exit", BLUE, DARKBLUE),
+    : start(0 + buttonoffset, "1 v 1", BLUE, DARKBLUE),
+    singleplayer(30+buttonoffset,"40 Line Clear", BLUE, DARKBLUE) ,
+    stats(60 + buttonoffset, "Stats", BLUE, DARKBLUE),
+      settings(90 + buttonoffset, "Settings", BLUE, DARKBLUE),
+      instructions(120 + buttonoffset, "Instructions", BLUE, DARKBLUE),
+      credits(150 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Exit", BLUE, DARKBLUE),
       board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats),
-      board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats), optionsPage(set) {
+      board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats),
+      singleBoard(singleBoardLoc[0],singleBoardLoc[1],set.p1Settings,playerStats),
+       optionsPage(set) {
     // initialize button instances
     onStartclicked = false;
     // start playing background music
@@ -53,6 +57,7 @@ void Menu::update() {
 
 
         start.updateButtonState();
+        singleplayer.updateButtonState();
         settings.updateButtonState();
         stats.updateButtonState();
         instructions.updateButtonState();
@@ -66,6 +71,14 @@ void Menu::update() {
                 onStartclicked = true;
             } else {
                 onStartclicked = false;
+            }
+        }
+        if(renderSubPage(singleplayer)){
+            if (currOption != Option::Single) {
+                currOption = Option::Single;
+                onSingleClicked = true;
+            } else {
+                onSingleClicked = false;
             }
         }
         if (renderSubPage(settings)) {
@@ -105,6 +118,7 @@ void Menu::removeBack() { back.remove(); }
 void Menu::remove() {
     // clears all menu buttons
     start.remove();
+    singleplayer.remove();
     settings.remove();
     stats.remove();
     instructions.remove();
@@ -187,11 +201,49 @@ void Menu::run() {
             Button winText = Button(40, playerWon, colors[r]);
             winText.updateButtonState();
             // play confetti noise yey you won
+            //Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
             PlaySound(TEXT("TETRIODEP/TetrioWin.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
         }
         //render back button on top
             back.drawButton();
     }
+
+    //singleplayer 30 line clear
+    if (isPageActive(Menu::Option::Single)) {
+            remove();
+            
+            if(!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()){
+
+            if(onSingleClicked){
+                singleBoard = TetrisBoard(singleBoardLoc[0],singleBoardLoc[1],set.p1Settings,playerStats);
+                singleBoard.clear();
+                onSingleClicked = false;
+                gameEnded = false;
+            }
+
+            LCD.SetFontColor(BLUE);
+            std::string pageTitle = "40 Line Clear";
+            LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
+
+
+            singleBoard.update();
+            // update score
+            playerStats.singleplayerStats.linesCleared = singleBoard.getLinesCleared();
+            singleBoard.draw();
+            }else if(singleBoard.gameEnded()){
+                //sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
+                PlaySound(TEXT("TETRIODEP/wompwomp.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+            Button lossText = Button(40,"Womp Womp you lost :[ Try again next game", RED);
+            lossText.updateButtonState();
+
+            }else if(singleBoard.fourtyLinesEnded()){
+
+            }
+    }
+
+
+
+
     if (isPageActive(Menu::Option::Settings)) {
         optionsPage.update();
     }

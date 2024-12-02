@@ -145,7 +145,8 @@ inline constexpr Statistics statistics = Statistics {
     },
     .singleplayerStats = {
         .linesCleared = 0,
-        .gamesWon = 0
+        .gamesWon = 0,
+        .lineTime = 0
     }
 };
 

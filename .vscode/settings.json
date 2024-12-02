@@ -48,6 +48,7 @@
         "thread": "cpp",
         "iomanip": "cpp",
         "mutex": "cpp",
-        "codecvt": "cpp"
+        "codecvt": "cpp",
+        "condition_variable": "cpp"
     }
 }

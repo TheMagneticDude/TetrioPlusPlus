@@ -47,7 +47,7 @@ class TetrisBoard {
     int pendingGarbage = 0;
     TetrisBoard *opponent;
 
-    std::string fourtyLineTime;
+    float fourtyLineTime;
 
     bool ended;
 
@@ -73,7 +73,7 @@ class TetrisBoard {
     bool fourtyLinesEnded();
     int getLinesCleared();
 
-    std::string getFourtyLinesClearedTime();
+    float getFourtyLinesClearedTime();
 
     void clear();
 

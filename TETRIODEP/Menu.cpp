@@ -6,6 +6,7 @@
 #include <FEHLCD.h>
 #include <FEHRandom.h>
 #include <string>
+#include <iomanip>
 
 Menu::Menu()
     : start(0 + buttonoffset, "1 v 1", BLUE, DARKBLUE),
@@ -227,7 +228,7 @@ void Menu::run() {
 
         } else if (singleBoard.fourtyLinesEnded()) {
             // update stats
-            playerStats.singleplayerStats.lineTime = stof(singleBoard.getFourtyLinesClearedTime());
+            playerStats.singleplayerStats.lineTime = singleBoard.getFourtyLinesClearedTime();
 
             // play confetti noise yey you won
             // Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
@@ -306,7 +307,9 @@ void Menu::run() {
         
 
         if(playerStats.singleplayerStats.lineTime > 0){
-            fourtyLineClearScore = "Best Fourty Line time: " + std::to_string(playerStats.singleplayerStats.lineTime);
+            std::stringstream stream;
+            stream << std::fixed << std::setprecision(2) << playerStats.singleplayerStats.lineTime;
+            fourtyLineClearScore = "Best Fourty Line time: " + stream.str();
         }else{
             fourtyLineClearScore = "Best Fourty Line time: N/A";
         }

@@ -32,7 +32,7 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, St
     startNewFalling();
     ended = false;
     linesCleared = 0;
-    fourtyLineTime = "N/A";
+    fourtyLineTime = 0;
 }
 
 // draws the entire tetrisboard
@@ -95,7 +95,7 @@ void TetrisBoard::update() {
     timeDisplay = stream.str();
 
     if (linesCleared == 40) {
-        fourtyLineTime = timeDisplay;
+        fourtyLineTime = elapsedTime;
     }
 
     drawStats();
@@ -525,7 +525,7 @@ bool TetrisBoard::gameEnded() { return ended; }
 
 bool TetrisBoard::fourtyLinesEnded() { return linesCleared >= 40; }
 
-std::string TetrisBoard::getFourtyLinesClearedTime() { return fourtyLineTime; }
+float TetrisBoard::getFourtyLinesClearedTime() { return fourtyLineTime; }
 
 void TetrisBoard::clear() {
     grid.clear();

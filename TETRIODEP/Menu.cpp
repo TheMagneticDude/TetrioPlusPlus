@@ -11,6 +11,8 @@
 #include <string>
 #include <windows.h>
 
+
+
 Menu::Menu()
     : start(0 + buttonoffset, "1 v 1", BLUE, DARKBLUE),
     singleplayer(30+buttonoffset,"40 Line Clear", BLUE, DARKBLUE) ,
@@ -101,14 +103,6 @@ void Menu::update() {
         }
     }
 
-    if(back.onButtonClicked()){
-        onStartclicked = false;
-        onSingleClicked = false;
-        //clear board after back is clicked
-        board1.clear();
-        board2.clear();
-        singleBoard.clear();
-    }
 }
 
 // returns true when its time to render a subpage for a given button
@@ -141,6 +135,13 @@ void Menu::run() {
     update();
 
     if (isPageActive(Menu::Option::Start)) {
+        if (onStartclicked) {
+                // creates new boards with updated settings
+                board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats);
+                board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats);
+                onStartclicked = false;
+                gameEnded = false;
+            }
 
         // while game has not ended run game
         if (!(board1.gameEnded() || board2.gameEnded())) {
@@ -148,13 +149,7 @@ void Menu::run() {
 
             
 
-            if (onStartclicked) {
-                // creates new boards with updated settings
-                board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats);
-                board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats);
-                onStartclicked = false;
-                gameEnded = false;
-            }
+            
 
             
 
@@ -213,14 +208,18 @@ void Menu::run() {
     //singleplayer 30 line clear
     if (isPageActive(Menu::Option::Single)) {
             remove();
-            
-            if(!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()){
 
             if(onSingleClicked){
                 singleBoard = TetrisBoard(singleBoardLoc[0],singleBoardLoc[1],set.p1Settings,playerStats);
                 onSingleClicked = false;
                 gameEnded = false;
+                std::cout<<"BOARD RESET";
             }
+            
+            if(!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()){
+                playBackground.Draw(0, 0);
+
+            
 
             LCD.SetFontColor(BLUE);
             std::string pageTitle = "40 Line Clear";
@@ -238,8 +237,26 @@ void Menu::run() {
             lossText.updateButtonState();
 
             }else if(singleBoard.fourtyLinesEnded()){
+                //update stats
+                playerStats.singleplayerStats.lineTime = stof(singleBoard.getFourtyLinesClearedTime());
+
+                // play confetti noise yey you won
+            //Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
+            PlaySound(TEXT("TETRIODEP/TetrioWin.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+
+            // color array for funy colors
+            unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
+            
+            // display won page
+            int r = Random.RandInt() % 7;
+            // draws wintext with funy colors
+            Button singleWin = Button(40, "You cleared fourty lines! Check your stats page!", colors[r]);
+            singleWin.updateButtonState();
 
             }
+
+            //render back button on top
+            back.drawButton();
     }
 
 

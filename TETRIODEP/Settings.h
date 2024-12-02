@@ -116,7 +116,7 @@ struct PlayerControls {
 struct PlayerStats{
     int linesCleared;
     int gamesWon;
-    int lineTime;
+    float lineTime;
 };
 
 struct PlayerSettings {

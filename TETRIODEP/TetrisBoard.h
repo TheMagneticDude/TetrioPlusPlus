@@ -66,6 +66,7 @@ class TetrisBoard {
     bool gameEnded();
     bool fourtyLinesEnded();
     int getLinesCleared();
+  
     void clear();
 
     static void* playSound(void* vargp);

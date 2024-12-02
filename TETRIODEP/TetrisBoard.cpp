@@ -12,6 +12,9 @@
 #include <iomanip>
 #include <mmsystem.h>
 #include <windows.h>
+
+
+
 #pragma comment(lib, "winmm.lib")
 
 // initialize tetrisboard with a coordinate (top left corner)
@@ -105,21 +108,23 @@ void TetrisBoard::update() {
     // Handle Left/Right movement keys
     bool pressedLeft = input.keyLeft.newPress();
     bool pressedRight = input.keyRight.newPress();
-    pthread_t soundThreadID;
+    // pthread_t soundThreadID;
 
     if (pressedLeft && !pressedRight) {
         if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
             // play sound
-            pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-            pthread_join(soundThreadID, NULL);
+            // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+            // pthread_join(soundThreadID, NULL);
+            PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
             fallingX--;
         }
     } else if (pressedRight && !pressedLeft) {
 
         if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
             // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
-            pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-            pthread_join(soundThreadID, NULL);
+            // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+            // pthread_join(soundThreadID, NULL);
+            PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
             fallingX++;
         }
     }
@@ -135,8 +140,9 @@ void TetrisBoard::update() {
     float effectiveGravityRate = gravityRate;
     if (input.softDrop.pressed()) {
         effectiveGravityRate /= settings->handling.sdf;
-        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        pthread_join(soundThreadID, NULL);
+        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+        // pthread_join(soundThreadID, NULL);
+        PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
     }
 
     if (lastGravitySecs >= effectiveGravityRate) {
@@ -155,8 +161,9 @@ void TetrisBoard::update() {
         int y = fallingY;
         while (!checkCollision(fallingGrid, fallingX, y - 1)) {
             y--;
-            pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-            pthread_join(soundThreadID, NULL);
+            // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+            // pthread_join(soundThreadID, NULL);
+            PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
         }
         settleGrid(fallingGrid, fallingX, y);
         startNewFalling();
@@ -169,8 +176,9 @@ void TetrisBoard::update() {
         holdGrid = createGrid(fallingMino, TetrominoOrientation::H);
         startNewFalling(oldHold);
         didHold = true;
-        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        pthread_join(soundThreadID, NULL);
+        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+        // pthread_join(soundThreadID, NULL);
+        PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
     }
 }
 
@@ -191,20 +199,23 @@ void TetrisBoard::updateRotation() {
     if (input.rotateCW.newPress()) {
         newRot = rotTable[0][static_cast<int>(newRot)];
         didRotate = true;
-        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        pthread_join(soundThreadID, NULL);
+        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+        // pthread_join(soundThreadID, NULL);
+        PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
     }
     if (input.rotateCCW.newPress()) {
         newRot = rotTable[1][static_cast<int>(newRot)];
         didRotate = true;
-        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        pthread_join(soundThreadID, NULL);
+        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+        // pthread_join(soundThreadID, NULL);
+        PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
     }
     if (input.rotate180.newPress()) {
         newRot = rotTable[2][static_cast<int>(newRot)];
         didRotate = true;
-        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        pthread_join(soundThreadID, NULL);
+        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+        // pthread_join(soundThreadID, NULL);
+        PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
     }
 
     if (!didRotate)
@@ -449,8 +460,12 @@ bool TetrisBoard::fourtyLinesEnded(){
     return linesCleared >=40;
 }
 
+std::string TetrisBoard::getFourtyLinesClearedTime(){
+    return fourtyLineTime;
+}
+
+
 void TetrisBoard::clear() {
-    // ended = false;
     grid.clear();
     fallingGrid.clear();
     holdGrid.clear();

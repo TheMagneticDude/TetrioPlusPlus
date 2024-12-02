@@ -247,7 +247,7 @@ void Button::updateButtonState() {
                 currColor = highlightedColor;
                 if (!wasHighlighted) {
                     // play click sound when highlighted
-                    PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+                    PlayAudioFile("assets/TetrisBlip.wav");
                     wasHighlighted = true;
                 }
 

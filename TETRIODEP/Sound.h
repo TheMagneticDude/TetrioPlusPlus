@@ -37,7 +37,7 @@ inline void PlayBackgroundMusic() {
 #ifdef _WIN32
     // Use Windows MCI (Media Control Interface) to play the background music (this avoids blocking the game, since we
     // can't use PlaySoundA more than once at a time)
-    mciSendString(TEXT("open \"TETRIODEP/TetrisBackground.mp3\" type mpegvideo alias Background"), NULL, 0, NULL);
+    mciSendString(TEXT("open \"assets/TetrisBackground.mp3\" type mpegvideo alias Background"), NULL, 0, NULL);
     mciSendString(TEXT("play Background repeat"), NULL, 0, 0);
 #endif
 #if __linux__ && !__ANDROID__
@@ -50,7 +50,7 @@ inline void PlayBackgroundMusic() {
         close(1);
         close(2);
         // Play the music file
-        execlp("/usr/bin/mplayer", "mplayer", "TETRIODEP/TetrisBackground.mp3", NULL);
+        execlp("/usr/bin/mplayer", "mplayer", "assets/TetrisBackground.mp3", NULL);
         // Exec the child process when done
         exit(0);
     }

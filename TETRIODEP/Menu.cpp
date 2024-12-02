@@ -20,15 +20,15 @@ Menu::Menu()
     onStartclicked = false;
     // start playing background music
     // this will error im not sure why but it compiles so who cares
-    //   mciSendString(TEXT("play \"TETRIODEP/TetrisBackground.mp3\""),NULL,0,0);
+    //   mciSendString(TEXT("play \"assets/TetrisBackground.mp3\""),NULL,0,0);
     PlayBackgroundMusic();
 
     gameEnded = false;
-    menuBackground.Open("TETRIODEP/TetrioBackground-2.png");
-    playBackground.Open("TETRIODEP/TetrioGameBackground.png");
-    confetti.Open("TETRIODEP/TetrisConfetti.png");
-    creditsImage.Open("TETRIODEP/CreditsPage.png");
-    howToPlay.Open("TETRIODEP/TetrioHowToPlay.png");
+    menuBackground.Open("assets/TetrioBackground-2.png");
+    playBackground.Open("assets/TetrioGameBackground.png");
+    confetti.Open("assets/TetrisConfetti.png");
+    creditsImage.Open("assets/CreditsPage.png");
+    howToPlay.Open("assets/TetrioHowToPlay.png");
 };
 
 void Menu::disable(Button &b) { b.disable(); }
@@ -44,7 +44,7 @@ void Menu::update() {
         // draws background
         // background was made by me in blender hence why its so ugly lol
         // FEHImage background;
-        // background.Open("TETRIODEP/TetrioBackground-2.png");
+        // background.Open("assets/TetrioBackground-2.png");
         menuBackground.Draw(0, 0);
 
         start.updateButtonState();
@@ -154,7 +154,7 @@ void Menu::run() {
 
             if (!gameEnded) {
                 // play confetti noise yey you won
-                PlayAudioFile("TETRIODEP/TetrioWin.wav");
+                PlayAudioFile("assets/TetrioWin.wav");
             }
 
             std::string playerWon = "";
@@ -204,7 +204,7 @@ void Menu::run() {
             singleBoard.draw();
         } else if (singleBoard.gameEnded()) {
             // sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
-            if (gameEnded) PlayAudioFile("TETRIODEP/wompwomp.wav");
+            if (gameEnded) PlayAudioFile("assets/wompwomp.wav");
             Button lossText = Button(40, "Womp Womp you lost :[ Try again next game", RED);
             lossText.updateButtonState();
 
@@ -214,7 +214,7 @@ void Menu::run() {
 
             // play confetti noise yey you won
             // Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
-            if (gameEnded) PlayAudioFile("TETRIODEP/TetrioWin.wav");
+            if (gameEnded) PlayAudioFile("assets/TetrioWin.wav");
 
             // color array for funy colors
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};

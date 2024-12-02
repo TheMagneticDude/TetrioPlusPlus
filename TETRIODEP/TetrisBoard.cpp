@@ -82,7 +82,7 @@ void TetrisBoard::drawStats() {
 }
 
 void *TetrisBoard::playSound(void *vargp) {
-    PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+    PlayAudioFile("assets/TetrisBlip.wav");
     return NULL;
 }
 
@@ -112,7 +112,7 @@ void TetrisBoard::update() {
             // play sound
             // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
             // pthread_join(soundThreadID, NULL);
-            PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+            PlayAudioFile("assets/TetrisBlip.wav");
             fallingX--;
             // Reset lock delay
             onGround = false;
@@ -122,7 +122,7 @@ void TetrisBoard::update() {
             // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
             // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
             // pthread_join(soundThreadID, NULL);
-            PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+            PlayAudioFile("assets/TetrisBlip.wav");
             fallingX++;
             // Reset lock delay
             onGround = false;
@@ -142,7 +142,7 @@ void TetrisBoard::update() {
         effectiveGravityRate /= settings->handling.sdf;
         // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         // pthread_join(soundThreadID, NULL);
-        PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+        PlayAudioFile("assets/TetrisBlip.wav");
     }
 
     // Gravity
@@ -174,7 +174,7 @@ void TetrisBoard::update() {
             y--;
             // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
             // pthread_join(soundThreadID, NULL);
-            PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+            PlayAudioFile("assets/TetrisBlip.wav");
         }
         settleGrid(fallingGrid, fallingX, y);
         startNewFalling();
@@ -189,7 +189,7 @@ void TetrisBoard::update() {
         didHold = true;
         // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         // pthread_join(soundThreadID, NULL);
-        PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+        PlayAudioFile("assets/TetrisBlip.wav");
     }
 }
 
@@ -212,21 +212,21 @@ void TetrisBoard::updateRotation() {
         didRotate = true;
         // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         // pthread_join(soundThreadID, NULL);
-        PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+        PlayAudioFile("assets/TetrisBlip.wav");
     }
     if (input.rotateCCW.newPress()) {
         newRot = rotTable[1][static_cast<int>(newRot)];
         didRotate = true;
         // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         // pthread_join(soundThreadID, NULL);
-        PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+        PlayAudioFile("assets/TetrisBlip.wav");
     }
     if (input.rotate180.newPress()) {
         newRot = rotTable[2][static_cast<int>(newRot)];
         didRotate = true;
         // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         // pthread_join(soundThreadID, NULL);
-        PlayAudioFile("TETRIODEP/TetrisBlip.wav");
+        PlayAudioFile("assets/TetrisBlip.wav");
     }
 
     if (!didRotate)

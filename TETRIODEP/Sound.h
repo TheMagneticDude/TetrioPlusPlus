@@ -3,12 +3,14 @@
 #include <string>
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <mmsystem.h>
+// #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <mmsystem.h>
+
 #pragma comment(lib, "winmm.lib")
 #include <codecvt>
 #include <locale>
+#include "Input.h"
 #endif
 
 #if __linux__ && !__ANDROID__
@@ -17,9 +19,8 @@
 
 inline void PlayAudioFile(std::string_view path) {
 #ifdef _WIN32
-    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-    std::wstring wstr = converter.from_bytes(path.data());
-    PlaySound(wstr.data(), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+    
+    PlaySoundA(path.data(), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
 #endif
 #if __linux__ && !__ANDROID__
     std::string command = "mplayer ";

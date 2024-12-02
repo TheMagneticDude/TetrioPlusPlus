@@ -47,6 +47,7 @@
         "map": "cpp",
         "thread": "cpp",
         "iomanip": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "codecvt": "cpp"
     }
 }

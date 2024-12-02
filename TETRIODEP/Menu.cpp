@@ -281,6 +281,24 @@ void Menu::run() {
 
         Button P2gwButton = Button(160, P2GamesWon, BLUE);
         P2gwButton.updateButtonState();
+
+        Button singleBannerButton = Button(200, "Singleplayer Stats", BLUE);
+        singleBannerButton.updateButtonState();
+
+        std::string fourtyLineClearScore;
+        
+
+        if(playerStats.singleplayerStats.lineTime > 0){
+            fourtyLineClearScore = "Best Fourty Line time: " + std::to_string(playerStats.singleplayerStats.lineTime);
+        }else{
+            fourtyLineClearScore = "Best Fourty Line time: N/A";
+        }
+
+        Button singleFourtyLineButton = Button(220, fourtyLineClearScore, BLUE);
+        singleFourtyLineButton.updateButtonState();
+
+
+
     }
     if (isPageActive(Menu::MenuOption::Credits)) {
         creditsImage.Draw(0, 0);

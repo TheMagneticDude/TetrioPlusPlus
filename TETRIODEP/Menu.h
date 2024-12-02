@@ -28,7 +28,7 @@ class Menu {
     int board1Loc[2] = {50, 220};
     int board2Loc[2] = {210, 220};
 
-    int singleBoardLoc[2] = {80,220};
+    int singleBoardLoc[2] = {140,220};
 
     bool gameEnded;
 

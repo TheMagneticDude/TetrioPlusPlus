@@ -16,7 +16,7 @@ void Grid::draw(int pos_x, int pos_y) {
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             auto mino = data[y * width + x];
-            unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
+            unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED, GRAY};
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
             if (color != BLACK) {

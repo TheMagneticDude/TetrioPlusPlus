@@ -34,6 +34,9 @@ class TetrisBoard {
     float elapsedTime;
     std::string timeDisplay;
 
+    bool onGround = false;
+    std::chrono::high_resolution_clock::time_point startedOnGround;
+
     std::optional<Tetromino> hold;
     bool didHold = false;
 
@@ -71,7 +74,7 @@ class TetrisBoard {
     int getLinesCleared();
 
     std::string getFourtyLinesClearedTime();
-  
+
     void clear();
 
     static void *playSound(void *vargp);

@@ -113,15 +113,18 @@ void TetrisBoard::update() {
             // pthread_join(soundThreadID, NULL);
             PlayAudioFile("TETRIODEP/TetrisBlip.wav");
             fallingX--;
+            // Reset lock delay
+            onGround = false;
         }
     } else if (pressedRight && !pressedLeft) {
-
         if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
             // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
             // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
             // pthread_join(soundThreadID, NULL);
             PlayAudioFile("TETRIODEP/TetrisBlip.wav");
             fallingX++;
+            // Reset lock delay
+            onGround = false;
         }
     }
 
@@ -141,11 +144,23 @@ void TetrisBoard::update() {
         PlayAudioFile("TETRIODEP/TetrisBlip.wav");
     }
 
+    // Gravity
     if (lastGravitySecs >= effectiveGravityRate) {
         lastGravity = now;
         if (!checkCollision(fallingGrid, fallingX, fallingY - 1)) {
             fallingY--;
-        } else {
+        } else if (!onGround) {
+            onGround = true;
+            startedOnGround = now;
+        }
+    }
+
+    // Lock delay
+    if (onGround) {
+        std::chrono::duration<float> durationOnGround = now - startedOnGround;
+        float secsOnGround = durationOnGround.count();
+        std::cout << secsOnGround << std::endl;
+        if (secsOnGround >= 1.0) {
             settleGrid(fallingGrid, fallingX, fallingY);
             startNewFalling();
             return;
@@ -187,7 +202,7 @@ void TetrisBoard::updateRotation() {
         // 180 rotation
         {TetrominoOrientation::U, TetrominoOrientation::L, TetrominoOrientation::R, TetrominoOrientation::H}};
 
-    bool didRotate;
+    bool didRotate = false;
     TetrominoOrientation newRot = fallingRotation;
     pthread_t soundThreadID;
 
@@ -216,6 +231,9 @@ void TetrisBoard::updateRotation() {
 
     if (!didRotate)
         return;
+
+    // Reset lock delay
+    onGround = false;
 
     typedef std::vector<std::pair<int, int>> offsetTableTy[4];
 
@@ -326,6 +344,7 @@ void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     fallingY = 19;
     lastGravity = std::chrono::high_resolution_clock::now();
     didHold = false;
+    onGround = false;
     if (checkCollision(fallingGrid, fallingX, fallingY)) {
         // TODO: game over
         std::cout << "Game Over!" << std::endl;

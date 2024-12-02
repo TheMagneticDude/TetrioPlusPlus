@@ -16,8 +16,10 @@
 #include <X11/Xlib.h>
 #include <tigr.h>
 
-// my guy you are a madman
+// Author: Ojas
+// Get the display handle to be used for keyboard input on Linux
 Display *TriggerKey::getX11Display() {
+    // my guy you are a madman
     // I'm sorry but it had to be done :)
     // The TigrInternal structure is placed directly after Tigr (Tigr* is at offset 0 in LCD)
     Tigr *internal = *reinterpret_cast<Tigr **>(&LCD) + 1;
@@ -29,12 +31,17 @@ Display *TriggerKey::getX11Display() {
 }
 #endif
 
+// Author: Ojas
+// Construct the key logic for a specific key on the keyboard
 TriggerKey::TriggerKey(int keyCode, bool useDAS = false)
     : keyCode(keyCode), useDAS(useDAS), isPressed(false), isNewPress(false) {}
 
-void TriggerKey::setKeyCode(int k) {
-    keyCode = k;
-}
+// Author: Nathan
+// Set the internal keyCode for when a setting is changed
+void TriggerKey::setKeyCode(int k) { keyCode = k; }
+
+// Author: Ojas
+// Update the state of the key (check to see if it is pressed, and repeat the input if DAS is in use)
 void TriggerKey::update() {
     bool currentlyIsPressed;
 
@@ -48,6 +55,7 @@ void TriggerKey::update() {
     char keymap[32];
     XQueryKeymap(display, keymap);
     int xKeyCode = XKeysymToKeycode(display, keyCode);
+    // Extract the bit that corresponds to the specific key
     currentlyIsPressed = keymap[xKeyCode / 8] & (1 << (xKeyCode % 8));
 #endif
 
@@ -59,24 +67,34 @@ void TriggerKey::update() {
     }
 }
 
+// Author: Ojas
+// Check to see if the key has been pressed since the last time this function was called
 bool TriggerKey::newPress() {
     bool wasNewPress = isNewPress;
     isNewPress = false;
     return wasNewPress;
 }
 
+// Author: Ojas
+// Check to see if the key is currently pressed
 bool TriggerKey::pressed() { return isPressed; }
 
+// Author: Ojas
+// Check how long the key has been held for
 float TriggerKey::holdTime() {
     std::chrono::duration<float> duration = std::chrono::high_resolution_clock::now() - holdStart;
     return duration.count();
 }
 
+// Author: Ojas
+// Reset the key state in the scenario of a new key press (real or simulated)
 void TriggerKey::resetHold() {
     isNewPress = true;
     holdStart = std::chrono::high_resolution_clock::now();
 }
 
+// Author: Ojas and Nathan
+// Construct the player input class by constructing each key using the user's settings
 PlayerInput::PlayerInput(PlayerSettings &playerSettings)
     : handling(&playerSettings.handling), keyLeft(playerSettings.controls.moveLeft, true),
       keyRight(playerSettings.controls.moveRight, true), rotateCW(playerSettings.controls.rotateCW),
@@ -96,6 +114,8 @@ PlayerInput::PlayerInput(PlayerSettings &playerSettings)
     keyBinds.emplace(KeyAction::SwapHold, &swapHold);
 }
 
+// Author: Ojas
+// Construct the player input class by constructing each key using the user's settings
 void PlayerInput::update() {
     keyLeft.update();
     keyRight.update();
@@ -110,8 +130,12 @@ void PlayerInput::update() {
     handleDAS(repeatingRight, keyRight);
 }
 
+// Author: Nathan
+// Change a specific key binding in the case of a new key mapping
 void PlayerInput::setKey(KeyAction key, int keyCode) { keyBinds[key]->setKeyCode(keyCode); }
 
+// Author: Nathan
+// Check to see if any keys are currently pressed (used when remapping keys)
 // Windows scanKey will figure out linux later
 #ifdef _WIN32
 // scans keys and stores them into a vector
@@ -134,11 +158,14 @@ std::vector<int> PlayerInput::scanKey() {
 #if __linux__ && !__ANDROID__
 std::vector<int> PlayerInput::scanKey() {
     scannedKeys.clear();
-    // TODO
+    // This is not yet supported on Linux, but does not affect the functionality of the game
     return scannedKeys;
 }
 #endif
 
+// Author: Ojas
+// This function implement DAS (Delayed Auto Shift) logic by simulated a new press when the hold time is greater than
+// the DAS setting.
 void PlayerInput::handleDAS(bool &isRepeating, TriggerKey &key) {
     if (!key.pressed() && isRepeating) {
         isRepeating = false;

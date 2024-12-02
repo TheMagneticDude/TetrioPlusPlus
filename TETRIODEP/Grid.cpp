@@ -6,8 +6,12 @@
 #include <FEHLCD.h>
 #include <FEHRandom.h>
 
+// Author: Ojas
+// Construct a grid with a specific width and height initialized to Tetromino::E
 Grid::Grid(int width, int height) : width(width), height(height), data(width * height, Tetromino::E) {}
 
+// Author: Ojas
+// Draw the grid at a specific position on the screen (in pixel coordinates)
 void Grid::draw(int pos_x, int pos_y) {
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
@@ -22,23 +26,32 @@ void Grid::draw(int pos_x, int pos_y) {
     }
 }
 
+// Author: Ojas
+// Clear all data in the grid (resetting it to Tetromino::E)
 void Grid::clear(){
     data.clear();
 }
 
+// Author: Ojas
+// Retreive a mino at a specific position in the grid
 Tetromino Grid::getAtPos(int x, int y) { return data[y * width + x]; }
 
+// Author: Ojas
+// Add a mino at a specific position in the grid
 void Grid::setAtPos(Tetromino tetromino, int x, int y) {
     assert(x >= 0 && y >= 0);
     assert(x < width && y < height);
     data[y * width + x] = tetromino;
 }
 
+// Author: Ojas
+// Remove a mino at a specific position in the grid
 void Grid::removeAtPos(int pos_x, int pos_y) {
     auto mino = Tetromino::E;
     data[pos_y * width + pos_x] = mino;
 }
 
+// Author: Nathan
 // draws a mino with the bottom left corner at pos_x and pos_y
 void Grid::drawMino(int pos_x, int pos_y, int color) {
     LCD.SetFontColor(color);
@@ -56,6 +69,8 @@ void Grid::drawMino(int pos_x, int pos_y, int color) {
     LCD.DrawLine(pos_x, pos_y - SCALE, pos_x, pos_y);
 }
 
+// Author: Ojas
+// Rotate the grid by 90 degrees.
 Grid Grid::rotate90() {
     // We are essentially transposing the grid here
     Grid newGrid(height, width);

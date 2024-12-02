@@ -1,12 +1,14 @@
 #pragma once
 
-#include <string>
 #include <FEHLCD.h>
+#include <string>
 
 #include "Input.h"
 
 using namespace std;
 
+// Author: Nathan
+// This class represents a UI Button with a base color and a different color for when it is selected.
 class Button {
   private:
     const unsigned int screenWidth = 320;
@@ -51,7 +53,6 @@ class Button {
 
     bool removed;
 
-    Button();
     // creates centered button
     Button(int y, string text, unsigned int color, unsigned int trigColor);
     Button(int y, string text, unsigned int color);

@@ -7,9 +7,9 @@
 
 using namespace std;
 
-Button::Button() {}
+// Author: Nathan
+// Constructs a normal buttun using a normal color, and the color for when its triggered
 Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
-
     buttonX = (screenWidth / 2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
     buttonY = y;
 
@@ -32,9 +32,9 @@ Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
     currColor = defaultColor;
 }
 
-//starts out disabled and centered to act as a display
+// Author: Nathan
+// Creates a buttom that starts out disabled and is centered to act as a display
 Button::Button(int y, string text, unsigned int color) {
-
     buttonX = (screenWidth / 2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
     buttonY = y;
 
@@ -55,8 +55,10 @@ Button::Button(int y, string text, unsigned int color) {
 
     currColor = defaultColor;
 }
-Button::Button(float x, float y, string text) {
 
+// Author: Nathan
+// Construsts a button using the default color and the supplied position.
+Button::Button(float x, float y, string text) {
     buttonX = x;
     buttonY = y;
 
@@ -78,9 +80,10 @@ Button::Button(float x, float y, string text) {
 
     currColor = defaultColor;
 }
+
+// Author: Nathan
 // creates a rectangular button with x and y being the top left of the rectangle
 Button::Button(float x, float y, float w, float h, string text) {
-
     buttonX = x;
     buttonY = y;
     buttonCenterX = x + w / 2;
@@ -104,7 +107,8 @@ Button::Button(float x, float y, float w, float h, string text) {
     currColor = defaultColor;
 }
 
-// creates a rectangular button with x and y being the top left of the rectangle
+// Author: Nathan
+// creates a rectangular button with x and y being the top left of the rectangle with colors
 Button::Button(float x, float y, float w, float h, string text, unsigned int color, unsigned int trigColor) {
 
     buttonX = x;
@@ -130,8 +134,9 @@ Button::Button(float x, float y, float w, float h, string text, unsigned int col
     currColor = defaultColor;
 }
 
+// Author: Nathan
+// Creates a button at a specific position with specific colors
 Button::Button(float x, float y, string text, unsigned int color, unsigned int trigColor) {
-
     buttonX = x;
     buttonY = y;
 

@@ -61,7 +61,6 @@ ToggleButton::ToggleButton(float x, float y, string text) {
 }
 
 ToggleButton::ToggleButton(float x, float y, string text, unsigned int color, unsigned int trigColor) {
-
     buttonX = x;
     buttonY = y;
 

@@ -1,10 +1,9 @@
-#include "ToggleButton.h"
 #include <FEHLCD.h>
 #include <limits>
 #include <string>
 
-#include <mmsystem.h>
-#include <windows.h>
+#include "ToggleButton.h"
+#include "Sound.h"
 
 using namespace std;
 
@@ -153,7 +152,7 @@ void ToggleButton::updateButtonState() {
                 currColor = highlightedColor;
                 if (!wasHighlighted) {
                     // play click sound when highlighted
-                    PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+                    PlayAudioFile("TETRIODEP/TetrisBlip.wav");
                     wasHighlighted = true;
                 }
 

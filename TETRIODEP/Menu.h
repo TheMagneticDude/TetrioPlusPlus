@@ -2,8 +2,8 @@
 
 #include "Button.h"
 #include "Grid.h"
-#include "TETRIODEP/Options.h"
-#include "TETRIODEP/TetrisBoard.h"
+#include "Options.h"
+#include "TetrisBoard.h"
 #include <FEHImages.h>
 
 class Menu {
@@ -47,9 +47,9 @@ class Menu {
 
 
 
-//had to make option enum visible to call isPageActive
-enum class Option {
-        None, // back to menu
+    //had to make option enum visible to call isPageActive
+    enum class MenuOption {
+        None_, // back to menu
         Start,
         Single,//singleplayer 40 line
         Settings, // can include page for player names, controls, themes, etcs
@@ -60,12 +60,12 @@ enum class Option {
     };
 
     // current option selected
-    Option currOption = Option::None;
+    MenuOption currOption = MenuOption::None_;
 
 
     Menu();
     bool renderSubPage(Button &b);
-    bool isPageActive(Option page);
+    bool isPageActive(MenuOption page);
     void disable(Button &b);
     void update();
 

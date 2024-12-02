@@ -5,8 +5,6 @@
 #include "Settings.h"
 #include "ToggleButton.h"
 
-#include <iostream>
-
 Options::Options(Settings &set)
     : left(20 + buttonoffset, "Move Left: Default", BLUE, DARKBLUE),
       right(20 + buttonoffset, "Move Right: Default", BLUE, DARKBLUE),

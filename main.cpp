@@ -1,12 +1,6 @@
 #include "TETRIODEP/Menu.h"
-#include "TETRIODEP/Options.h"
-#include "TETRIODEP/Switch.h"
-#include "TETRIODEP/TetrisBoard.h"
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-
-#include <mmsystem.h>      
-#include <windows.h>        
 
 int main() {
 

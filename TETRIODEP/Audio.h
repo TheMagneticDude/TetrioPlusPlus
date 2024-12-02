@@ -20,7 +20,6 @@ inline void PlayAudioFile(std::string_view path) {
 #if __linux__ && !__ANDROID__
     std::string command = "mplayer ";
     command += path;
-    command += " &";
     system(command.data());
 #endif
 }
@@ -32,6 +31,7 @@ inline void PlayBackgroundMusic() {
     mciSendString(TEXT("play Background repeat"), NULL, 0, 0);
 #endif
 #if __linux__ && !__ANDROID__
-    system("mplayer TETRIODEP/TetrisBackground.mp3 &");
+    std::string command = "mplayer TETRIODEP/TetrisBackground.mp3";
+    system(command.data());
 #endif
 }

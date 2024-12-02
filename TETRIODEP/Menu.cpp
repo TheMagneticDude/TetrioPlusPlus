@@ -1,38 +1,28 @@
 #include "Menu.h"
 #include "Button.h"
-#include "Switch.h"
+#include "Sound.h"
 
-#include "Input.h"
 #include <FEHImages.h>
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-#include <iostream>
-#include <mmsystem.h>
 #include <string>
-#include <windows.h>
-
-
 
 Menu::Menu()
     : start(0 + buttonoffset, "1 v 1", BLUE, DARKBLUE),
-    singleplayer(30+buttonoffset,"40 Line Clear", BLUE, DARKBLUE) ,
-    stats(60 + buttonoffset, "Stats", BLUE, DARKBLUE),
-      settings(90 + buttonoffset, "Settings", BLUE, DARKBLUE),
+      singleplayer(30 + buttonoffset, "40 Line Clear", BLUE, DARKBLUE),
+      stats(60 + buttonoffset, "Stats", BLUE, DARKBLUE), settings(90 + buttonoffset, "Settings", BLUE, DARKBLUE),
       instructions(120 + buttonoffset, "Instructions", BLUE, DARKBLUE),
       credits(150 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Exit", BLUE, DARKBLUE),
       board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats),
       board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats),
-      singleBoard(singleBoardLoc[0],singleBoardLoc[1],set.p1Settings,playerStats),
-       optionsPage(set) {
+      singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats), optionsPage(set) {
     // initialize button instances
     onStartclicked = false;
     // start playing background music
     // this will error im not sure why but it compiles so who cares
     //   mciSendString(TEXT("play \"TETRIODEP/TetrisBackground.mp3\""),NULL,0,0);
+    PlayBackgroundMusic();
 
-    // Tetris song from internet archive: https://ia902905.us.archive.org/11/items/TetrisThemeMusic/Tetris.mp3
-    mciSendString(TEXT("open \"TETRIODEP/TetrisBackground.mp3\" type mpegvideo alias Background"), NULL, 0, NULL);
-    mciSendString(TEXT("play Background repeat"), NULL, 0, 0);
     gameEnded = false;
     menuBackground.Open("TETRIODEP/TetrioBackground-2.png");
     playBackground.Open("TETRIODEP/TetrioGameBackground.png");
@@ -45,10 +35,10 @@ void Menu::disable(Button &b) { b.disable(); }
 
 void Menu::update() {
 
-    if (currOption == Option::Back) {
-        currOption = Option::None;
+    if (currOption == MenuOption::Back) {
+        currOption = MenuOption::None_;
     }
-    bool menuActive = currOption == Option::None; // if in subpage
+    bool menuActive = currOption == MenuOption::None_; // if in subpage
 
     if (menuActive) {
         // draws background
@@ -56,7 +46,6 @@ void Menu::update() {
         // FEHImage background;
         // background.Open("TETRIODEP/TetrioBackground-2.png");
         menuBackground.Draw(0, 0);
-
 
         start.updateButtonState();
         singleplayer.updateButtonState();
@@ -68,28 +57,28 @@ void Menu::update() {
         // update current option selected if a button triggers
         if ((renderSubPage(start))) {
 
-            if (currOption != Option::Start) {
-                currOption = Option::Start;
+            if (currOption != MenuOption::Start) {
+                currOption = MenuOption::Start;
                 onStartclicked = true;
-            } 
+            }
         }
-        if(renderSubPage(singleplayer)){
-            if (currOption != Option::Single) {
-                currOption = Option::Single;
+        if (renderSubPage(singleplayer)) {
+            if (currOption != MenuOption::Single) {
+                currOption = MenuOption::Single;
                 onSingleClicked = true;
-            } 
+            }
         }
         if (renderSubPage(settings)) {
-            currOption = Option::Settings;
+            currOption = MenuOption::Settings;
         }
         if (renderSubPage(stats)) {
-            currOption = Option::Stats;
+            currOption = MenuOption::Stats;
         }
         if (renderSubPage(instructions)) {
-            currOption = Option::Instructions;
+            currOption = MenuOption::Instructions;
         }
         if (renderSubPage(credits)) {
-            currOption = Option::Credits;
+            currOption = MenuOption::Credits;
         }
     } else {
         // removes menu buttons and draws back button
@@ -97,18 +86,17 @@ void Menu::update() {
         back.updateButtonState();
 
         if (renderSubPage(back)) {
-            currOption = Option::Back;
+            currOption = MenuOption::Back;
             back.remove();
             // back to menu
         }
     }
-
 }
 
 // returns true when its time to render a subpage for a given button
 bool Menu::renderSubPage(Button &b) { return b.onButtonReleased(); }
 
-bool Menu::isPageActive(Option page) { return currOption == page; }
+bool Menu::isPageActive(MenuOption page) { return currOption == page; }
 
 void Menu::renderBackButton() { back.updateButtonState(); }
 
@@ -125,7 +113,7 @@ void Menu::remove() {
 }
 
 void Menu::returnToMenu() {
-    currOption = Option::Back;
+    currOption = MenuOption::Back;
     back.remove();
     // back to menu
 }
@@ -134,24 +122,18 @@ void Menu::returnToMenu() {
 void Menu::run() {
     update();
 
-    if (isPageActive(Menu::Option::Start)) {
+    if (isPageActive(Menu::MenuOption::Start)) {
         if (onStartclicked) {
-                // creates new boards with updated settings
-                board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats);
-                board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats);
-                onStartclicked = false;
-                gameEnded = false;
-            }
+            // creates new boards with updated settings
+            board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats);
+            board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats);
+            onStartclicked = false;
+            gameEnded = false;
+        }
 
         // while game has not ended run game
         if (!(board1.gameEnded() || board2.gameEnded())) {
             playBackground.Draw(0, 0);
-
-            
-
-            
-
-            
 
             LCD.SetFontColor(BLUE);
             std::string pageTitle = "P1 VS P2";
@@ -168,8 +150,7 @@ void Menu::run() {
             board1.draw();
             board2.draw();
         } else {
-            
-            
+
             confetti.Draw(0, 0);
 
             std::string playerWon = "";
@@ -198,75 +179,68 @@ void Menu::run() {
             Button winText = Button(40, playerWon, colors[r]);
             winText.updateButtonState();
             // play confetti noise yey you won
-            //Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
-            PlaySound(TEXT("TETRIODEP/TetrioWin.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+            // Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
+            PlayAudioFile("TETRIODEP/TetrioWin.wav");
         }
-        //render back button on top
-            back.drawButton();
+        // render back button on top
+        back.drawButton();
     }
 
-    //singleplayer 30 line clear
-    if (isPageActive(Menu::Option::Single)) {
-            remove();
+    // singleplayer 30 line clear
+    if (isPageActive(MenuOption::Single)) {
+        remove();
 
-            if(onSingleClicked){
-                singleBoard = TetrisBoard(singleBoardLoc[0],singleBoardLoc[1],set.p1Settings,playerStats);
-                onSingleClicked = false;
-                gameEnded = false;
-                std::cout<<"BOARD RESET";
-            }
-            
-            if(!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()){
-                playBackground.Draw(0, 0);
+        if (onSingleClicked) {
+            singleBoard = TetrisBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats);
+            onSingleClicked = false;
+            gameEnded = false;
+            std::cout << "BOARD RESET";
+        }
 
-            
+        if (!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()) {
+            playBackground.Draw(0, 0);
 
             LCD.SetFontColor(BLUE);
             std::string pageTitle = "40 Line Clear";
             LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
 
-
             singleBoard.update();
             // update score
             playerStats.singleplayerStats.linesCleared = singleBoard.getLinesCleared();
             singleBoard.draw();
-            }else if(singleBoard.gameEnded()){
-                //sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
-                PlaySound(TEXT("TETRIODEP/wompwomp.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
-            Button lossText = Button(40,"Womp Womp you lost :[ Try again next game", RED);
+        } else if (singleBoard.gameEnded()) {
+            // sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
+            PlayAudioFile("TETRIODEP/wompwomp.wav");
+            Button lossText = Button(40, "Womp Womp you lost :[ Try again next game", RED);
             lossText.updateButtonState();
 
-            }else if(singleBoard.fourtyLinesEnded()){
-                //update stats
-                playerStats.singleplayerStats.lineTime = stof(singleBoard.getFourtyLinesClearedTime());
+        } else if (singleBoard.fourtyLinesEnded()) {
+            // update stats
+            playerStats.singleplayerStats.lineTime = stof(singleBoard.getFourtyLinesClearedTime());
 
-                // play confetti noise yey you won
-            //Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
-            PlaySound(TEXT("TETRIODEP/TetrioWin.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+            // play confetti noise yey you won
+            // Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
+            PlayAudioFile("TETRIODEP/TetrioWin.wav");
 
             // color array for funy colors
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
-            
+
             // display won page
             int r = Random.RandInt() % 7;
             // draws wintext with funy colors
             Button singleWin = Button(40, "You cleared fourty lines! Check your stats page!", colors[r]);
             singleWin.updateButtonState();
+        }
 
-            }
-
-            //render back button on top
-            back.drawButton();
+        // render back button on top
+        back.drawButton();
     }
 
-
-
-
-    if (isPageActive(Menu::Option::Settings)) {
+    if (isPageActive(Menu::MenuOption::Settings)) {
         optionsPage.update();
     }
 
-    if (isPageActive(Menu::Option::Stats)) {
+    if (isPageActive(Menu::MenuOption::Stats)) {
 
         LCD.SetFontColor(BLUE);
 
@@ -307,25 +281,23 @@ void Menu::run() {
         Button P2gwButton = Button(160, P2GamesWon, BLUE);
         P2gwButton.updateButtonState();
     }
-    if (isPageActive(Menu::Option::Credits)) {
+    if (isPageActive(Menu::MenuOption::Credits)) {
         creditsImage.Draw(0, 0);
 
-        
-        //render back button on top
-            back.drawButton();
+        // render back button on top
+        back.drawButton();
 
-            
         // LCD.SetFontColor(BLUE);
         // LCD.WriteAt("Tetrio++ Written by:", 0, 20);
         // LCD.WriteAt("Nathan Cheng", 0, 50);
         // LCD.WriteAt("Ojas Landge", 0, 90);
     }
 
-    if (isPageActive(Menu::Option::Instructions)) {
-        howToPlay.Draw(0,0);
+    if (isPageActive(Menu::MenuOption::Instructions)) {
+        howToPlay.Draw(0, 0);
 
-        //render back button on top
-            back.drawButton();
+        // render back button on top
+        back.drawButton();
 
         // LCD.SetFontColor(BLUE);
         // LCD.WriteAt("How to play Tetrio++", 0, 20);

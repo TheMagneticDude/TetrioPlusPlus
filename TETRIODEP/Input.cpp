@@ -1,4 +1,3 @@
-#include <map>
 #include <unordered_map>
 #include <vector>
 
@@ -7,7 +6,6 @@
 #include "Input.h"
 #include "Settings.h"
 #include <FEHLCD.h>
-#include <iostream>
 
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
@@ -130,6 +128,14 @@ std::vector<int> PlayerInput::scanKey() {
             scannedKeys.push_back(key);
         }
     }
+    return scannedKeys;
+}
+#endif
+
+#if __linux__ && !__ANDROID__
+std::vector<int> PlayerInput::scanKey() {
+    scannedKeys.clear();
+    // TODO
     return scannedKeys;
 }
 #endif

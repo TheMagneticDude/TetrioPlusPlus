@@ -2,10 +2,8 @@
 #include <string>
 
 #include "Button.h"
+#include "Sound.h"
 #include <FEHLCD.h>
-#include <iostream>
-#include <mmsystem.h>
-#include <windows.h>
 
 using namespace std;
 
@@ -244,7 +242,7 @@ void Button::updateButtonState() {
                 currColor = highlightedColor;
                 if (!wasHighlighted) {
                     // play click sound when highlighted
-                    PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
+                    PlayAudioFile("TETRIODEP/TetrisBlip.wav");
                     wasHighlighted = true;
                 }
 

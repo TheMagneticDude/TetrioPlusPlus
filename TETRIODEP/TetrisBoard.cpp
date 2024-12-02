@@ -9,9 +9,9 @@
 #include "Tetromino.h"
 #include <FEHLCD.h>
 
-#include <mmsystem.h>    
-#include <windows.h>     
 #include <iomanip>
+#include <mmsystem.h>
+#include <windows.h>
 #pragma comment(lib, "winmm.lib")
 
 // initialize tetrisboard with a coordinate (top left corner)
@@ -70,16 +70,17 @@ void TetrisBoard::drawBorder() {
                       SCALE * (grid.height) + borderScale);
 }
 
-void TetrisBoard::drawStats(){
+void TetrisBoard::drawStats() {
     LCD.SetFontColor(WHITE);
-    //display time
-    LCD.WriteAt(timeDisplay,boardX - (timeDisplay.length() * LCD.getCharWidth()) - 10,(boardY + (SCALE * grid.height)) + 10);
+    // display time
+    LCD.WriteAt(timeDisplay, boardX - (timeDisplay.length() * LCD.getCharWidth()) - 10,
+                (boardY + (SCALE * grid.height)) + 10);
     std::string linesClearedText = "LC: " + std::to_string(linesCleared);
-    LCD.WriteAt(linesClearedText,boardX - (linesClearedText.length() * LCD.getCharWidth()) - 10,(boardY + (SCALE * grid.height)) + 30);
-
+    LCD.WriteAt(linesClearedText, boardX - (linesClearedText.length() * LCD.getCharWidth()) - 10,
+                (boardY + (SCALE * grid.height)) + 30);
 }
 
-void* TetrisBoard::playSound(void* vargp){
+void *TetrisBoard::playSound(void *vargp) {
     PlaySound(TEXT("TETRIODEP/TetrisBlip.wav"), NULL, SND_FILENAME | SND_ASYNC | SND_NOSTOP);
     return NULL;
 }
@@ -89,11 +90,11 @@ void TetrisBoard::update() {
     float elapsedTime = std::chrono::duration<float>(currentTime - timeStart).count();
     std::stringstream stream;
     stream << std::fixed << std::setprecision(2) << elapsedTime;
-    //to display time
+    // to display time
     timeDisplay = stream.str();
 
     drawStats();
-    
+
     input.update();
 
     // Handle Left/Right movement keys
@@ -104,16 +105,16 @@ void TetrisBoard::update() {
     if (pressedLeft && !pressedRight) {
         if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
             // play sound
-        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
-        pthread_join(soundThreadID, NULL);
+            pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+            pthread_join(soundThreadID, NULL);
             fallingX--;
         }
     } else if (pressedRight && !pressedLeft) {
-        
+
         if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
             // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
-        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
-        pthread_join(soundThreadID, NULL);
+            pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+            pthread_join(soundThreadID, NULL);
             fallingX++;
         }
     }
@@ -129,7 +130,7 @@ void TetrisBoard::update() {
     float effectiveGravityRate = gravityRate;
     if (input.softDrop.pressed()) {
         effectiveGravityRate /= settings->handling.sdf;
-        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         pthread_join(soundThreadID, NULL);
     }
 
@@ -149,8 +150,8 @@ void TetrisBoard::update() {
         int y = fallingY;
         while (!checkCollision(fallingGrid, fallingX, y - 1)) {
             y--;
-            pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
-        pthread_join(soundThreadID, NULL);
+            pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
+            pthread_join(soundThreadID, NULL);
         }
         settleGrid(fallingGrid, fallingX, y);
         startNewFalling();
@@ -163,7 +164,7 @@ void TetrisBoard::update() {
         holdGrid = createGrid(fallingMino, TetrominoOrientation::H);
         startNewFalling(oldHold);
         didHold = true;
-        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         pthread_join(soundThreadID, NULL);
     }
 }
@@ -185,19 +186,19 @@ void TetrisBoard::updateRotation() {
     if (input.rotateCW.newPress()) {
         newRot = rotTable[0][static_cast<int>(newRot)];
         didRotate = true;
-        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         pthread_join(soundThreadID, NULL);
     }
     if (input.rotateCCW.newPress()) {
         newRot = rotTable[1][static_cast<int>(newRot)];
         didRotate = true;
-        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         pthread_join(soundThreadID, NULL);
     }
     if (input.rotate180.newPress()) {
         newRot = rotTable[2][static_cast<int>(newRot)];
         didRotate = true;
-        pthread_create(&soundThreadID, NULL,TetrisBoard::playSound ,NULL);
+        pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
         pthread_join(soundThreadID, NULL);
     }
 
@@ -392,7 +393,7 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
 
         if (!hasSpace) {
             clearLine(y);
-            //increase linesCleared stat for this board
+            // increase linesCleared stat for this board
             linesCleared++;
             y--;
         }
@@ -435,11 +436,12 @@ Tetromino TetrisBoard::getNextFromQueue() {
     return mino;
 }
 
+int TetrisBoard::getLinesCleared() { return linesCleared; }
+
 bool TetrisBoard::gameEnded() { return ended; }
 
-void TetrisBoard::clear(){
+void TetrisBoard::clear() {
     grid.clear();
     fallingGrid.clear();
     holdGrid.clear();
 }
-

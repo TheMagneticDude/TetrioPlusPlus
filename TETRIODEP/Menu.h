@@ -10,7 +10,7 @@ class Menu {
   unsigned int screenWidth = 320;
   unsigned int screenHeight = 240;
 
-  int buttonoffset = 50;
+  int buttonoffset = 70;
   public:
   bool onStartclicked;
 

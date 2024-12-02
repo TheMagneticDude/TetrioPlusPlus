@@ -1,3 +1,4 @@
+#include <X11/Xlib.h>
 #include <chrono>
 
 #include "Input.h"
@@ -285,6 +286,7 @@ bool Options::anyButtonToggled() {
 }
 
 std::string Options::getKeyName(int key) {
+#ifdef _WIN32
     // if key exists as text return the key
     if (keyNameMap.find(key) != keyNameMap.end()) {
         return keyNameMap[key];
@@ -292,6 +294,10 @@ std::string Options::getKeyName(int key) {
 
     // returns UNKNOWN key
     return keyNameMap[-1];
+#endif
+#if __linux__ && !__ANDROID__
+    return XKeysymToString(key);
+#endif
 }
 
 void Options::updateButtonNames() {

@@ -205,9 +205,9 @@ void ToggleButton::enable() {
 void ToggleButton::setTriggered(bool t) {
     triggered = t;
     if (t) {
-        currState == buttonState::held;
+        currState = buttonState::held;
     } else {
-        currState == buttonState::released;
+        currState = buttonState::released;
     }
 }
 

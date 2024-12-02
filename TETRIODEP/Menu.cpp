@@ -31,8 +31,12 @@ Menu::Menu()
     howToPlay.Open("assets/TetrioHowToPlay.png");
 };
 
+//disables a button
+//Author: Nathan 
 void Menu::disable(Button &b) { b.disable(); }
 
+//updates menu pages
+//Author: Nathan 
 void Menu::update() {
 
     if (currOption == MenuOption::Back) {
@@ -94,14 +98,23 @@ void Menu::update() {
 }
 
 // returns true when its time to render a subpage for a given button
+//Author: Nathan 
 bool Menu::renderSubPage(Button &b) { return b.onButtonReleased(); }
 
+//returns true if page should be active
+//Author: Nathan 
 bool Menu::isPageActive(MenuOption page) { return currOption == page; }
 
+//renders back
+//Author: Nathan 
 void Menu::renderBackButton() { back.updateButtonState(); }
 
+//remmoves back
+//Author: Nathan 
 void Menu::removeBack() { back.remove(); }
 
+//removes all menu buttons
+//Author: Nathan 
 void Menu::remove() {
     // clears all menu buttons
     start.remove();
@@ -112,6 +125,8 @@ void Menu::remove() {
     credits.remove();
 }
 
+//removes back and sets up return to menu
+//Author: Nathan 
 void Menu::returnToMenu() {
     currOption = MenuOption::Back;
     back.remove();
@@ -119,6 +134,8 @@ void Menu::returnToMenu() {
 }
 
 // moved logic from main to here
+//Author: Nathan 
+//Author: Ojas Landge
 void Menu::run() {
     update();
 
@@ -308,7 +325,7 @@ void Menu::run() {
 
         // LCD.SetFontColor(BLUE);
         // LCD.WriteAt("Tetrio++ Written by:", 0, 20);
-        // LCD.WriteAt("Nathan Cheng", 0, 50);
+        // LCD.WriteAt("Nathan ", 0, 50);
         // LCD.WriteAt("Ojas Landge", 0, 90);
     }
 
@@ -318,11 +335,5 @@ void Menu::run() {
         // render back button on top
         back.drawButton();
 
-        // LCD.SetFontColor(BLUE);
-        // LCD.WriteAt("How to play Tetrio++", 0, 20);
-        // LCD.WriteAt("The goal is to clear lines", 0, 50);
-        // LCD.WriteAt("faster than your opponent.", 0, 90);
-        // LCD.WriteAt("First to stack to the", 0, 120);
-        // LCD.WriteAt("top loses", 0, 150);
     }
 }

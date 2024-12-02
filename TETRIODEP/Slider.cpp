@@ -11,6 +11,7 @@ using namespace std;
 
 Slider::Slider() {}
 // draws centered slider
+//Author: Nathan
 Slider::Slider(int y, float width, float val, unsigned int color, unsigned int backCol, float min, float max) {
     barX = (screenWidth / 2.0) - (width / 2.0);
     barY = y;
@@ -33,6 +34,7 @@ Slider::Slider(int y, float width, float val, unsigned int color, unsigned int b
 }
 
 // draws centered slider with name next to it
+//Author: Nathan
 Slider::Slider(std::string name, int y, float width, float val, unsigned int color, unsigned int backCol, float min,
                float max) {
     barX = (screenWidth / 2.0) - (width / 2.0);
@@ -55,6 +57,8 @@ Slider::Slider(std::string name, int y, float width, float val, unsigned int col
     toggled = false;
 }
 
+//updates and renders slider
+//Author: Nathan
 void Slider::update() {
     bool withinEllipse = false;
     bool withinBar = false;
@@ -131,6 +135,8 @@ void Slider::update() {
     draw();
 }
 
+//draws slider and bar
+//Author: Nathan
 void Slider::draw() {
     // slider bar
     LCD.SetFontColor(barColor);
@@ -158,6 +164,8 @@ float Slider::getValue() {
     return sliderValue;
 }
 
+//check if the touch is in ellipse
+//Author: Nathan
 bool Slider::checkInEllipse(int x, int y) {
     // taken from the equation of an ellipse
     // if it is greater than 1 then its not in the ellipse
@@ -169,6 +177,8 @@ bool Slider::checkInEllipse(int x, int y) {
     return p <= 1.0;
 }
 
+//Returns true on first click
+//Author: Nathan
 bool Slider::onSliderClicked() {
     bool clicked = false;
     if (currState == sliderState::active) {
@@ -178,6 +188,8 @@ bool Slider::onSliderClicked() {
     return clicked;
 }
 
+//Returns true on first release
+//Author: Nathan
 bool Slider::onSliderReleased() {
     bool released = false;
     if (currState == sliderState::released) {
@@ -187,6 +199,8 @@ bool Slider::onSliderReleased() {
     return released;
 }
 
+//Returns true while held
+//Author: Nathan
 bool Slider::getHeld(){
     return toggled;
 }

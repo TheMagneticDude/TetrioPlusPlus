@@ -28,6 +28,9 @@ Menu::Menu()
     mciSendString(TEXT("open \"TETRIODEP/TetrisBackground.mp3\" type mpegvideo alias Background"), NULL, 0, NULL);
     mciSendString(TEXT("play Background repeat"), NULL, 0, 0);
     gameEnded = false;
+    menuBackground.Open("TETRIODEP/TetrioBackground-2.png");
+    playBackground.Open("TETRIODEP/TetrioGameBackground.png");
+    confetti.Open("TETRIODEP/TetrisConfetti.png");
 };
 
 void Menu::disable(Button &b) { b.disable(); }
@@ -42,10 +45,10 @@ void Menu::update() {
     if (menuActive) {
         // draws background
         // background was made by me in blender hence why its so ugly lol
-        FEHImage background;
-        background.Open("TETRIODEP/TetrioBackground-2.png");
-        background.Draw(0, 0);
-        background.Close();
+        // FEHImage background;
+        // background.Open("TETRIODEP/TetrioBackground-2.png");
+        menuBackground.Draw(0, 0);
+
 
         start.updateButtonState();
         settings.updateButtonState();
@@ -120,10 +123,8 @@ void Menu::run() {
 
         // while game has not ended run game
         if (!(board1.gameEnded() || board2.gameEnded())) {
-            FEHImage background2;
-            background2.Open("TETRIODEP/TetrioGameBackground.png");
-            background2.Draw(0, 0);
-            background2.Close();
+            playBackground.Draw(0, 0);
+
             
 
             if (onStartclicked) {
@@ -154,10 +155,9 @@ void Menu::run() {
             board1.draw();
             board2.draw();
         } else {
-            FEHImage confetti;
-            confetti.Open("TETRIODEP/TetrisConfetti.png");
+            
+            
             confetti.Draw(0, 0);
-            confetti.Close();
 
             std::string playerWon = "";
             // p2 won

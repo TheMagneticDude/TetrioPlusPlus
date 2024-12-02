@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "TETRIODEP/Options.h"
 #include "TETRIODEP/TetrisBoard.h"
+#include <FEHImages.h>
 
 class Menu {
   private:
@@ -32,6 +33,10 @@ class Menu {
     TetrisBoard board1;
     TetrisBoard board2;
     Options optionsPage;
+
+    FEHImage menuBackground;
+    FEHImage playBackground;
+    FEHImage confetti;
 
 
 

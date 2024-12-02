@@ -75,7 +75,5 @@ class TetrisBoard {
 
     float getFourtyLinesClearedTime();
 
-    void clear();
-
     static void *playSound(void *vargp);
 };

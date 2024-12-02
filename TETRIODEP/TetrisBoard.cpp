@@ -12,6 +12,7 @@
 
 #include <iomanip>
 
+// Author: Ojas
 // initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, Statistics &playerStats,
                          TetrisBoard *opponent)
@@ -35,6 +36,7 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, St
     fourtyLineTime = 0;
 }
 
+// Author: Nathan
 // draws the entire tetrisboard
 void TetrisBoard::draw() {
     drawBorder();
@@ -47,6 +49,7 @@ void TetrisBoard::draw() {
     }
 }
 
+// Author: Nathan
 // draws border around board excluding top
 void TetrisBoard::drawBorder() {
     int borderScale = 4;
@@ -71,6 +74,8 @@ void TetrisBoard::drawBorder() {
                       SCALE * (grid.height) + borderScale);
 }
 
+// Author: Nathan
+// Draw the time and number of lines cleared next to the tetris board
 void TetrisBoard::drawStats() {
     LCD.SetFontColor(WHITE);
     // display time
@@ -81,11 +86,15 @@ void TetrisBoard::drawStats() {
                 (boardY + (SCALE * grid.height)) + 30);
 }
 
+// Author: Nathan
+// Play a blip sound
 void *TetrisBoard::playSound(void *vargp) {
     PlayAudioFile("assets/TetrisBlip.wav");
     return NULL;
 }
 
+// Author: Ojas
+// Handle the main game logic for the tetris board
 void TetrisBoard::update() {
     auto currentTime = std::chrono::high_resolution_clock::now();
     float elapsedTime = std::chrono::duration<float>(currentTime - timeStart).count();
@@ -193,6 +202,8 @@ void TetrisBoard::update() {
     }
 }
 
+// Author: Ojas
+// Handle rotating a tetromino (one of the most complex parts of the game logic)
 void TetrisBoard::updateRotation() {
     TetrominoOrientation rotTable[3][4] = {
         // Clockwise rotation
@@ -315,6 +326,8 @@ void TetrisBoard::updateRotation() {
     }
 }
 
+// Author: Ojas
+// Pick a new tetromino to start falling and then start it falling
 void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     int garbageHole = Random.RandInt() % 10;
     for (int i = 0; i < pendingGarbage; i++) {
@@ -353,6 +366,8 @@ void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     }
 }
 
+// Author: Ojas
+// Check to see if the falling tetromino is colliding with the settled peices on the board.
 bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {
     for (int x = 0; x < with.width; x++) {
         for (int y = 0; y < with.height; y++) {
@@ -371,6 +386,8 @@ bool TetrisBoard::checkCollision(Grid with, int withX, int withY) {
     return false;
 }
 
+// Author: Ojas
+// Create the smaller grid used to hold a single tetromino
 Grid TetrisBoard::createGrid(Tetromino type, TetrominoOrientation orientation) {
     int gridWidth = type == Tetromino::I ? 5 : 3;
     Grid newGrid(gridWidth, gridWidth);
@@ -421,6 +438,8 @@ Grid TetrisBoard::createGrid(Tetromino type, TetrominoOrientation orientation) {
     return newGrid;
 }
 
+// Author: Ojas
+// Move the tetromino from the small falling grid to the larger settled grid
 void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
     for (int x = 0; x < from.width; x++) {
         for (int y = 0; y < from.height; y++) {
@@ -483,6 +502,8 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
     }
 }
 
+// Author: Ojas
+// Clear out one line on the board and then shift all lines above it down
 void TetrisBoard::clearLine(int startY) {
     for (int y = startY; y < grid.height - 1; y++) {
         for (int x = 0; x < 10; x++) {
@@ -497,6 +518,8 @@ void TetrisBoard::clearLine(int startY) {
     }
 }
 
+// Author: Ojas
+// Pick a new tetromino from the 7 bag
 Tetromino TetrisBoard::getNextFromBag() {
     if (bag.size() == 0) {
         bag = {Tetromino::I, Tetromino::J, Tetromino::L, Tetromino::O, Tetromino::S, Tetromino::T, Tetromino::Z};
@@ -508,6 +531,8 @@ Tetromino TetrisBoard::getNextFromBag() {
     return mino;
 }
 
+// Author: Ojas
+// Pick a new tetromino from already displayed queue
 Tetromino TetrisBoard::getNextFromQueue() {
     auto mino = queue[0];
     queue.erase(queue.begin());
@@ -519,22 +544,28 @@ Tetromino TetrisBoard::getNextFromQueue() {
     return mino;
 }
 
+// Author: Nathan
+// Get the number of lines cleared
 int TetrisBoard::getLinesCleared() { return linesCleared; }
 
+// Author: Nathan
+// Check to see if the game has ended
 bool TetrisBoard::gameEnded() { return ended; }
 
+// Author: Nathan
+// Check to see if the win condition for 40 lines has ended
 bool TetrisBoard::fourtyLinesEnded() { return linesCleared >= 40; }
 
+// Author: Nathan
+// Get the time taken to clear 40 lines
 float TetrisBoard::getFourtyLinesClearedTime() { return fourtyLineTime; }
 
-void TetrisBoard::clear() {
-    grid.clear();
-    fallingGrid.clear();
-    holdGrid.clear();
-}
-
+// Author: Ojas
+// Add lines that are pending to become garbage after the player 
 void TetrisBoard::receiveLines(int numLines) { pendingGarbage += numLines; }
 
+// Author: Ojas
+// Send lines to the other opponent if there's no more to cancel
 void TetrisBoard::attackOpponent(int numLines) {
     if (!opponent)
         return;

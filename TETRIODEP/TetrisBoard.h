@@ -66,6 +66,8 @@ class TetrisBoard {
     bool gameEnded();
     bool fourtyLinesEnded();
     int getLinesCleared();
+
+    std::string getFourtyLinesClearedTime();
   
     void clear();
 

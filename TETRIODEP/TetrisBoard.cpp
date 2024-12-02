@@ -450,6 +450,7 @@ bool TetrisBoard::fourtyLinesEnded(){
 }
 
 void TetrisBoard::clear() {
+    // ended = false;
     grid.clear();
     fallingGrid.clear();
     holdGrid.clear();

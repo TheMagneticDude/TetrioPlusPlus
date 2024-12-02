@@ -69,17 +69,13 @@ void Menu::update() {
             if (currOption != Option::Start) {
                 currOption = Option::Start;
                 onStartclicked = true;
-            } else {
-                onStartclicked = false;
-            }
+            } 
         }
         if(renderSubPage(singleplayer)){
             if (currOption != Option::Single) {
                 currOption = Option::Single;
                 onSingleClicked = true;
-            } else {
-                onSingleClicked = false;
-            }
+            } 
         }
         if (renderSubPage(settings)) {
             currOption = Option::Settings;
@@ -103,6 +99,15 @@ void Menu::update() {
             back.remove();
             // back to menu
         }
+    }
+
+    if(back.onButtonClicked()){
+        onStartclicked = false;
+        onSingleClicked = false;
+        //clear board after back is clicked
+        board1.clear();
+        board2.clear();
+        singleBoard.clear();
     }
 }
 
@@ -147,9 +152,6 @@ void Menu::run() {
                 // creates new boards with updated settings
                 board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats);
                 board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats);
-                // needs to add a clear method
-                board1.clear();
-                board2.clear();
                 onStartclicked = false;
                 gameEnded = false;
             }
@@ -216,7 +218,6 @@ void Menu::run() {
 
             if(onSingleClicked){
                 singleBoard = TetrisBoard(singleBoardLoc[0],singleBoardLoc[1],set.p1Settings,playerStats);
-                singleBoard.clear();
                 onSingleClicked = false;
                 gameEnded = false;
             }

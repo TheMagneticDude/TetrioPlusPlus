@@ -230,7 +230,7 @@ void Menu::run() {
             singleBoard = TetrisBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL);
             onSingleClicked = false;
             gameEnded = false;
-            std::cout << "BOARD RESET";
+            std::cout << "BOARD RESET" << std::endl;
         }
 
         // render back button on top

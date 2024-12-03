@@ -43,6 +43,13 @@ void TetrisBoard::draw() {
     grid.draw(boardX, boardY);
     holdGrid.draw(boardX - (holdGrid.width + 1 + getSpawnOffset(hold.value_or(Tetromino::E))) * SCALE,
                   boardY - 17 * SCALE);
+
+    int shadowY = fallingY;
+    while (!checkCollision(fallingGrid, fallingX, shadowY - 1)) {
+        shadowY--;
+    }
+    fallingGrid.draw(boardX + fallingX * SCALE, boardY - shadowY * SCALE, true);
+
     fallingGrid.draw(boardX + fallingX * SCALE, boardY - fallingY * SCALE);
     for (int i = 0; i < queue.size(); i++) {
         queueGrids[i].draw(boardX + (12 + getSpawnOffset(queue[i])) * SCALE, boardY - 19 * SCALE + i * 3 * SCALE);
@@ -179,10 +186,8 @@ void TetrisBoard::update() {
         int y = fallingY;
         while (!checkCollision(fallingGrid, fallingX, y - 1)) {
             y--;
-            // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-            // pthread_join(soundThreadID, NULL);
-            PlayAudioFile("assets/TetrisBlip.wav");
         }
+        PlayAudioFile("assets/TetrisBlip.wav");
         settleGrid(fallingGrid, fallingX, y);
         startNewFalling();
         return;

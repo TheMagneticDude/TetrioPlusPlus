@@ -1,3 +1,4 @@
+#include <LCDColors.h>
 #include <vector>
 #include <cassert>
 
@@ -12,7 +13,7 @@ Grid::Grid(int width, int height) : width(width), height(height), data(width * h
 
 // Author: Ojas
 // Draw the grid at a specific position on the screen (in pixel coordinates)
-void Grid::draw(int pos_x, int pos_y) {
+void Grid::draw(int pos_x, int pos_y, bool isShadow) {
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             auto mino = data[y * width + x];
@@ -20,7 +21,11 @@ void Grid::draw(int pos_x, int pos_y) {
             unsigned int color = colors[static_cast<size_t>(mino)];
             // draws mino with shading
             if (color != BLACK) {
-                drawMino(pos_x + x * SCALE, pos_y - y * SCALE, color);
+                if (isShadow) {
+                    drawMino(pos_x + x * SCALE, pos_y - y * SCALE, DIMGRAY);
+                } else {
+                    drawMino(pos_x + x * SCALE, pos_y - y * SCALE, color);
+                }
             }
         }
     }

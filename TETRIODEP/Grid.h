@@ -27,7 +27,7 @@ class Grid {
 
     Grid rotate90();
 
-    void draw(int pos_x, int pos_y);
+    void draw(int pos_x, int pos_y, bool isShadow = false);
 
     void clear();
 };

@@ -40,11 +40,23 @@ class Menu {
     Options optionsPage;
 
     FEHImage menuBackground;
+    FEHImage menuPlusPlus;
+    FEHImage animatedText;
     FEHImage playBackground;
     FEHImage singleBackground;
     FEHImage confetti;
     FEHImage creditsImage;
     FEHImage howToPlay;
+
+
+    std::chrono::high_resolution_clock::time_point timeStart;
+    std::chrono::high_resolution_clock::time_point currTime;
+    std::chrono::high_resolution_clock::time_point nextFrame;
+
+    unsigned int currFrame;
+    unsigned int maxFrames = 114;
+
+    int frameTime = 12;//in milliseconds
 
 
 

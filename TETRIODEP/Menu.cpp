@@ -5,8 +5,9 @@
 #include <FEHImages.h>
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-#include <string>
+#include <chrono>
 #include <iomanip>
+#include <string>
 
 Menu::Menu()
     : start(0 + buttonoffset, "1 v 1", BLUE, DARKBLUE),
@@ -21,28 +22,41 @@ Menu::Menu()
     onStartclicked = false;
     // start playing background music
     // this will error im not sure why but it compiles so who cares
-      mciSendString(TEXT("play \"assets/TetrisBackground.mp3\""),NULL,0,0);
+    mciSendString(TEXT("play \"assets/TetrisBackground.mp3\""), NULL, 0, 0);
     PlayBackgroundMusic();
 
     gameEnded = false;
     std::string extension = ".png";
     std::string frame = "2";
-    //Tetrio Text generated using : https://erikdemaine.org/fonts/tetris/?text=%2B%2B&speed=10
-    menuBackground.Open("assets/TetrioBackgroundTetrio.png");
+    // Tetrio Text generated using : https://erikdemaine.org/fonts/tetris/?text=%2B%2B&speed=10
+    //  menuBackground.Open("assets/TetrioBackgroundTetrio.png");
+    menuBackground.Open("assets/TetrioBackground.png");
+    menuPlusPlus.Open("assets/TetrioPlusSign.png");
     playBackground.Open("assets/TetrioGameBackground-2.png");
     singleBackground.Open("assets/TetrioGameBackground.png");
     confetti.Open("assets/TetrisConfetti.png");
     creditsImage.Open("assets/CreditsPage.png");
     howToPlay.Open("assets/TetrioHowToPlay.png");
+
+    std::string fileName = "assets/TitleFrames/frame_";
+    std::string fileType = ".png";
+    std::string fileNumber = to_string(currFrame);
+    std::string filePath = fileName + fileNumber + fileType;
+    animatedText.Open(filePath.c_str());
+
+    timeStart = std::chrono::high_resolution_clock::now();
+    currFrame = 1;
 };
 
-//disables a button
-//Author: Nathan 
+// disables a button
+// Author: Nathan
 void Menu::disable(Button &b) { b.disable(); }
 
-//updates menu pages
-//Author: Nathan 
+// updates menu pages
+// Author: Nathan
 void Menu::update() {
+
+    currTime = std::chrono::high_resolution_clock::now();
 
     if (currOption == MenuOption::Back) {
         currOption = MenuOption::None_;
@@ -54,7 +68,22 @@ void Menu::update() {
         // background was made by me in blender hence why its so ugly lol
         // FEHImage background;
         // background.Open("assets/TetrioBackground-2.png");
+
+        auto timeToNextFrame = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - nextFrame);
+        if (timeToNextFrame.count() >= frameTime && currFrame < maxFrames) {
+            animatedText.Close();
+            nextFrame = currTime + std::chrono::milliseconds(frameTime);
+            currFrame++;
+            // update text
+            std::string fileName = "assets/TitleFrames/frame_";
+            std::string fileType = ".png";
+            std::string fileNumber = to_string(currFrame);
+            std::string filePath = fileName + fileNumber + fileType;
+            animatedText.Open(filePath.c_str());
+        }
         menuBackground.Draw(0, 0);
+        menuPlusPlus.Draw(0,0);
+        animatedText.Draw(60,-30);
 
         start.updateButtonState();
         singleplayer.updateButtonState();
@@ -97,29 +126,30 @@ void Menu::update() {
         if (renderSubPage(back)) {
             currOption = MenuOption::Back;
             back.remove();
+            currFrame = 1;
             // back to menu
         }
     }
 }
 
 // returns true when its time to render a subpage for a given button
-//Author: Nathan 
+// Author: Nathan
 bool Menu::renderSubPage(Button &b) { return b.onButtonReleased(); }
 
-//returns true if page should be active
-//Author: Nathan 
+// returns true if page should be active
+// Author: Nathan
 bool Menu::isPageActive(MenuOption page) { return currOption == page; }
 
-//renders back
-//Author: Nathan 
+// renders back
+// Author: Nathan
 void Menu::renderBackButton() { back.updateButtonState(); }
 
-//remmoves back
-//Author: Nathan 
+// remmoves back
+// Author: Nathan
 void Menu::removeBack() { back.remove(); }
 
-//removes all menu buttons
-//Author: Nathan 
+// removes all menu buttons
+// Author: Nathan
 void Menu::remove() {
     // clears all menu buttons
     start.remove();
@@ -130,8 +160,8 @@ void Menu::remove() {
     credits.remove();
 }
 
-//removes back and sets up return to menu
-//Author: Nathan 
+// removes back and sets up return to menu
+// Author: Nathan
 void Menu::returnToMenu() {
     currOption = MenuOption::Back;
     back.remove();
@@ -139,8 +169,8 @@ void Menu::returnToMenu() {
 }
 
 // moved logic from main to here
-//Author: Nathan 
-//Author: Ojas Landge
+// Author: Nathan
+// Author: Ojas Landge
 void Menu::run() {
     update();
 
@@ -226,7 +256,8 @@ void Menu::run() {
             singleBoard.draw();
         } else if (singleBoard.gameEnded()) {
             // sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
-            if (gameEnded) PlayAudioFile("assets/wompwomp.wav");
+            if (gameEnded)
+                PlayAudioFile("assets/wompwomp.wav");
             Button lossText = Button(40, "Womp Womp you lost :[ Try again next game", RED);
             lossText.updateButtonState();
 
@@ -236,7 +267,8 @@ void Menu::run() {
 
             // play confetti noise yey you won
             // Confetti noise: https://www.youtube.com/watch?v=7ZpXg0_gx6s
-            if (gameEnded) PlayAudioFile("assets/TetrioWin.wav");
+            if (gameEnded)
+                PlayAudioFile("assets/TetrioWin.wav");
 
             // color array for funy colors
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
@@ -308,19 +340,16 @@ void Menu::run() {
 
         std::string fourtyLineClearScore;
 
-        if(playerStats.singleplayerStats.lineTime > 0){
+        if (playerStats.singleplayerStats.lineTime > 0) {
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << playerStats.singleplayerStats.lineTime;
             fourtyLineClearScore = "Best Fourty Line time: " + stream.str();
-        }else{
+        } else {
             fourtyLineClearScore = "Best Fourty Line time: N/A";
         }
 
         Button singleFourtyLineButton = Button(220, fourtyLineClearScore, BLUE);
         singleFourtyLineButton.updateButtonState();
-
-
-
     }
     if (isPageActive(Menu::MenuOption::Credits)) {
         creditsImage.Draw(0, 0);
@@ -339,6 +368,5 @@ void Menu::run() {
 
         // render back button on top
         back.drawButton();
-
     }
 }

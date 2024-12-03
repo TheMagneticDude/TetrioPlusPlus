@@ -12,7 +12,12 @@
 #define CHAR_HEIGHT 17
 #define CHAR_WIDTH 6
 
+
+//Author: Nathan
+//Returns char width
 int FEHLCD::getCharWidth() { return CHAR_WIDTH; }
+//Author: Nathan
+//Returns char height
 int FEHLCD::getCharHeight() { return CHAR_HEIGHT; }
 
 unsigned char FEHLCD::fontData[] = {
@@ -353,7 +358,8 @@ void FEHLCD::DrawCircle(int x0, int y0, int r) {
 }
 
 
-
+//Author: Nathan
+//Draws an ellipse with center at x0,y0
 void FEHLCD::DrawEllipse(float x0, float y0, float a, float b) {
     //paramatization of an ellipse is <acost,bsint> for the form x^2/a^2 + y^2/b^2 = 1
     //for t frm 0 to 2pi
@@ -367,6 +373,8 @@ void FEHLCD::DrawEllipse(float x0, float y0, float a, float b) {
     }
 }
 
+//Author: Nathan
+//Draws an ellipse with center at x0,y0 that is filled
 void FEHLCD::DrawFilledEllipse(float x0, float y0, float a, float b) {
     //paramatization of an ellipse is <acost,bsint> for the form x^2/a^2 + y^2/b^2 = 1
     //for t frm 0 to 2pi

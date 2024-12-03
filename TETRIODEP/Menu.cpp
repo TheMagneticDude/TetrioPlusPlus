@@ -25,7 +25,10 @@ Menu::Menu()
     PlayBackgroundMusic();
 
     gameEnded = false;
-    menuBackground.Open("assets/TetrioBackground-2.png");
+    std::string extension = ".png";
+    std::string frame = "2";
+    //Tetrio Text generated using : https://erikdemaine.org/fonts/tetris/?text=%2B%2B&speed=10
+    menuBackground.Open("assets/TetrioBackgroundTetrio.png");
     playBackground.Open("assets/TetrioGameBackground-2.png");
     singleBackground.Open("assets/TetrioGameBackground.png");
     confetti.Open("assets/TetrisConfetti.png");

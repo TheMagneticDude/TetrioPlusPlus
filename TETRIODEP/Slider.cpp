@@ -76,9 +76,7 @@ void Slider::update() {
             withinEllipse = checkInEllipse(touchedX, touchedY);
             withinBar = touchedX >= barX && touchedX <= (barX + barWidth) && touchedY >= barY &&
                       touchedY <= barY + barHeight;
-            // std::cout << "X: " << touchedX << "\n";
-            // std::cout << "Y: " << touchedY << "\n";
-            // std::cout << "In ELLIPSE: " << withinEllipse << "\n";
+
         
     }
     if (withinEllipse) {
@@ -106,8 +104,7 @@ void Slider::update() {
     }
     //continue tracking pointer even if its no longer directly on the slider until user lets go
     touched = LCD.Touch(&xTrash, &yTrash, false);
-    // std::cout<<"TOUCHED : " << touched << std::endl;
-    // std::cout<<"TOGGLE : " << toggled << std::endl;
+
     if(toggled && touched){
         
         // move slider to pointer x

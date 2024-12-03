@@ -309,7 +309,7 @@ void Menu::run() {
 
         std::string fourtyLineClearScore;
         
-
+        std::cout<<playerStats.singleplayerStats.lineTime;
         if(playerStats.singleplayerStats.lineTime > 0){
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << playerStats.singleplayerStats.lineTime;

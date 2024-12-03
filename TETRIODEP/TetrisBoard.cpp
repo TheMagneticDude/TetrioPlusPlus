@@ -103,9 +103,7 @@ void TetrisBoard::update() {
     // to display time
     timeDisplay = stream.str();
 
-    if (linesCleared == 40) {
-        fourtyLineTime = elapsedTime;
-    }
+    
 
     drawStats();
 
@@ -554,14 +552,19 @@ bool TetrisBoard::gameEnded() { return ended; }
 
 // Author: Nathan
 // Check to see if the win condition for 40 lines has ended
-bool TetrisBoard::fourtyLinesEnded() { return linesCleared >= 40; }
+bool TetrisBoard::fourtyLinesEnded() { 
+    if (linesCleared >= 40) {
+        fourtyLineTime = std::stof(timeDisplay);
+    }
+    return linesCleared >= 40 ;
+    }
 
 // Author: Nathan
 // Get the time taken to clear 40 lines
 float TetrisBoard::getFourtyLinesClearedTime() { return fourtyLineTime; }
 
 // Author: Ojas
-// Add lines that are pending to become garbage after the player 
+// Add lines that are pending to become garbage after the player
 void TetrisBoard::receiveLines(int numLines) { pendingGarbage += numLines; }
 
 // Author: Ojas

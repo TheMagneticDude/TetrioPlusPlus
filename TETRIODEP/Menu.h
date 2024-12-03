@@ -41,6 +41,7 @@ class Menu {
 
     FEHImage menuBackground;
     FEHImage playBackground;
+    FEHImage singleBackground;
     FEHImage confetti;
     FEHImage creditsImage;
     FEHImage howToPlay;

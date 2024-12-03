@@ -26,7 +26,8 @@ Menu::Menu()
 
     gameEnded = false;
     menuBackground.Open("assets/TetrioBackground-2.png");
-    playBackground.Open("assets/TetrioGameBackground.png");
+    playBackground.Open("assets/TetrioGameBackground-2.png");
+    singleBackground.Open("assets/TetrioGameBackground.png");
     confetti.Open("assets/TetrisConfetti.png");
     creditsImage.Open("assets/CreditsPage.png");
     howToPlay.Open("assets/TetrioHowToPlay.png");
@@ -210,7 +211,7 @@ void Menu::run() {
         remove();
 
         if (!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()) {
-            playBackground.Draw(0, 0);
+            singleBackground.Draw(0, 0);
 
             LCD.SetFontColor(BLUE);
             std::string pageTitle = "40 Line Clear";

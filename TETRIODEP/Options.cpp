@@ -66,30 +66,11 @@ void Options::update() {
         }
     }
 
-    // update all button states
 
-    left.updateButtonState();
-    right.updateButtonState();
-    softDrop.updateButtonState();
-    hardDrop.updateButtonState();
-    rotateCCW.updateButtonState();
-    rotateCW.updateButtonState();
-    rotate180.updateButtonState();
-    swapHold.updateButtonState();
 
-    // recenter all buttons
-    //  left.recenter();
-    //  right.recenter();
-    softDrop.recenter();
-    hardDrop.recenter();
-    rotateCCW.recenter();
-    rotateCW.recenter();
-    rotate180.recenter();
-    swapHold.recenter();
+    
 
-    // due to lack of space and me not wanting to implement scrolling lol
-    // left and right need to be next to each other
-    recenterButtonPair(left, right);
+    
 
     // slider set values
     currSetting->handling.arr = arr.getValue();
@@ -121,6 +102,7 @@ void Options::update() {
         }
 
         if (currActive == buttons::left) {
+            left.setString("<Press Key>");
             handleButtonToggle(left);
             // gets first key pressed in the array read.
             // Will add support for multiple keys pressed at once eventually
@@ -136,6 +118,7 @@ void Options::update() {
             }
         }
         if (currActive == buttons::right) {
+            right.setString("<Press Key>");
             handleButtonToggle(right);
             auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
@@ -148,6 +131,7 @@ void Options::update() {
             }
         }
         if (currActive == buttons::softDrop) {
+            softDrop.setString("<Press Key>");
             handleButtonToggle(softDrop);
             auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
@@ -160,6 +144,7 @@ void Options::update() {
             }
         }
         if (currActive == buttons::hardDrop) {
+            hardDrop.setString("<Press Key>");
             handleButtonToggle(hardDrop);
             auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
@@ -172,6 +157,7 @@ void Options::update() {
             }
         }
         if (currActive == buttons::rotateCCW) {
+            rotateCCW.setString("<Press Key>");
             handleButtonToggle(rotateCCW);
             auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
@@ -184,6 +170,7 @@ void Options::update() {
             }
         }
         if (currActive == buttons::rotateCW) {
+            rotateCW.setString("<Press Key>");
             handleButtonToggle(rotateCW);
             auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
@@ -196,6 +183,7 @@ void Options::update() {
             }
         }
         if (currActive == buttons::rotate180) {
+            rotate180.setString("<Press Key>");
             handleButtonToggle(rotate180);
             auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
@@ -208,6 +196,7 @@ void Options::update() {
             }
         }
         if (currActive == buttons::swapHold) {
+            swapHold.setString("<Press Key>");
             handleButtonToggle(swapHold);
             auto keys = currentPlayerInput->scanKey();
             if (!keys.empty()) {
@@ -220,6 +209,31 @@ void Options::update() {
             }
         }
     }
+
+    // due to lack of space and me not wanting to implement scrolling lol
+    // left and right need to be next to each other
+    recenterButtonPair(left, right);
+
+    // recenter all buttons
+    //  left.recenter();
+    //  right.recenter();
+    softDrop.recenter();
+    hardDrop.recenter();
+    rotateCCW.recenter();
+    rotateCW.recenter();
+    rotate180.recenter();
+    swapHold.recenter();
+
+        // update all button states
+
+    left.updateButtonState();
+    right.updateButtonState();
+    softDrop.updateButtonState();
+    hardDrop.updateButtonState();
+    rotateCCW.updateButtonState();
+    rotateCW.updateButtonState();
+    rotate180.updateButtonState();
+    swapHold.updateButtonState();
 }
 
 // Flashes red if another button is pressed and untoggles all others

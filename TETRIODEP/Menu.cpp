@@ -252,7 +252,6 @@ void Menu::run() {
             singleBoard = TetrisBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL);
             onSingleClicked = false;
             gameEnded = false;
-            std::cout << "BOARD RESET" << std::endl;
         }
 
         // render back button on top
@@ -308,8 +307,7 @@ void Menu::run() {
         singleBannerButton.updateButtonState();
 
         std::string fourtyLineClearScore;
-        
-        std::cout<<playerStats.singleplayerStats.lineTime;
+
         if(playerStats.singleplayerStats.lineTime > 0){
             std::stringstream stream;
             stream << std::fixed << std::setprecision(2) << playerStats.singleplayerStats.lineTime;

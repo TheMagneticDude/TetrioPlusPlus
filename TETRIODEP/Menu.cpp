@@ -21,7 +21,7 @@ Menu::Menu()
     onStartclicked = false;
     // start playing background music
     // this will error im not sure why but it compiles so who cares
-    //   mciSendString(TEXT("play \"assets/TetrisBackground.mp3\""),NULL,0,0);
+      mciSendString(TEXT("play \"assets/TetrisBackground.mp3\""),NULL,0,0);
     PlayBackgroundMusic();
 
     gameEnded = false;

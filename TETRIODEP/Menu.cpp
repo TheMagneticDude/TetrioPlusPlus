@@ -21,8 +21,6 @@ Menu::Menu()
     // initialize button instances
     onStartclicked = false;
     // start playing background music
-    // this will error im not sure why but it compiles so who cares
-    mciSendString(TEXT("play \"assets/TetrisBackground.mp3\""), NULL, 0, 0);
     PlayBackgroundMusic();
 
     gameEnded = false;
@@ -38,14 +36,14 @@ Menu::Menu()
     creditsImage.Open("assets/CreditsPage.png");
     howToPlay.Open("assets/TetrioHowToPlay.png");
 
+    timeStart = std::chrono::high_resolution_clock::now();
+    currFrame = 1;
+
     std::string fileName = "assets/TitleFrames/frame_";
     std::string fileType = ".png";
     std::string fileNumber = to_string(currFrame);
     std::string filePath = fileName + fileNumber + fileType;
     animatedText.Open(filePath.c_str());
-
-    timeStart = std::chrono::high_resolution_clock::now();
-    currFrame = 1;
 };
 
 // disables a button

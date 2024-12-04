@@ -32,7 +32,7 @@ class ToggleButton {
     bool highlighted;
     bool wasHighlighted = false;
 
-    int currColor = defaultColor;
+    int currColor;
 
     std::chrono::high_resolution_clock::time_point lastPress;
 

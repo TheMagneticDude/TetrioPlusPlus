@@ -27,8 +27,6 @@ Button::Button(int y, string text, unsigned int color, unsigned int trigColor) {
     triggeredColor = trigColor;
     disabledColor = defaultDisabledColor;
 
-    removed = false;
-
     currColor = defaultColor;
 }
 
@@ -50,8 +48,6 @@ Button::Button(int y, string text, unsigned int color) {
 
     defaultColor = color;
     disabledColor = color;
-
-    removed = false;
 
     currColor = defaultColor;
 }
@@ -75,8 +71,6 @@ Button::Button(float x, float y, string text) {
     defaultColor = defaultNormColor;
     triggeredColor = defaultTriggeredColor;
     disabledColor = defaultDisabledColor;
-
-    removed = false;
 
     currColor = defaultColor;
 }
@@ -102,15 +96,12 @@ Button::Button(float x, float y, float w, float h, string text) {
     triggeredColor = defaultTriggeredColor;
     disabledColor = defaultDisabledColor;
 
-    removed = false;
-
     currColor = defaultColor;
 }
 
 // Author: Nathan
 // creates a rectangular button with x and y being the top left of the rectangle with colors
 Button::Button(float x, float y, float w, float h, string text, unsigned int color, unsigned int trigColor) {
-
     buttonX = x;
     buttonY = y;
     buttonCenterX = x + w / 2;
@@ -128,8 +119,6 @@ Button::Button(float x, float y, float w, float h, string text, unsigned int col
     defaultColor = color;
     triggeredColor = trigColor;
     disabledColor = defaultDisabledColor;
-
-    removed = false;
 
     currColor = defaultColor;
 }
@@ -154,14 +143,11 @@ Button::Button(float x, float y, string text, unsigned int color, unsigned int t
     triggeredColor = trigColor;
     disabledColor = defaultDisabledColor;
 
-    removed = false;
-
     currColor = defaultColor;
 }
 
 // initializes button values and whether button starts enabled or disabled
 Button::Button(float x, float y, float w, float h, string text, bool e) {
-
     buttonX = x;
     buttonY = y;
     buttonCenterX = x + w / 2;
@@ -179,7 +165,6 @@ Button::Button(float x, float y, float w, float h, string text, bool e) {
     defaultColor = defaultNormColor;
     triggeredColor = defaultTriggeredColor;
     disabledColor = defaultDisabledColor;
-    removed = false;
     if (e) {
         currColor = disabledColor;
     } else {
@@ -192,7 +177,6 @@ void Button::setTriggeredColor(unsigned int color) { triggeredColor = color; }
 void Button::setDisabledColor(unsigned int color) { disabledColor = color; }
 
 void Button::drawButton() {
-    removed = false;
     LCD.SetFontColor(currColor);
     LCD.DrawRectangle(buttonX - LCD.getCharWidth(), buttonY, buttonWidth + LCD.getCharWidth() * 2, buttonHeight);
     LCD.WriteAt(buttonText, buttonX, buttonY + 4);
@@ -299,12 +283,3 @@ void Button::setString(std::string s) { buttonText = s; }
 void Button::setXPos(int x) { buttonX = x; }
 void Button::setYPos(int y) { buttonY = y; }
 std::string Button::getString() { return buttonText; }
-void Button::remove() {
-    if (!removed) {
-        int backColor = BLACK;
-        LCD.SetFontColor(backColor);
-        LCD.DrawRectangle(buttonX, buttonY, buttonWidth, buttonHeight);
-        LCD.WriteAt(buttonText, buttonX, buttonY + 4);
-    }
-    removed = true;
-}

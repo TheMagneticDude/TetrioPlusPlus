@@ -118,12 +118,10 @@ void Menu::update() {
         }
     } else {
         // removes menu buttons and draws back button
-        remove();
         back.updateButtonState();
 
         if (renderSubPage(back)) {
             currOption = MenuOption::Back;
-            back.remove();
             currFrame = 1;
             // back to menu
         }
@@ -142,27 +140,10 @@ bool Menu::isPageActive(MenuOption page) { return currOption == page; }
 // Author: Nathan
 void Menu::renderBackButton() { back.updateButtonState(); }
 
-// remmoves back
-// Author: Nathan
-void Menu::removeBack() { back.remove(); }
-
-// removes all menu buttons
-// Author: Nathan
-void Menu::remove() {
-    // clears all menu buttons
-    start.remove();
-    singleplayer.remove();
-    settings.remove();
-    stats.remove();
-    instructions.remove();
-    credits.remove();
-}
-
 // removes back and sets up return to menu
 // Author: Nathan
 void Menu::returnToMenu() {
     currOption = MenuOption::Back;
-    back.remove();
     // back to menu
 }
 
@@ -188,7 +169,6 @@ void Menu::run() {
             LCD.SetFontColor(BLUE);
             std::string pageTitle = "P1 VS P2";
             LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
-            remove();
 
             board1.update();
             board2.update();
@@ -239,8 +219,6 @@ void Menu::run() {
 
     // singleplayer 30 line clear
     if (isPageActive(MenuOption::Single)) {
-        remove();
-
         if (!singleBoard.gameEnded() && !singleBoard.fourtyLinesEnded()) {
             singleBackground.Draw(0, 0);
 

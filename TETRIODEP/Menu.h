@@ -80,11 +80,8 @@ class Menu {
     void update();
 
     void renderBackButton();
-    void removeBack();
 
     void returnToMenu();
 
     void run();
-
-    void remove();
 };

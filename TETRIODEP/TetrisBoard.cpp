@@ -40,6 +40,8 @@ TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, St
 // Author: Nathan
 // draws the entire tetrisboard
 void TetrisBoard::draw() {
+    LCD.SetFontColor(BLACK);
+    LCD.FillRectangle(boardX, boardY - grid.height * SCALE, SCALE * grid.width, SCALE * grid.height);
     drawBorder();
     grid.draw(boardX, boardY);
     holdGrid.draw(boardX - (holdGrid.width + 1 + getSpawnOffset(hold.value_or(Tetromino::E))) * SCALE,
@@ -68,7 +70,7 @@ void TetrisBoard::drawBorder() {
     LCD.SetFontColor(WHITE);
 
     // bottom boarder
-    LCD.FillRectangle(pos_x - borderScale, pos_y, SCALE * (grid.width) + 2 * borderScale, borderScale);
+    LCD.FillRectangle(pos_x - borderScale, pos_y, SCALE * grid.width + 2 * borderScale, borderScale);
 
     // left and right boarders
 

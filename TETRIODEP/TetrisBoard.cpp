@@ -1,3 +1,4 @@
+#include <cmath>
 #include <iostream>
 #include <optional>
 
@@ -119,26 +120,29 @@ void TetrisBoard::update() {
     bool pressedRight = input.keyRight.newPress();
     // pthread_t soundThreadID;
 
+    int originalX = fallingX;
     if (pressedLeft && !pressedRight) {
-        if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
-            // play sound
-            // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-            // pthread_join(soundThreadID, NULL);
-            PlayAudioFile("assets/TetrisBlip.wav");
+        if (input.isRepeatingLeft() && settings->handling.arr == 0) {
+            while (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
+                fallingX--;
+            }
+        } else if (!checkCollision(fallingGrid, fallingX - 1, fallingY)) {
             fallingX--;
-            // Reset lock delay
-            onGround = false;
         }
     } else if (pressedRight && !pressedLeft) {
-        if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
-            // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
-            // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-            // pthread_join(soundThreadID, NULL);
-            PlayAudioFile("assets/TetrisBlip.wav");
+        if (input.isRepeatingRight() && settings->handling.arr == 0) {
+            while (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
+                fallingX++;
+            }
+        } else if (!checkCollision(fallingGrid, fallingX + 1, fallingY)) {
             fallingX++;
-            // Reset lock delay
-            onGround = false;
         }
+    }
+    if (fallingX != originalX) {
+        // play sound TODO: NEEDS TO SHORTEN WAV FILE BUT I DONT HAVE DAVINCHI RESOLVE HERE SO I CANT
+        PlayAudioFile("assets/TetrisBlip.wav");
+        // Reset lock delay
+        onGround = false;
     }
 
     updateRotation();
@@ -152,16 +156,20 @@ void TetrisBoard::update() {
     float effectiveGravityRate = gravityRate;
     if (input.softDrop.pressed()) {
         effectiveGravityRate /= settings->handling.sdf;
-        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        // pthread_join(soundThreadID, NULL);
-        PlayAudioFile("assets/TetrisBlip.wav");
     }
 
     // Gravity
     if (lastGravitySecs >= effectiveGravityRate) {
         lastGravity = now;
         if (!checkCollision(fallingGrid, fallingX, fallingY - 1)) {
-            fallingY--;
+            // This will happen when SDF is infinity
+            if (effectiveGravityRate == 0) {
+                while (!checkCollision(fallingGrid, fallingX, fallingY - 1)) {
+                    fallingY--;
+                }
+            } else {
+                fallingY--;
+            }
         } else if (!onGround) {
             onGround = true;
             startedOnGround = now;
@@ -197,8 +205,6 @@ void TetrisBoard::update() {
         holdGrid = createGrid(fallingMino, TetrominoOrientation::H);
         startNewFalling(oldHold);
         didHold = true;
-        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        // pthread_join(soundThreadID, NULL);
         PlayAudioFile("assets/TetrisBlip.wav");
     }
 }
@@ -222,22 +228,16 @@ void TetrisBoard::updateRotation() {
     if (input.rotateCW.newPress()) {
         newRot = rotTable[0][static_cast<int>(newRot)];
         didRotate = true;
-        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        // pthread_join(soundThreadID, NULL);
         PlayAudioFile("assets/TetrisBlip.wav");
     }
     if (input.rotateCCW.newPress()) {
         newRot = rotTable[1][static_cast<int>(newRot)];
         didRotate = true;
-        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        // pthread_join(soundThreadID, NULL);
         PlayAudioFile("assets/TetrisBlip.wav");
     }
     if (input.rotate180.newPress()) {
         newRot = rotTable[2][static_cast<int>(newRot)];
         didRotate = true;
-        // pthread_create(&soundThreadID, NULL, TetrisBoard::playSound, NULL);
-        // pthread_join(soundThreadID, NULL);
         PlayAudioFile("assets/TetrisBlip.wav");
     }
 

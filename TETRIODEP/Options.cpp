@@ -1,7 +1,3 @@
-#ifdef __linux__ && !__ANDROID__
-#include <X11/Xlib.h>
-#endif
-
 #include <chrono>
 
 #include "Input.h"
@@ -18,9 +14,9 @@ Options::Options(Settings &set)
       rotateCW(100 + buttonoffset, "Rotate CW: Default", BLUE, DARKBLUE),
       rotate180(120 + buttonoffset, "Rotate 180: Default", BLUE, DARKBLUE),
       swapHold(140 + buttonoffset, "Swap Hold: Default", BLUE, DARKBLUE), p1Input(set.p1Settings),
-      p2Input(set.p2Settings), togglePlayer(0, "P1", BLUE, GRAY, 8, 6), arr("ARR", 30, 200, 0, BLUE, DARKBLUE, 0, 5),
-      das("DAS", 50, 200, 0, BLUE, DARKBLUE, 0, 1), dcd("DCD", 70, 200, 0, BLUE, DARKBLUE, 0, 1),
-      sdf("SDF", 90, 200, 0, BLUE, DARKBLUE, 5, 40) {
+      p2Input(set.p2Settings), togglePlayer(0, "P1", BLUE, GRAY, 8, 6),
+      arr("ARR", 30, 200, 0, BLUE, DARKBLUE, 0, 0.083), das("DAS", 50, 200, 0, BLUE, DARKBLUE, 0.017, 0.333),
+      dcd("DCD", 70, 200, 0, BLUE, DARKBLUE, 0, 0.333), sdf("SDF", 90, 200, 0, BLUE, DARKBLUE, 5, 40, true) {
     settings = &set;
     // initialize currSetting
     currSetting = &(settings->p1Settings);

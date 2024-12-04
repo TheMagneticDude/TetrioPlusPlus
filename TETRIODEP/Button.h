@@ -32,7 +32,7 @@ class Button {
     bool highlighted;
     bool wasHighlighted = false;
 
-    int currColor = defaultColor;
+    int currColor;
 
   public:
     float buttonX;
@@ -50,8 +50,6 @@ class Button {
     float buttonHeight;
 
     string buttonText;
-
-    bool removed;
 
     // creates centered button
     Button(int y, string text, unsigned int color, unsigned int trigColor);
@@ -84,6 +82,4 @@ class Button {
     void setXPos(int x);
     void setYPos(int y);
     std::string getString();
-
-    void remove();
 };

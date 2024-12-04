@@ -22,6 +22,7 @@ class Slider {
     std::string sliderName;
     float sliderMax;
     float sliderMin;
+    bool canBeInf;
 
     float sliderX;
     float sliderY;
@@ -56,7 +57,7 @@ class Slider {
     // creates centered Switch
     Slider(int y, float width, float val, unsigned int color, unsigned int backCol, float max, float min);
     Slider(std::string name, int y, float width, float val, unsigned int color, unsigned int backCol, float max,
-           float min);
+           float min, bool canBeInf = false);
     void update();
     void draw();
     void setString(float f);

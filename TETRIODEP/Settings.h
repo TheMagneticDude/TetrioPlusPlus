@@ -146,12 +146,12 @@ inline constexpr Settings defaultSettings = Settings{.p1Settings = {.handling =
                                                                         },
                                                                     .controls =
                                                                         {
-                                                                            .moveLeft = KEY_F,
-                                                                            .moveRight = KEY_H,
-                                                                            .softDrop = KEY_G,
+                                                                            .moveLeft = KEY_A,
+                                                                            .moveRight = KEY_D,
+                                                                            .softDrop = KEY_S,
                                                                             .hardDrop = KEY_SPACE,
                                                                             .rotateCCW = KEY_X,
-                                                                            .rotateCW = KEY_C,
+                                                                            .rotateCW = KEY_W,
                                                                             .rotate180 = KEY_Z,
                                                                             .swapHold = KEY_SHIFT,
                                                                         }},

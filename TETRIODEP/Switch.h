@@ -35,12 +35,7 @@ class Switch {
 
     bool toggled;
 
-    enum class switchState {
-        inactive,
-        active,
-        held,
-        released
-    };
+    enum class switchState { inactive, active, held, released };
     switchState currState = switchState::inactive;
 
     // debounce

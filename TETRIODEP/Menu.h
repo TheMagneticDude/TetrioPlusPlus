@@ -8,13 +8,14 @@
 
 class Menu {
   private:
-  unsigned int screenWidth = 320;
-  unsigned int screenHeight = 240;
+    unsigned int screenWidth = 320;
+    unsigned int screenHeight = 240;
 
-  int buttonoffset = 70;
+    int buttonoffset = 70;
+
   public:
-  bool onStartclicked;
-  bool onSingleClicked;
+    bool onStartclicked;
+    bool onSingleClicked;
 
     Button start;
     Button singleplayer;
@@ -24,11 +25,11 @@ class Menu {
     Button credits;
     Button back;
 
-    //main logic
+    // main logic
     int board1Loc[2] = {50, 220};
     int board2Loc[2] = {210, 220};
 
-    int singleBoardLoc[2] = {140,220};
+    int singleBoardLoc[2] = {140, 220};
 
     bool gameEnded;
 
@@ -48,7 +49,6 @@ class Menu {
     FEHImage creditsImage;
     FEHImage howToPlay;
 
-
     std::chrono::high_resolution_clock::time_point timeStart;
     std::chrono::high_resolution_clock::time_point currTime;
     std::chrono::high_resolution_clock::time_point nextFrame;
@@ -56,15 +56,13 @@ class Menu {
     unsigned int currFrame;
     unsigned int maxFrames = 114;
 
-    int frameTime = 12;//in milliseconds
+    int frameTime = 12; // in milliseconds
 
-
-
-    //had to make option enum visible to call isPageActive
+    // had to make option enum visible to call isPageActive
     enum class MenuOption {
         None_, // back to menu
         Start,
-        Single,//singleplayer 40 line
+        Single,   // singleplayer 40 line
         Settings, // can include page for player names, controls, themes, etcs
         Stats,
         Instructions,
@@ -74,7 +72,6 @@ class Menu {
 
     // current option selected
     MenuOption currOption = MenuOption::None_;
-
 
     Menu();
     bool renderSubPage(Button &b);
@@ -86,8 +83,6 @@ class Menu {
     void removeBack();
 
     void returnToMenu();
-
-
 
     void run();
 

@@ -1,11 +1,10 @@
 #pragma once
-#include <chrono>
-#include <string>
 #include "Grid.h"
 #include <FEHLCD.h>
+#include <chrono>
+#include <string>
 
 #include "Input.h"
-
 
 using namespace std;
 
@@ -37,9 +36,6 @@ class ToggleButton {
 
     std::chrono::high_resolution_clock::time_point lastPress;
 
-
-
-
   public:
     float buttonX;
     float buttonY;
@@ -60,7 +56,7 @@ class ToggleButton {
     bool removed;
 
     ToggleButton();
-    //creates centered button
+    // creates centered button
     ToggleButton(int y, string text, unsigned int color, unsigned int trigColor);
     ToggleButton(float x, float y, string text);
     ToggleButton(float x, float y, string text, unsigned int color, unsigned int trigColor);

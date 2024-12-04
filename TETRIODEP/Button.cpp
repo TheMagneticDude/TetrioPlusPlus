@@ -159,9 +159,6 @@ Button::Button(float x, float y, string text, unsigned int color, unsigned int t
     currColor = defaultColor;
 }
 
-
-
-
 // initializes button values and whether button starts enabled or disabled
 Button::Button(float x, float y, float w, float h, string text, bool e) {
 
@@ -299,15 +296,9 @@ void Button::enable() {
 
 void Button::setString(std::string s) { buttonText = s; }
 
-void Button::setXPos(int x){
-    buttonX = x;
-}
-void Button::setYPos(int y){
-    buttonY = y;
-}
-std::string Button::getString(){
-    return buttonText;
-}
+void Button::setXPos(int x) { buttonX = x; }
+void Button::setYPos(int y) { buttonY = y; }
+std::string Button::getString() { return buttonText; }
 void Button::remove() {
     if (!removed) {
         int backColor = BLACK;

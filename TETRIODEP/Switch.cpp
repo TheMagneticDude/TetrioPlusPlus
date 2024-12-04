@@ -60,7 +60,6 @@ void Switch::update() {
         // no joke this is the actual code from FEH documentation -_-
         // if touch is within button boundery then set button state to true
         withinEllipse = checkInEllipse(touchedX, touchedY);
-
     }
     if (withinEllipse) {
         auto currTime = std::chrono::steady_clock::now();
@@ -72,9 +71,10 @@ void Switch::update() {
             } else if (currState == switchState::active) {
                 currState = switchState::held;
             }
-            if(onSwitchClicked()){toggled = !toggled;}
+            if (onSwitchClicked()) {
+                toggled = !toggled;
+            }
             debounceStart = currTime; // Reset debounce timer after toggling
- 
         }
     } else {
         if (currState == switchState::held) {
@@ -116,9 +116,7 @@ bool Switch::onSwitchReleased() {
 
 bool Switch::getToggled() { return toggled; }
 
-void Switch::setString(std::string s){
-    switchText = s;
-}
+void Switch::setString(std::string s) { switchText = s; }
 
 void Switch::draw() {
     // draw background ellipse

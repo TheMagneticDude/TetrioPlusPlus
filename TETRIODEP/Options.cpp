@@ -66,12 +66,6 @@ void Options::update() {
         }
     }
 
-
-
-    
-
-    
-
     // slider set values
     currSetting->handling.arr = arr.getValue();
     currSetting->handling.das = das.getValue();
@@ -224,7 +218,7 @@ void Options::update() {
     rotate180.recenter();
     swapHold.recenter();
 
-        // update all button states
+    // update all button states
 
     left.updateButtonState();
     right.updateButtonState();
@@ -237,7 +231,7 @@ void Options::update() {
 }
 
 // Flashes red if another button is pressed and untoggles all others
-//Author: Nathan
+// Author: Nathan
 void Options::handleButtonToggle(ToggleButton &b) {
     if (otherButtonToggled(b)) {
         b.flashRed();
@@ -246,7 +240,7 @@ void Options::handleButtonToggle(ToggleButton &b) {
     }
 }
 // Get current button that is toggled
-//Author: Nathan
+// Author: Nathan
 void Options::getCurrentButton() {
 
     if (left.getButtonTriggered()) {
@@ -271,7 +265,7 @@ void Options::getCurrentButton() {
 }
 
 // Untoggles all other buttons
-//Author: Nathan
+// Author: Nathan
 void Options::untoggleOthers(ToggleButton &b) {
     ToggleButton *buttons[] = {&left, &right, &softDrop, &hardDrop, &rotateCCW, &rotateCW, &rotate180, &swapHold};
 
@@ -283,7 +277,7 @@ void Options::untoggleOthers(ToggleButton &b) {
 }
 
 // Checks if other buttons ar toggled
-//Author: Nathan
+// Author: Nathan
 bool Options::otherButtonToggled(ToggleButton &b) {
 
     ToggleButton *buttons[] = {&left, &right, &softDrop, &hardDrop, &rotateCCW, &rotateCW, &rotate180, &swapHold};
@@ -296,8 +290,8 @@ bool Options::otherButtonToggled(ToggleButton &b) {
     return false;
 }
 
-//Checks if any other button is toggled
-//Author: Nathan
+// Checks if any other button is toggled
+// Author: Nathan
 bool Options::anyButtonToggled() {
     ToggleButton *buttons[] = {&left, &right, &softDrop, &hardDrop, &rotateCCW, &rotateCW, &rotate180, &swapHold};
 
@@ -309,8 +303,8 @@ bool Options::anyButtonToggled() {
     return false;
 }
 
-//Gets a the string name of a key if it exists
-//Author: Nathan
+// Gets a the string name of a key if it exists
+// Author: Nathan
 std::string Options::getKeyName(int key) {
 #ifdef _WIN32
     // if key exists as text return the key
@@ -326,8 +320,8 @@ std::string Options::getKeyName(int key) {
 #endif
 }
 
-//Updates button names
-//Author: Nathan
+// Updates button names
+// Author: Nathan
 void Options::updateButtonNames() {
     left.setString("Move Left: " + getKeyName(currSetting->controls.moveLeft));
     right.setString("Move Right: " + getKeyName(currSetting->controls.moveRight));
@@ -339,8 +333,8 @@ void Options::updateButtonNames() {
     swapHold.setString("Swap Hold: " + getKeyName(currSetting->controls.swapHold));
 }
 
-//Updates slider values to match
-//Author: Nathan
+// Updates slider values to match
+// Author: Nathan
 void Options::updateSliderValues() {
     arr.setValue(currSetting->handling.arr);
     das.setValue(currSetting->handling.das);
@@ -348,8 +342,8 @@ void Options::updateSliderValues() {
     sdf.setValue(currSetting->handling.sdf);
 }
 
-//Recenter a button pair that needs to be side by side
-//Author: Nathan
+// Recenter a button pair that needs to be side by side
+// Author: Nathan
 void Options::recenterButtonPair(ToggleButton &b1, ToggleButton &b2) {
     unsigned int gapFromCenter = 8;
     float screenCenterX = screenWidth / 2.0;
@@ -359,8 +353,8 @@ void Options::recenterButtonPair(ToggleButton &b1, ToggleButton &b2) {
     b2.setXPos(screenCenterX + gapFromCenter);
 }
 
-//Removes all option buttons
-//Author: Nathan
+// Removes all option buttons
+// Author: Nathan
 void Options::remove() {
     // clears all option buttons
     left.remove();

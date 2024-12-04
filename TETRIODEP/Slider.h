@@ -45,18 +45,18 @@ class Slider {
 
     enum class sliderState {
         inactive,
-        active,//first clicked
-        held,//held, being dragged
-        released//first released
+        active,  // first clicked
+        held,    // held, being dragged
+        released // first released
     };
     sliderState currState = sliderState::inactive;
-
 
   public:
     Slider();
     // creates centered Switch
     Slider(int y, float width, float val, unsigned int color, unsigned int backCol, float max, float min);
-    Slider(std::string name,int y, float width, float val, unsigned int color, unsigned int backCol, float max, float min);
+    Slider(std::string name, int y, float width, float val, unsigned int color, unsigned int backCol, float max,
+           float min);
     void update();
     void draw();
     void setString(float f);

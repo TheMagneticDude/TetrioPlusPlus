@@ -110,8 +110,6 @@ void TetrisBoard::update() {
     // to display time
     timeDisplay = stream.str();
 
-    
-
     drawStats();
 
     input.update();
@@ -557,12 +555,12 @@ bool TetrisBoard::gameEnded() { return ended; }
 
 // Author: Nathan
 // Check to see if the win condition for 40 lines has ended
-bool TetrisBoard::fourtyLinesEnded() { 
+bool TetrisBoard::fourtyLinesEnded() {
     if (linesCleared >= 40) {
         fourtyLineTime = std::stof(timeDisplay);
     }
-    return linesCleared >= 40 ;
-    }
+    return linesCleared >= 40;
+}
 
 // Author: Nathan
 // Get the time taken to clear 40 lines

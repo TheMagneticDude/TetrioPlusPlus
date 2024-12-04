@@ -80,8 +80,8 @@ void Menu::update() {
             animatedText.Open(filePath.c_str());
         }
         menuBackground.Draw(0, 0);
-        menuPlusPlus.Draw(0,0);
-        animatedText.Draw(60,-30);
+        menuPlusPlus.Draw(0, 0);
+        animatedText.Draw(60, -30);
 
         start.updateButtonState();
         singleplayer.updateButtonState();

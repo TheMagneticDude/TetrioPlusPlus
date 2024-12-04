@@ -2,14 +2,14 @@
 #include <limits>
 #include <string>
 
-#include "ToggleButton.h"
 #include "Sound.h"
+#include "ToggleButton.h"
 
 using namespace std;
 
 ToggleButton::ToggleButton() {}
 // draws centered button
-//Author: Nathan 
+// Author: Nathan
 ToggleButton::ToggleButton(int y, string text, unsigned int color, unsigned int trigColor) {
 
     buttonX = (screenWidth / 2.0) - ((text.length() / 2.0) * LCD.getCharWidth());
@@ -86,18 +86,18 @@ ToggleButton::ToggleButton(float x, float y, string text, unsigned int color, un
     lastPress = std::chrono::high_resolution_clock::now();
 }
 
-//sets button default color
-//Author: Nathan 
+// sets button default color
+// Author: Nathan
 void ToggleButton::setDefaultColor(unsigned int color) { defaultColor = color; }
-//sets button triggered color
-//Author: Nathan 
+// sets button triggered color
+// Author: Nathan
 void ToggleButton::setTriggeredColor(unsigned int color) { triggeredColor = color; }
-//sets button disabled color
-//Author: Nathan 
+// sets button disabled color
+// Author: Nathan
 void ToggleButton::setDisabledColor(unsigned int color) { disabledColor = color; }
 
-//draws button
-//Author: Nathan 
+// draws button
+// Author: Nathan
 void ToggleButton::drawButton() {
     removed = false;
     LCD.SetFontColor(currColor);
@@ -106,7 +106,7 @@ void ToggleButton::drawButton() {
 }
 
 // redraws button and also updates its state
-//Author: Nathan 
+// Author: Nathan
 void ToggleButton::updateButtonState() {
     // update button to fit text
     buttonWidth = buttonText.length() * LCD.getCharWidth();
@@ -181,12 +181,12 @@ void ToggleButton::updateButtonState() {
     drawButton();
 }
 
-//Returns if triggered
-//Author: Nathan 
+// Returns if triggered
+// Author: Nathan
 bool ToggleButton::getButtonTriggered() { return triggered; }
 
-//Returns true once on click
-//Author: Nathan 
+// Returns true once on click
+// Author: Nathan
 bool ToggleButton::onButtonClicked() {
     bool clicked = false;
     if (currState == buttonState::active) {
@@ -196,9 +196,8 @@ bool ToggleButton::onButtonClicked() {
     return clicked;
 }
 
-
-//Returns true once on release
-//Author: Nathan 
+// Returns true once on release
+// Author: Nathan
 bool ToggleButton::onButtonReleased() {
     bool released = false;
     if (currState == buttonState::released) {
@@ -208,23 +207,23 @@ bool ToggleButton::onButtonReleased() {
     return released;
 }
 
-//Disables button
-//Author: Nathan 
+// Disables button
+// Author: Nathan
 void ToggleButton::disable() {
     enabled = false;
     currColor = disabledColor;
 }
 
-//Enables button
-//Author: Nathan 
+// Enables button
+// Author: Nathan
 void ToggleButton::enable() {
     enabled = true;
     currColor = defaultColor;
 }
 
-//Sets button as triggered
-//Author: Nathan 
-//Author: Ojas Landge
+// Sets button as triggered
+// Author: Nathan
+// Author: Ojas Landge
 void ToggleButton::setTriggered(bool t) {
     triggered = t;
     if (t) {
@@ -233,35 +232,29 @@ void ToggleButton::setTriggered(bool t) {
         currState = buttonState::released;
     }
 }
-//Flashes button red
-//Author: Nathan 
+// Flashes button red
+// Author: Nathan
 void ToggleButton::flashRed() { currColor = RED; }
 
-//Sets button string
-//Author: Nathan 
+// Sets button string
+// Author: Nathan
 void ToggleButton::setString(std::string s) { buttonText = s; }
 
-//Recenters button
-//Author: Nathan 
+// Recenters button
+// Author: Nathan
 void ToggleButton::recenter() { buttonX = (screenWidth / 2.0) - ((buttonText.length() / 2.0) * LCD.getCharWidth()); }
 
-//Sets x pos
-//Author: Nathan 
-void ToggleButton::setXPos(int x){
-    buttonX = x;
-}
-//Sets y pos
-//Author: Nathan 
-void ToggleButton::setYPos(int y){
-    buttonY = y;
-}
-//Gets button string
-//Author: Nathan 
-std::string ToggleButton::getString(){
-    return buttonText;
-}
-//Removes button
-//Author: Nathan 
+// Sets x pos
+// Author: Nathan
+void ToggleButton::setXPos(int x) { buttonX = x; }
+// Sets y pos
+// Author: Nathan
+void ToggleButton::setYPos(int y) { buttonY = y; }
+// Gets button string
+// Author: Nathan
+std::string ToggleButton::getString() { return buttonText; }
+// Removes button
+// Author: Nathan
 void ToggleButton::remove() {
     if (!removed) {
         int backColor = BLACK;

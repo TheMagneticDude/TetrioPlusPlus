@@ -42,8 +42,6 @@
 #define KEY_LEFT_ALT VK_LMENU
 #define KEY_RIGHT_ALT VK_RMENU
 
-
-
 #endif
 
 #if __linux__ && !__ANDROID__
@@ -112,7 +110,7 @@ struct PlayerControls {
     int swapHold;
 };
 
-struct PlayerStats{
+struct PlayerStats {
     int linesCleared;
     int gamesWon;
     float lineTime;
@@ -128,65 +126,49 @@ struct Settings {
     PlayerSettings p2Settings;
 };
 
-struct Statistics{
+struct Statistics {
     PlayerStats p1Stats;
     PlayerStats p2Stats;
     PlayerStats singleplayerStats;
 };
-inline constexpr Statistics statistics = Statistics {
-    .p1Stats = {
-        .linesCleared = 0,
-        .gamesWon = 0
-    },
+inline constexpr Statistics statistics =
+    Statistics{.p1Stats = {.linesCleared = 0, .gamesWon = 0},
 
-    .p2Stats = {
-        .linesCleared = 0,
-        .gamesWon = 0
-    },
-    .singleplayerStats = {
-        .linesCleared = 0,
-        .gamesWon = 0,
-        .lineTime = 0
-    }
-};
+               .p2Stats = {.linesCleared = 0, .gamesWon = 0},
+               .singleplayerStats = {.linesCleared = 0, .gamesWon = 0, .lineTime = 0}};
 
-inline constexpr Settings defaultSettings = Settings {
-    .p1Settings = {
-        .handling = {
-            .arr = 0.033,
-            .das = 0.167,
-            .dcd = 0.017,
-            .sdf = 6.0,
-        },
-        .controls = {
-            .moveLeft = KEY_F,
-            .moveRight = KEY_H,
-            .softDrop = KEY_G,
-            .hardDrop = KEY_SPACE,
-            .rotateCCW = KEY_X,
-            .rotateCW = KEY_C,
-            .rotate180 = KEY_Z,
-            .swapHold = KEY_SHIFT,
-        }
-    },
-    .p2Settings = {
-        .handling = {
-            .arr = 0.033,
-            .das = 0.167,
-            .dcd = 0.017,
-            .sdf = 6.0,
-        },
-        .controls = {
-            .moveLeft = KEY_LEFT,
-            .moveRight = KEY_RIGHT,
-            .softDrop = KEY_DOWN,
-            .hardDrop = KEY_RIGHT_ALT,
-            .rotateCCW = KEY_COMMA,
-            .rotateCW = KEY_UP,
-            .rotate180 = KEY_M,
-            .swapHold = KEY_N,
-        }
-    }
-};
-
-
+inline constexpr Settings defaultSettings = Settings{.p1Settings = {.handling =
+                                                                        {
+                                                                            .arr = 0.033,
+                                                                            .das = 0.167,
+                                                                            .dcd = 0.017,
+                                                                            .sdf = 6.0,
+                                                                        },
+                                                                    .controls =
+                                                                        {
+                                                                            .moveLeft = KEY_F,
+                                                                            .moveRight = KEY_H,
+                                                                            .softDrop = KEY_G,
+                                                                            .hardDrop = KEY_SPACE,
+                                                                            .rotateCCW = KEY_X,
+                                                                            .rotateCW = KEY_C,
+                                                                            .rotate180 = KEY_Z,
+                                                                            .swapHold = KEY_SHIFT,
+                                                                        }},
+                                                     .p2Settings = {.handling =
+                                                                        {
+                                                                            .arr = 0.033,
+                                                                            .das = 0.167,
+                                                                            .dcd = 0.017,
+                                                                            .sdf = 6.0,
+                                                                        },
+                                                                    .controls = {
+                                                                        .moveLeft = KEY_LEFT,
+                                                                        .moveRight = KEY_RIGHT,
+                                                                        .softDrop = KEY_DOWN,
+                                                                        .hardDrop = KEY_RIGHT_ALT,
+                                                                        .rotateCCW = KEY_COMMA,
+                                                                        .rotateCW = KEY_UP,
+                                                                        .rotate180 = KEY_M,
+                                                                        .swapHold = KEY_N,
+                                                                    }}};

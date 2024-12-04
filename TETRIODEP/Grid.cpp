@@ -1,6 +1,6 @@
 #include <LCDColors.h>
-#include <vector>
 #include <cassert>
+#include <vector>
 
 #include "Grid.h"
 #include "Tetromino.h"
@@ -33,9 +33,7 @@ void Grid::draw(int pos_x, int pos_y, bool isShadow) {
 
 // Author: Ojas
 // Clear all data in the grid (resetting it to Tetromino::E)
-void Grid::clear(){
-    data.clear();
-}
+void Grid::clear() { data.clear(); }
 
 // Author: Ojas
 // Retreive a mino at a specific position in the grid

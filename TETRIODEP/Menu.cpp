@@ -20,7 +20,10 @@ Menu::Menu()
       board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1, random()),
       singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL, random()), optionsPage(set),
       menuText("assets/TitleFrames/frame_",".png", 1,114,12,60,-30,false),
-      confettiAnimation("assets/ConfettiFrames/frame_",".png", 1,48,15,0,0,false){
+      confettiAnimation("assets/ConfettiFrames/frame_",".png", 1,48,15,0,0,true),
+      gameOverAnimation("assets/GameOver/frame_",".png", 1,39,15,0,0,false),
+      p1Vsp2Text("assets/P1VsP2/frame_",".png", 1,41,15,80,0,false),
+      fourtyLineText("assets/FourtyLine/frame_",".png", 1,44,15,2,10,false){
     // initialize button instances
     onStartclicked = false;
     // start playing background music
@@ -142,6 +145,7 @@ void Menu::run() {
             board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1, randomSeed);
             onStartclicked = false;
             gameEnded = false;
+            p1Vsp2Text.replay();
         }
 
         // while game has not ended run game
@@ -149,8 +153,12 @@ void Menu::run() {
             playBackground.Draw(0, 0);
 
             LCD.SetFontColor(BLUE);
-            std::string pageTitle = "P1 VS P2";
-            LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
+            // std::string pageTitle = "P1 VS P2";
+            
+            // LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
+
+
+            p1Vsp2Text.update();
 
             board1.update();
             board2.update();
@@ -188,6 +196,13 @@ void Menu::run() {
 
                 playerWon += "P1 Won!";
             }
+
+            Button playAgain = Button(160, "Play Again?", BLUE, DARKBLUE);
+            playAgain.updateButtonState();
+            if(playAgain.onButtonClicked()){
+                onStartclicked = true;
+                //restart
+            }
             // color array for funy colors
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
             // display won page
@@ -206,8 +221,9 @@ void Menu::run() {
             singleBackground.Draw(0, 0);
 
             LCD.SetFontColor(BLUE);
-            std::string pageTitle = "40 Line Clear";
-            LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
+            // std::string pageTitle = "40 Line Clear";
+            // LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
+            fourtyLineText.update();
 
             singleBoard.update();
             // update score
@@ -217,8 +233,17 @@ void Menu::run() {
             // sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
             if (gameEnded)
                 PlayAudioFile("assets/wompwomp.wav");
-            Button lossText = Button(40, "Womp Womp you lost :[ Try again next game", RED);
+                gameOverAnimation.update();
+            Button lossText = Button(100, "Womp Womp you lost :[", RED);
             lossText.updateButtonState();
+            Button playAgain = Button(160, "Play Again?", BLUE, DARKBLUE);
+            playAgain.updateButtonState();
+            if(playAgain.onButtonClicked()){
+                onSingleClicked = true;
+                //restart
+
+                fourtyLineText.replay();
+            }
 
         } else if (singleBoard.fourtyLinesEnded()) {
             // draw confetti
@@ -240,6 +265,12 @@ void Menu::run() {
             // draws wintext with funy colors
             Button singleWin = Button(40, "You cleared fourty lines! Check your stats page!", colors[r]);
             singleWin.updateButtonState();
+            Button playAgain = Button(160, "Play Again?", BLUE, DARKBLUE);
+            playAgain.updateButtonState();
+            if(playAgain.onButtonClicked()){
+                onSingleClicked = true;
+                //restart
+            }
         }
 
         if (onSingleClicked) {

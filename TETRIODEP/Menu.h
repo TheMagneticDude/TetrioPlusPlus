@@ -56,7 +56,10 @@ class Menu {
 
 
     Animation menuText;
+    Animation p1Vsp2Text;
+    Animation fourtyLineText;
     Animation confettiAnimation;
+    Animation gameOverAnimation;
 
     // had to make option enum visible to call isPageActive
     enum class MenuOption {

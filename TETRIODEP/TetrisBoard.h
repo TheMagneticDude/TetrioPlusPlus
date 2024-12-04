@@ -29,6 +29,7 @@ class TetrisBoard {
     int fallingX;
     int fallingY;
     int shadowY;
+    bool didTSpin;
 
     float gravityRate = 0.7;
     std::chrono::high_resolution_clock::time_point lastGravity;

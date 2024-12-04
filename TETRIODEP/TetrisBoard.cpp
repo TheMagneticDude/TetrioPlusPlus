@@ -145,6 +145,7 @@ void TetrisBoard::update() {
         PlayAudioFile("assets/TetrisBlip.wav");
         // Reset lock delay
         onGround = false;
+        didTSpin = false;
     }
 
     updateRotation();
@@ -172,6 +173,7 @@ void TetrisBoard::update() {
             } else {
                 fallingY--;
             }
+            didTSpin = false;
         } else if (!onGround) {
             onGround = true;
             startedOnGround = now;
@@ -326,6 +328,21 @@ void TetrisBoard::updateRotation() {
         fallingX -= offsetX;
         fallingY -= offsetY;
         fallingRotation = newRot;
+
+        if (fallingMino == Tetromino::T) {
+            int numCornersFilled = 0;
+            if (grid.getAtPos(fallingX, fallingY) != Tetromino::E)
+                numCornersFilled++;
+            if (grid.getAtPos(fallingX + 2, fallingY) != Tetromino::E)
+                numCornersFilled++;
+            if (grid.getAtPos(fallingX + 2, fallingY + 2) != Tetromino::E)
+                numCornersFilled++;
+            if (grid.getAtPos(fallingX, fallingY + 2) != Tetromino::E)
+                numCornersFilled++;
+            if (numCornersFilled >= 3) {
+                didTSpin = true;
+            }
+        }
     }
 }
 
@@ -361,6 +378,7 @@ void TetrisBoard::startNewFalling(std::optional<Tetromino> mino) {
     lastGravity = std::chrono::high_resolution_clock::now();
     didHold = false;
     onGround = false;
+    didTSpin = false;
     if (checkCollision(fallingGrid, fallingX, fallingY)) {
         // TODO: game over
         std::cout << "Game Over!" << std::endl;
@@ -474,20 +492,35 @@ void TetrisBoard::settleGrid(Grid from, int fromX, int fromY) {
     // increase linesCleared stat for this board
     linesCleared += linesClearedNow;
 
-    // TODO: t-spins
     int attack;
-    switch (linesClearedNow) {
-    case 2:
-        attack = 1;
-        break;
-    case 3:
-        attack = 2;
-        break;
-    case 4:
-        attack = 4;
-        break;
-    default:
-        attack = 0;
+    if (fallingMino == Tetromino::T && didTSpin) {
+        switch (linesClearedNow) {
+        case 1:
+            attack = 2;
+            break;
+        case 2:
+            attack = 4;
+            break;
+        case 3:
+            attack = 6;
+            break;
+        default:
+            attack = 0;
+        }
+    } else {
+        switch (linesClearedNow) {
+        case 2:
+            attack = 1;
+            break;
+        case 3:
+            attack = 2;
+            break;
+        case 4:
+            attack = 4;
+            break;
+        default:
+            attack = 0;
+        }
     }
     attackOpponent(attack);
 

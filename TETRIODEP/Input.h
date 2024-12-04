@@ -67,4 +67,6 @@ class PlayerInput {
     // scans keyboard for a key input and returns the correct int representing that key
     std::vector<int> scanKey();
     void update();
+    bool isRepeatingLeft();
+    bool isRepeatingRight();
 };

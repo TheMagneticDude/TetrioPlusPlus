@@ -1,8 +1,8 @@
 #include "Slider.h"
 #include <FEHLCD.h>
+#include <cmath>
 #include <iomanip>
 #include <iostream>
-#include <limits>
 #include <math.h>
 #include <sstream>
 #include <string>
@@ -36,7 +36,7 @@ Slider::Slider(int y, float width, float val, unsigned int color, unsigned int b
 // draws centered slider with name next to it
 // Author: Nathan
 Slider::Slider(std::string name, int y, float width, float val, unsigned int color, unsigned int backCol, float min,
-               float max) {
+               float max, bool _canBeInf) {
     barX = (screenWidth / 2.0) - (width / 2.0);
     barY = y;
     // init sliderX to init to middle of bar
@@ -52,6 +52,7 @@ Slider::Slider(std::string name, int y, float width, float val, unsigned int col
 
     sliderMax = max;
     sliderMin = min;
+    canBeInf = _canBeInf;
     sliderValue = min + (max - min) / 2.0;
     sliderName = name;
     toggled = false;
@@ -120,6 +121,10 @@ void Slider::update() {
 
     float barPercent = (sliderX - barX) / (barWidth);
     sliderValue = ((sliderMax - sliderMin) * barPercent) + sliderMin;
+    if (barPercent == 1.0 && canBeInf) {
+        sliderValue = INFINITY;
+    }
+    // std::cout << barPercent << std::endl;
 
     draw();
 }

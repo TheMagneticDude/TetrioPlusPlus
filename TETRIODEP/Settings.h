@@ -141,7 +141,7 @@ inline constexpr Settings defaultSettings = Settings{.p1Settings = {.handling =
                                                                         {
                                                                             .arr = 0.033,
                                                                             .das = 0.167,
-                                                                            .dcd = 0.017,
+                                                                            .dcd = 0.018,
                                                                             .sdf = 6.0,
                                                                         },
                                                                     .controls =
@@ -159,7 +159,7 @@ inline constexpr Settings defaultSettings = Settings{.p1Settings = {.handling =
                                                                         {
                                                                             .arr = 0.033,
                                                                             .das = 0.167,
-                                                                            .dcd = 0.017,
+                                                                            .dcd = 0.018,
                                                                             .sdf = 6.0,
                                                                         },
                                                                     .controls = {

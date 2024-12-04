@@ -195,3 +195,6 @@ void PlayerInput::handleDAS(bool &isRepeating, TriggerKey &key) {
         isRepeating = true;
     }
 }
+
+bool PlayerInput::isRepeatingLeft() { return repeatingLeft; }
+bool PlayerInput::isRepeatingRight() { return repeatingRight; }

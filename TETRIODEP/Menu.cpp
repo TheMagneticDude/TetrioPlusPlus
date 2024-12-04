@@ -18,11 +18,11 @@ Menu::Menu()
       board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2, random()),
       board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1, random()),
       singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL, random()), optionsPage(set),
-      menuText("assets/TitleFrames/frame_",".png", 1,114,12,60,-30,false),
-      confettiAnimation("assets/ConfettiFrames/frame_",".png", 1,48,15,0,0,true),
-      gameOverAnimation("assets/GameOver/frame_",".png", 1,39,15,0,0,false),
-      p1Vsp2Text("assets/P1VsP2/frame_",".png", 1,41,15,80,0,false),
-      fourtyLineText("assets/FourtyLine/frame_",".png", 1,44,15,2,10,false){
+      menuText("assets/TitleFrames/frame_", ".png", 1, 114, 12, 60, -30, false),
+      confettiAnimation("assets/ConfettiFrames/frame_", ".png", 1, 48, 15, 0, 0, true),
+      gameOverAnimation("assets/GameOver/frame_", ".png", 1, 39, 15, 0, 0, false),
+      p1Vsp2Text("assets/P1VsP2/frame_", ".png", 1, 41, 15, 80, 0, false),
+      fourtyLineText("assets/FourtyLine/frame_", ".png", 1, 44, 15, 2, 10, false) {
     // initialize button instances
     onStartclicked = false;
     // start playing background music
@@ -152,9 +152,8 @@ void Menu::run() {
 
             LCD.SetFontColor(BLUE);
             // std::string pageTitle = "P1 VS P2";
-            
-            // LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
 
+            // LCD.WriteAt(pageTitle, (screenWidth / 2.0) - ((pageTitle.length() * LCD.getCharWidth()) / 2.0), 25);
 
             p1Vsp2Text.update();
 
@@ -199,9 +198,9 @@ void Menu::run() {
 
             Button playAgain = Button(160, "Play Again?", BLUE, DARKBLUE);
             playAgain.updateButtonState();
-            if(playAgain.onButtonClicked()){
+            if (playAgain.onButtonClicked()) {
                 onStartclicked = true;
-                //restart
+                // restart
             }
             // color array for funy colors
             unsigned int colors[] = {BLACK, AQUA, BLUE, ORANGE, YELLOW, GREEN, PURPLE, RED};
@@ -233,14 +232,14 @@ void Menu::run() {
             // sad horn sound effect from youtube: https://www.youtube.com/watch?v=CQeezCdF4mk
             if (gameEnded)
                 PlayAudioFile("assets/wompwomp.wav");
-                gameOverAnimation.update();
+            gameOverAnimation.update();
             Button lossText = Button(100, "Womp Womp you lost :[", RED);
             lossText.updateButtonState();
             Button playAgain = Button(160, "Play Again?", BLUE, DARKBLUE);
             playAgain.updateButtonState();
-            if(playAgain.onButtonClicked()){
+            if (playAgain.onButtonClicked()) {
                 onSingleClicked = true;
-                //restart
+                // restart
 
                 fourtyLineText.replay();
             }
@@ -269,9 +268,9 @@ void Menu::run() {
             singleWin.updateButtonState();
             Button playAgain = Button(160, "Play Again?", BLUE, DARKBLUE);
             playAgain.updateButtonState();
-            if(playAgain.onButtonClicked()){
+            if (playAgain.onButtonClicked()) {
                 onSingleClicked = true;
-                //restart
+                // restart
             }
         }
 

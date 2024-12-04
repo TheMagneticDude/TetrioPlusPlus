@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #ifdef _WIN32
 #include <windows.h>
 
@@ -172,3 +173,39 @@ inline constexpr Settings defaultSettings = Settings{.p1Settings = {.handling =
                                                                         .rotate180 = KEY_M,
                                                                         .swapHold = KEY_N,
                                                                     }}};
+
+inline constexpr Settings presetSettings = Settings{.p1Settings = {.handling =
+                                                                       {
+                                                                           .arr = 0.0,
+                                                                           .das = 0.10,
+                                                                           .dcd = 0.042,
+                                                                           .sdf = INFINITY,
+                                                                       },
+                                                                   .controls =
+                                                                       {
+                                                                           .moveLeft = KEY_LEFT,
+                                                                           .moveRight = KEY_RIGHT,
+                                                                           .softDrop = KEY_DOWN,
+                                                                           .hardDrop = KEY_SPACE,
+                                                                           .rotateCCW = KEY_X,
+                                                                           .rotateCW = KEY_C,
+                                                                           .rotate180 = KEY_Z,
+                                                                           .swapHold = KEY_SHIFT,
+                                                                       }},
+                                                    .p2Settings = {.handling =
+                                                                       {
+                                                                           .arr = 0.0,
+                                                                           .das = 0.10,
+                                                                           .dcd = 0.00,
+                                                                           .sdf = INFINITY,
+                                                                       },
+                                                                   .controls = {
+                                                                       .moveLeft = KEY_U,
+                                                                       .moveRight = KEY_O,
+                                                                       .softDrop = KEY_I,
+                                                                       .hardDrop = KEY_T,
+                                                                       .rotateCCW = KEY_W,
+                                                                       .rotateCW = KEY_E,
+                                                                       .rotate180 = KEY_R,
+                                                                       .swapHold = KEY_Q,
+                                                                   }}};

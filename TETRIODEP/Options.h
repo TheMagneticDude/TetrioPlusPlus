@@ -6,6 +6,7 @@
 #include "Slider.h"
 #include "Switch.h"
 #include "ToggleButton.h"
+#include "Button.h"
 
 class Options {
   private:
@@ -37,6 +38,8 @@ class Options {
     ToggleButton rotateCW;
     ToggleButton rotate180;
     ToggleButton swapHold;
+
+    Button preset;
 
     enum class buttons { left, right, softDrop, hardDrop, rotateCCW, rotateCW, rotate180, swapHold, none };
 

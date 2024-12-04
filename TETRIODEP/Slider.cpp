@@ -152,7 +152,11 @@ void Slider::setString(float f) {
 
 void Slider::setValue(float f) {
     sliderValue = f;
-    sliderX = ((sliderValue - sliderMin) / (sliderMax - sliderMin)) * barWidth + barX;
+    if (f == INFINITY) {
+        sliderX = barWidth + barX;
+    } else {
+        sliderX = ((sliderValue - sliderMin) / (sliderMax - sliderMin)) * barWidth + barX;
+    }
 }
 float Slider::getValue() { return sliderValue; }
 

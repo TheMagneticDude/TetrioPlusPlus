@@ -1,9 +1,9 @@
 #pragma once
 #include "Grid.h"
+#include <FEHImages.h>
 #include <FEHLCD.h>
 #include <chrono>
 #include <string>
-#include <FEHImages.h>
 
 using namespace std;
 
@@ -27,8 +27,10 @@ class Animation {
     std::string fileType;
     std::string fileNumber;
     std::string filePath;
+
   public:
-    Animation(std::string fn, std::string ft, unsigned int fstart, unsigned int fend, unsigned int ftime,int x, int y, bool loop);
+    Animation(std::string fn, std::string ft, unsigned int fstart, unsigned int fend, unsigned int ftime, int x, int y,
+              bool loop);
     void update();
     void replay();
 };

@@ -1,12 +1,11 @@
 #include "Menu.h"
+#include "Animation.h"
 #include "Button.h"
 #include "Sound.h"
-#include "Animation.h"
 
 #include <FEHImages.h>
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-#include <chrono>
 #include <iomanip>
 #include <string>
 
@@ -19,8 +18,8 @@ Menu::Menu()
       board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2, random()),
       board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1, random()),
       singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL, random()), optionsPage(set),
-      menuText("assets/TitleFrames/frame_",".png", 1,114,12,60,-30,false),
-      confettiAnimation("assets/ConfettiFrames/frame_",".png", 1,48,15,0,0,false){
+      menuText("assets/TitleFrames/frame_", ".png", 1, 114, 12, 60, -30, false),
+      confettiAnimation("assets/ConfettiFrames/frame_", ".png", 1, 48, 15, 0, 0, false) {
     // initialize button instances
     onStartclicked = false;
     // start playing background music
@@ -38,8 +37,6 @@ Menu::Menu()
     confetti.Open("assets/TetrisConfetti.png");
     creditsImage.Open("assets/CreditsPage.png");
     howToPlay.Open("assets/TetrioHowToPlay.png");
-
-    
 };
 
 // disables a button

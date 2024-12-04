@@ -1,10 +1,10 @@
 #pragma once
 
+#include "Animation.h"
 #include "Button.h"
 #include "Grid.h"
 #include "Options.h"
 #include "TetrisBoard.h"
-#include "Animation.h"
 #include <FEHImages.h>
 #include <random>
 
@@ -53,7 +53,6 @@ class Menu {
     FEHImage confetti;
     FEHImage creditsImage;
     FEHImage howToPlay;
-
 
     Animation menuText;
     Animation confettiAnimation;

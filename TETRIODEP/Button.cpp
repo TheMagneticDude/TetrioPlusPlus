@@ -191,7 +191,8 @@ void Button::updateButtonState() {
         // read where cursor is
         LCD.Touch(&touchedX, &touchedY, false);
         // change button highlight
-        highlighted = touchedX >= buttonX && touchedX <= buttonX + buttonWidth && touchedY >= buttonY &&
+        highlighted = touchedX >= buttonX - LCD.getCharWidth() &&
+                      touchedX <= buttonX + buttonWidth + LCD.getCharWidth() - 1 && touchedY >= buttonY &&
                       touchedY <= buttonY + buttonHeight;
         // update touched location
         if (!LCD.Touch(&touchedX, &touchedY, false)) {
@@ -200,7 +201,8 @@ void Button::updateButtonState() {
             // wait until touch releases
             // no joke this is the actual code from FEH documentation -_-
             // if touch is within button boundery then set button state to true
-            withinX = touchedX >= buttonX && touchedX <= buttonX + buttonWidth;
+            withinX =
+                touchedX >= buttonX - LCD.getCharHeight() && touchedX <= buttonX + buttonWidth + LCD.getCharWidth() - 1;
             withinY = touchedY >= buttonY && touchedY <= buttonY + buttonHeight;
         }
 

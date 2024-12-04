@@ -1,6 +1,7 @@
 #include "Menu.h"
 #include "Button.h"
 #include "Sound.h"
+#include "Animation.h"
 
 #include <FEHImages.h>
 #include <FEHLCD.h>
@@ -17,7 +18,9 @@ Menu::Menu()
       credits(150 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Exit", BLUE, DARKBLUE),
       board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2, random()),
       board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1, random()),
-      singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL, random()), optionsPage(set) {
+      singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL, random()), optionsPage(set),
+      menuText("assets/TitleFrames/frame_",".png", 1,114,12,60,-30,false),
+      confettiAnimation("assets/ConfettiFrames/frame_",".png", 1,48,15,0,0,false){
     // initialize button instances
     onStartclicked = false;
     // start playing background music
@@ -36,21 +39,7 @@ Menu::Menu()
     creditsImage.Open("assets/CreditsPage.png");
     howToPlay.Open("assets/TetrioHowToPlay.png");
 
-    timeStart = std::chrono::high_resolution_clock::now();
-    currFrame = 1;
-    confetticurrFrame = 1;
-
-    std::string fileName = "assets/TitleFrames/frame_";
-    std::string fileType = ".png";
-    std::string fileNumber = to_string(currFrame);
-    std::string filePath = fileName + fileNumber + fileType;
-    animatedText.Open(filePath.c_str());
-
-    std::string confettifileName = "assets/ConfettiFrames/frame_";
-    std::string confettifileType = ".png";
-    std::string confettifileNumber = to_string(confetticurrFrame);
-    std::string confettifilePath = confettifileName + confettifileNumber + confettifileType;
-    animatedConfetti.Open(confettifilePath.c_str());
+    
 };
 
 // disables a button
@@ -60,9 +49,6 @@ void Menu::disable(Button &b) { b.disable(); }
 // updates menu pages
 // Author: Nathan
 void Menu::update() {
-
-    currTime = std::chrono::high_resolution_clock::now();
-
     if (currOption == MenuOption::Back) {
         currOption = MenuOption::None_;
     }
@@ -73,22 +59,10 @@ void Menu::update() {
         // background was made by me in blender hence why its so ugly lol
         // FEHImage background;
         // background.Open("assets/TetrioBackground-2.png");
-
-        auto timeToNextFrame = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - nextFrame);
-        if (timeToNextFrame.count() >= frameTime && currFrame < maxFrames) {
-            animatedText.Close();
-            nextFrame = currTime + std::chrono::milliseconds(frameTime);
-            currFrame++;
-            // update text
-            std::string fileName = "assets/TitleFrames/frame_";
-            std::string fileType = ".png";
-            std::string fileNumber = to_string(currFrame);
-            std::string filePath = fileName + fileNumber + fileType;
-            animatedText.Open(filePath.c_str());
-        }
         menuBackground.Draw(0, 0);
         menuPlusPlus.Draw(0, 0);
-        animatedText.Draw(60, -30);
+        menuText.update();
+        // animatedText.Draw(60, -30);
 
         start.updateButtonState();
         singleplayer.updateButtonState();
@@ -129,7 +103,7 @@ void Menu::update() {
 
         if (renderSubPage(back)) {
             currOption = MenuOption::Back;
-            currFrame = 1;
+            menuText.replay();
             // back to menu
         }
     }
@@ -189,23 +163,7 @@ void Menu::run() {
             board2.draw();
         } else {
             // draw confetti
-            auto confettitimeToNextFrame = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - confettinextFrame);
-            if (confettitimeToNextFrame.count() >= confettiframeTime && confetticurrFrame < confettimaxFrames) {
-                animatedConfetti.Close();
-                confettinextFrame = currTime + std::chrono::milliseconds(confettiframeTime);
-                confetticurrFrame++;
-                // update text
-                std::string confettifileName = "assets/ConfettiFrames/frame_";
-                std::string confettifileType = ".png";
-                std::string confettifileNumber = to_string(confetticurrFrame);
-                std::string confettifilePath = confettifileName + confettifileNumber + confettifileType;
-                animatedConfetti.Open(confettifilePath.c_str());
-            }
-            if (confetticurrFrame >= confettimaxFrames) {
-                // keep looping
-                confetticurrFrame = 1;
-            }
-            animatedConfetti.Draw(0,0);
+            confettiAnimation.update();
 
             if (!gameEnded) {
                 // play confetti noise yey you won
@@ -264,23 +222,7 @@ void Menu::run() {
 
         } else if (singleBoard.fourtyLinesEnded()) {
             // draw confetti
-            auto confettitimeToNextFrame = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - confettinextFrame);
-            if (confettitimeToNextFrame.count() >= confettiframeTime && confetticurrFrame < confettimaxFrames) {
-                animatedConfetti.Close();
-                confettinextFrame = currTime + std::chrono::milliseconds(confettiframeTime);
-                confetticurrFrame++;
-                // update text
-                std::string confettifileName = "assets/ConfettiFrames/frame_";
-                std::string confettifileType = ".png";
-                std::string confettifileNumber = to_string(confetticurrFrame);
-                std::string confettifilePath = confettifileName + confettifileNumber + confettifileType;
-                animatedText.Open(confettifilePath.c_str());
-            }
-            if (confetticurrFrame >= confettimaxFrames) {
-                // keep looping
-                confetticurrFrame = 1;
-            }
-            animatedConfetti.Draw(0,0);
+            confettiAnimation.update();
 
             // update stats
             playerStats.singleplayerStats.lineTime = singleBoard.getFourtyLinesClearedTime();

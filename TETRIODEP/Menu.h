@@ -4,6 +4,7 @@
 #include "Grid.h"
 #include "Options.h"
 #include "TetrisBoard.h"
+#include "Animation.h"
 #include <FEHImages.h>
 #include <random>
 
@@ -53,22 +54,9 @@ class Menu {
     FEHImage creditsImage;
     FEHImage howToPlay;
 
-    std::chrono::high_resolution_clock::time_point timeStart;
-    std::chrono::high_resolution_clock::time_point currTime;
-    std::chrono::high_resolution_clock::time_point nextFrame;
 
-    unsigned int currFrame;
-    unsigned int maxFrames = 114;
-
-    int frameTime = 12; // in milliseconds
-
-
-    std::chrono::high_resolution_clock::time_point confettinextFrame;
-
-    unsigned int confetticurrFrame;
-    unsigned int confettimaxFrames = 48;
-
-    int confettiframeTime = 15; // in milliseconds
+    Animation menuText;
+    Animation confettiAnimation;
 
     // had to make option enum visible to call isPageActive
     enum class MenuOption {

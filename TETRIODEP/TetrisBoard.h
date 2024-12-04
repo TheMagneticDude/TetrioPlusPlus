@@ -69,7 +69,8 @@ class TetrisBoard {
     void drawStats();
 
   public:
-    TetrisBoard(int x, int y, PlayerSettings &playerSettings, Statistics &playerStats, TetrisBoard *opponent, int randomSeed);
+    TetrisBoard(int x, int y, PlayerSettings &playerSettings, Statistics &playerStats, TetrisBoard *opponent,
+                int randomSeed);
     void update();
     void draw();
     bool gameEnded();

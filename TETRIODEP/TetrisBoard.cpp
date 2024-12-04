@@ -1,7 +1,7 @@
 #include <cmath>
+#include <iomanip>
 #include <iostream>
 #include <optional>
-#include <iomanip>
 #include <random>
 
 #include "FEHRandom.h"

@@ -1,12 +1,11 @@
 #include "Menu.h"
+#include "Animation.h"
 #include "Button.h"
 #include "Sound.h"
-#include "Animation.h"
 
 #include <FEHImages.h>
 #include <FEHLCD.h>
 #include <FEHRandom.h>
-#include <chrono>
 #include <iomanip>
 #include <string>
 
@@ -41,8 +40,6 @@ Menu::Menu()
     confetti.Open("assets/TetrisConfetti.png");
     creditsImage.Open("assets/CreditsPage.png");
     howToPlay.Open("assets/TetrioHowToPlay.png");
-
-    
 };
 
 // disables a button

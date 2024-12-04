@@ -18,7 +18,7 @@
 
 // Author: Ojas
 // Get the display handle to be used for keyboard input on Linux
-Display *TriggerKey::getX11Display() {
+Display *getX11Display() {
     // my guy you are a madman
     // I'm sorry but it had to be done :)
     // The TigrInternal structure is placed directly after Tigr (Tigr* is at offset 0 in LCD)
@@ -158,6 +158,25 @@ std::vector<int> PlayerInput::scanKey() {
 #if __linux__ && !__ANDROID__
 std::vector<int> PlayerInput::scanKey() {
     scannedKeys.clear();
+
+    Display *display = getX11Display();
+    char keymap[32];
+    XQueryKeymap(display, keymap);
+
+    int allowedKeys[] = {XK_a,     XK_b,  XK_c,    XK_d,     XK_e,     XK_f,       XK_g,     XK_h,    XK_i,
+                         XK_j,     XK_k,  XK_l,    XK_m,     XK_n,     XK_o,       XK_p,     XK_q,    XK_r,
+                         XK_s,     XK_t,  XK_u,    XK_v,     XK_w,     XK_x,       XK_y,     XK_z,    XK_Left,
+                         XK_Right, XK_Up, XK_Down, XK_comma, XK_space, XK_Shift_L, XK_Alt_L, XK_Alt_R};
+
+    // Extract the bit that corresponds to the specific key
+    for (int i = 0; i < sizeof(allowedKeys) / sizeof(int); i++) {
+        int xKeyCode = XKeysymToKeycode(display, allowedKeys[i]);
+        bool currentlyIsPressed = keymap[xKeyCode / 8] & (1 << (xKeyCode % 8));
+        if (currentlyIsPressed) {
+            scannedKeys.push_back(allowedKeys[i]);
+        }
+    }
+
     // This is not yet supported on Linux, but does not affect the functionality of the game
     return scannedKeys;
 }

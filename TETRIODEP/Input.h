@@ -18,10 +18,6 @@ class TriggerKey {
     bool isNewPress;
     bool useDAS;
 
-#if __linux__ && !__ANDROID__
-    static Display *getX11Display();
-#endif
-
   public:
     // default constructor
     TriggerKey() : keyCode(0), isPressed(false), isNewPress(false), useDAS(false) {}

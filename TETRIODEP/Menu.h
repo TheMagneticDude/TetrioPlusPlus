@@ -53,6 +53,7 @@ class Menu {
     FEHImage confetti;
     FEHImage creditsImage;
     FEHImage howToPlay;
+    FEHImage victory;
 
     Animation menuText;
     Animation p1Vsp2Text;

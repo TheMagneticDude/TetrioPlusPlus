@@ -40,6 +40,7 @@ Menu::Menu()
     confetti.Open("assets/TetrisConfetti.png");
     creditsImage.Open("assets/CreditsPage.png");
     howToPlay.Open("assets/TetrioHowToPlay.png");
+    victory.Open("assets/TetrisVictory.png");
 };
 
 // disables a button
@@ -175,6 +176,8 @@ void Menu::run() {
                 PlayAudioFile("assets/TetrioWin.wav");
             }
 
+            victory.Draw(0,0);
+
             std::string playerWon = "";
             // p2 won
             if (board1.gameEnded()) {
@@ -205,7 +208,7 @@ void Menu::run() {
             // display won page
             int r = Random.RandInt() % 7;
             // draws wintext with funy colors
-            Button winText = Button(40, playerWon, colors[r]);
+            Button winText = Button(80, playerWon, colors[r]);
             winText.updateButtonState();
         }
         // render back button on top
@@ -245,6 +248,8 @@ void Menu::run() {
         } else if (singleBoard.fourtyLinesEnded()) {
             // draw confetti
             confettiAnimation.update();
+
+            victory.Draw(0,0);
 
             // update stats
             playerStats.singleplayerStats.lineTime = singleBoard.getFourtyLinesClearedTime();

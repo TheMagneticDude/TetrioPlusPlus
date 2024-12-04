@@ -5,6 +5,7 @@
 #include "Options.h"
 #include "TetrisBoard.h"
 #include <FEHImages.h>
+#include <random>
 
 class Menu {
   private:
@@ -12,6 +13,8 @@ class Menu {
     unsigned int screenHeight = 240;
 
     int buttonoffset = 70;
+
+    std::random_device random;
 
   public:
     bool onStartclicked;

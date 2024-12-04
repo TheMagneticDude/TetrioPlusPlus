@@ -1,6 +1,7 @@
 #pragma once
 
 #include <optional>
+#include <random>
 
 #include "Grid.h"
 #include "Input.h"
@@ -41,6 +42,7 @@ class TetrisBoard {
     std::optional<Tetromino> hold;
     bool didHold = false;
 
+    std::mt19937 randomGen;
     std::vector<Tetromino> queue;
     std::vector<Tetromino> bag;
 
@@ -67,7 +69,7 @@ class TetrisBoard {
     void drawStats();
 
   public:
-    TetrisBoard(int x, int y, PlayerSettings &playerSettings, Statistics &playerStats, TetrisBoard *opponent);
+    TetrisBoard(int x, int y, PlayerSettings &playerSettings, Statistics &playerStats, TetrisBoard *opponent, int randomSeed);
     void update();
     void draw();
     bool gameEnded();

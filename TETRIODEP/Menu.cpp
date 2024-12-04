@@ -15,9 +15,9 @@ Menu::Menu()
       stats(60 + buttonoffset, "Stats", BLUE, DARKBLUE), settings(90 + buttonoffset, "Settings", BLUE, DARKBLUE),
       instructions(120 + buttonoffset, "Instructions", BLUE, DARKBLUE),
       credits(150 + buttonoffset, "Credits", BLUE, DARKBLUE), back(10, 0, "Exit", BLUE, DARKBLUE),
-      board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2),
-      board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1),
-      singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL), optionsPage(set) {
+      board1(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2, random()),
+      board2(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1, random()),
+      singleBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL, random()), optionsPage(set) {
     // initialize button instances
     onStartclicked = false;
     // start playing background music
@@ -163,8 +163,9 @@ void Menu::run() {
     if (isPageActive(Menu::MenuOption::Start)) {
         if (onStartclicked) {
             // creates new boards with updated settings
-            board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2);
-            board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1);
+            int randomSeed = random();
+            board1 = TetrisBoard(board1Loc[0], board1Loc[1], set.p1Settings, playerStats, &board2, randomSeed);
+            board2 = TetrisBoard(board2Loc[0], board2Loc[1], set.p2Settings, playerStats, &board1, randomSeed);
             onStartclicked = false;
             gameEnded = false;
         }
@@ -300,7 +301,8 @@ void Menu::run() {
         }
 
         if (onSingleClicked) {
-            singleBoard = TetrisBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL);
+            singleBoard =
+                TetrisBoard(singleBoardLoc[0], singleBoardLoc[1], set.p1Settings, playerStats, NULL, random());
             onSingleClicked = false;
             gameEnded = false;
         }
@@ -314,7 +316,6 @@ void Menu::run() {
     }
 
     if (isPageActive(Menu::MenuOption::Stats)) {
-
         LCD.SetFontColor(BLUE);
 
         Button p1BannerButton = Button(10, "P1 Stats", BLUE);

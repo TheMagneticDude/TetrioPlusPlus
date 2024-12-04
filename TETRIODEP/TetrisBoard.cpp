@@ -1,6 +1,8 @@
 #include <cmath>
 #include <iostream>
 #include <optional>
+#include <iomanip>
+#include <random>
 
 #include "FEHRandom.h"
 #include "Grid.h"
@@ -11,13 +13,11 @@
 #include "Tetromino.h"
 #include <FEHLCD.h>
 
-#include <iomanip>
-
 // Author: Ojas
 // initialize tetrisboard with a coordinate (top left corner)
 TetrisBoard::TetrisBoard(int _boardX, int _boardY, PlayerSettings &_settings, Statistics &playerStats,
-                         TetrisBoard *opponent)
-    : grid(10, 22), fallingGrid(3, 3), holdGrid(3, 3), input(_settings), opponent(opponent) {
+                         TetrisBoard *opponent, int randomSeed)
+    : grid(10, 22), fallingGrid(3, 3), holdGrid(3, 3), input(_settings), opponent(opponent), randomGen(randomSeed) {
     settings = &_settings;
     // these are where the board is built around in world coords (top left corner)
     boardX = _boardX;
@@ -526,7 +526,8 @@ Tetromino TetrisBoard::getNextFromBag() {
         bag = {Tetromino::I, Tetromino::J, Tetromino::L, Tetromino::O, Tetromino::S, Tetromino::T, Tetromino::Z};
     }
 
-    int idx = Random.RandInt() % bag.size();
+    std::uniform_int_distribution<> distrib(0, bag.size() - 1);
+    int idx = distrib(randomGen);
     auto mino = bag[idx];
     bag.erase(bag.begin() + idx);
     return mino;

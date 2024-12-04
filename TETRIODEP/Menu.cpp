@@ -38,12 +38,19 @@ Menu::Menu()
 
     timeStart = std::chrono::high_resolution_clock::now();
     currFrame = 1;
+    confetticurrFrame = 1;
 
     std::string fileName = "assets/TitleFrames/frame_";
     std::string fileType = ".png";
     std::string fileNumber = to_string(currFrame);
     std::string filePath = fileName + fileNumber + fileType;
     animatedText.Open(filePath.c_str());
+
+    std::string confettifileName = "assets/ConfettiFrames/frame_";
+    std::string confettifileType = ".png";
+    std::string confettifileNumber = to_string(confetticurrFrame);
+    std::string confettifilePath = confettifileName + confettifileNumber + confettifileType;
+    animatedConfetti.Open(confettifilePath.c_str());
 };
 
 // disables a button
@@ -200,7 +207,24 @@ void Menu::run() {
             board1.draw();
             board2.draw();
         } else {
-            confetti.Draw(0, 0);
+            // draw confetti
+            auto confettitimeToNextFrame = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - confettinextFrame);
+            if (confettitimeToNextFrame.count() >= confettiframeTime && confetticurrFrame < confettimaxFrames) {
+                animatedConfetti.Close();
+                confettinextFrame = currTime + std::chrono::milliseconds(confettiframeTime);
+                confetticurrFrame++;
+                // update text
+                std::string confettifileName = "assets/ConfettiFrames/frame_";
+                std::string confettifileType = ".png";
+                std::string confettifileNumber = to_string(confetticurrFrame);
+                std::string confettifilePath = confettifileName + confettifileNumber + confettifileType;
+                animatedConfetti.Open(confettifilePath.c_str());
+            }
+            if (confetticurrFrame >= confettimaxFrames) {
+                // keep looping
+                confetticurrFrame = 1;
+            }
+            animatedConfetti.Draw(0,0);
 
             if (!gameEnded) {
                 // play confetti noise yey you won
@@ -260,6 +284,25 @@ void Menu::run() {
             lossText.updateButtonState();
 
         } else if (singleBoard.fourtyLinesEnded()) {
+            // draw confetti
+            auto confettitimeToNextFrame = std::chrono::duration_cast<std::chrono::milliseconds>(currTime - confettinextFrame);
+            if (confettitimeToNextFrame.count() >= confettiframeTime && confetticurrFrame < confettimaxFrames) {
+                animatedConfetti.Close();
+                confettinextFrame = currTime + std::chrono::milliseconds(confettiframeTime);
+                confetticurrFrame++;
+                // update text
+                std::string confettifileName = "assets/ConfettiFrames/frame_";
+                std::string confettifileType = ".png";
+                std::string confettifileNumber = to_string(confetticurrFrame);
+                std::string confettifilePath = confettifileName + confettifileNumber + confettifileType;
+                animatedText.Open(confettifilePath.c_str());
+            }
+            if (confetticurrFrame >= confettimaxFrames) {
+                // keep looping
+                confetticurrFrame = 1;
+            }
+            animatedConfetti.Draw(0,0);
+
             // update stats
             playerStats.singleplayerStats.lineTime = singleBoard.getFourtyLinesClearedTime();
 

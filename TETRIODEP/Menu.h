@@ -43,6 +43,7 @@ class Menu {
     FEHImage menuBackground;
     FEHImage menuPlusPlus;
     FEHImage animatedText;
+    FEHImage animatedConfetti;
     FEHImage playBackground;
     FEHImage singleBackground;
     FEHImage confetti;
@@ -57,6 +58,14 @@ class Menu {
     unsigned int maxFrames = 114;
 
     int frameTime = 12; // in milliseconds
+
+
+    std::chrono::high_resolution_clock::time_point confettinextFrame;
+
+    unsigned int confetticurrFrame;
+    unsigned int confettimaxFrames = 48;
+
+    int confettiframeTime = 15; // in milliseconds
 
     // had to make option enum visible to call isPageActive
     enum class MenuOption {
